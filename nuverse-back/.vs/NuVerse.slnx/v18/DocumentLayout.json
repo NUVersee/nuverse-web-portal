@@ -1,0 +1,54 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "E:\\Grad\\nuverse-web-portal\\nuverse-back\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A66F6B64-6BCF-42C1-830B-C30D77C51B31}|src\\NuVerse.WebAPI\\NuVerse.WebAPI.csproj|e:\\grad\\nuverse-web-portal\\nuverse-back\\src\\nuverse.webapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A66F6B64-6BCF-42C1-830B-C30D77C51B31}|src\\NuVerse.WebAPI\\NuVerse.WebAPI.csproj|solutionrelative:src\\nuverse.webapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A66F6B64-6BCF-42C1-830B-C30D77C51B31}|src\\NuVerse.WebAPI\\NuVerse.WebAPI.csproj|e:\\grad\\nuverse-web-portal\\nuverse-back\\src\\nuverse.webapi\\controllers\\testcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A66F6B64-6BCF-42C1-830B-C30D77C51B31}|src\\NuVerse.WebAPI\\NuVerse.WebAPI.csproj|solutionrelative:src\\nuverse.webapi\\controllers\\testcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "TestController.cs",
+              "DocumentMoniker": "E:\\Grad\\nuverse-web-portal\\nuverse-back\\src\\NuVerse.WebAPI\\Controllers\\TestController.cs",
+              "RelativeDocumentMoniker": "src\\NuVerse.WebAPI\\Controllers\\TestController.cs",
+              "ToolTip": "E:\\Grad\\nuverse-web-portal\\nuverse-back\\src\\NuVerse.WebAPI\\Controllers\\TestController.cs",
+              "RelativeToolTip": "src\\NuVerse.WebAPI\\Controllers\\TestController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-28T17:53:35.718Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "E:\\Grad\\nuverse-web-portal\\nuverse-back\\src\\NuVerse.WebAPI\\Program.cs",
+              "RelativeDocumentMoniker": "src\\NuVerse.WebAPI\\Program.cs",
+              "ToolTip": "E:\\Grad\\nuverse-web-portal\\nuverse-back\\src\\NuVerse.WebAPI\\Program.cs",
+              "RelativeToolTip": "src\\NuVerse.WebAPI\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-28T17:54:16.113Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
