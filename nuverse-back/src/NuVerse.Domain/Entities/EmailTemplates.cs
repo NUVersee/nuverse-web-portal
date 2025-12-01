@@ -1,6 +1,6 @@
 using System;
 
-namespace NuVerse.Infrastructure.Configurations
+namespace NuVerse.Domain.Configurations
 {
     public class EmailTemplates
     {

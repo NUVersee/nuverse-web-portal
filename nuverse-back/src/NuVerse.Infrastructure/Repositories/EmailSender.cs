@@ -9,20 +9,22 @@ using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
 
-namespace NuVerse.Infrastructure.Services
+namespace NuVerse.Infrastructure.Repositories
 {
     public class EmailSender : IEmailSender, IAsyncDisposable
     {
         private readonly EmailSettings _settings;
-        private readonly NuVerse.Infrastructure.Configurations.EmailTemplates _templates;
+        private readonly NuVerse.Domain.Configurations.EmailTemplates _templates;
         private readonly ILogger<EmailSender> _logger;
         private readonly SmtpClient _client;
         private readonly SemaphoreSlim _clientLock = new SemaphoreSlim(1, 1);
+        // 0 = not disposed, 1 = disposed
+        private int _disposed;
 
-        public EmailSender(IOptions<EmailSettings> settings, IOptions<NuVerse.Infrastructure.Configurations.EmailTemplates> templates, ILogger<EmailSender> logger)
+        public EmailSender(IOptions<EmailSettings> settings, IOptions<NuVerse.Domain.Configurations.EmailTemplates> templates, ILogger<EmailSender> logger)
         {
             _settings = settings.Value;
-            _templates = templates?.Value ?? new NuVerse.Infrastructure.Configurations.EmailTemplates();
+            _templates = templates?.Value ?? new NuVerse.Domain.Configurations.EmailTemplates();
             _logger = logger;
             _client = new SmtpClient();
 
@@ -35,6 +37,10 @@ namespace NuVerse.Infrastructure.Services
 
         public async Task SendEmailAsync(string fullName, string email, string phone, string reason)
         {
+            // Prevent operations after DisposeAsync has started
+            if (System.Threading.Interlocked.CompareExchange(ref _disposed, 0, 0) == 1)
+                throw new ObjectDisposedException(nameof(EmailSender));
+
             var username = _settings.Username ?? Environment.GetEnvironmentVariable("SMTP_USER");
             var password = _settings.Password ?? Environment.GetEnvironmentVariable("SMTP_PASS");
 
@@ -70,7 +76,7 @@ namespace NuVerse.Infrastructure.Services
                     }
                 }
 
-            // SEND TO NUSERSE
+            // SEND TO NUVERSE
             var adminSubject = Format(_templates.AdminSubject, fullName, email, phone, reason) ?? $"VR Request - {fullName}";
             var adminBody = Format(_templates.AdminBody, fullName, email, phone, reason) ??
                 $"VR Request From: {fullName}\nEmail: {email}\nPhone: {phone}\n\nReason:\n{reason}";

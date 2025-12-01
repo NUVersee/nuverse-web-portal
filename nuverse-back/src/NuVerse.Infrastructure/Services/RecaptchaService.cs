@@ -50,7 +50,7 @@ namespace NuVerse.Infrastructure.Services
 
                 if (!string.IsNullOrWhiteSpace(remoteIp))
                     values.Add("remoteip", remoteIp);
-
+                using var content = new FormUrlEncodedContent(values);
                 var response = await _http.PostAsync("https://www.google.com/recaptcha/api/siteverify", new FormUrlEncodedContent(values));
                 if (!response.IsSuccessStatusCode)
                 {
