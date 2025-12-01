@@ -14,7 +14,7 @@ public static class DependencyInjection
         // Bind email settings from configuration (appsettings / user-secrets / env)
         services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
         // Bind email templates for subjects and bodies
-        services.Configure<NuVerse.Infrastructure.Configurations.EmailTemplates>(configuration.GetSection("EmailTemplates"));
+        services.Configure<NuVerse.Domain.Configurations.EmailTemplates>(configuration.GetSection("EmailTemplates"));
 
         // Override sensitive or environment-specific settings from environment variables if present.
         services.PostConfigure<EmailSettings>(opts =>
@@ -38,7 +38,7 @@ public static class DependencyInjection
 
         // Register infrastructure services
         // EmailSender uses MailKit and holds a reusable SMTP client — register as singleton so the client can be reused.
-        services.AddSingleton<IEmailSender, EmailSender>();
+        services.AddTransient<IEmailSender, Repositories.EmailSender>();
         // Recaptcha verification (uses HttpClient)
         services.AddHttpClient<IRecaptchaService, RecaptchaService>();
 
