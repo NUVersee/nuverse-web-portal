@@ -14,5 +14,6 @@ namespace NuVerse.Domain.DTOs
 
         [Required(ErrorMessage = "Reason is required")]
         public string? Reason { get; set; }
+        public string? CaptchaToken { get; set; }
     }
 }
