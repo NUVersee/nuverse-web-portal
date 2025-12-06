@@ -39,8 +39,10 @@ public static class DependencyInjection
         // Register infrastructure services
         // EmailSender uses MailKit and holds a reusable SMTP client — register as singleton so the client can be reused.
         services.AddTransient<IEmailSender, Repositories.EmailSender>();
-        // Recaptcha verification (uses HttpClient)
         services.AddHttpClient<IRecaptchaService, RecaptchaService>();
+        
+        services.AddScoped<IChemistryLabService, ChemistryLabService>();
+        services.AddScoped<ICircuitLabService, CircuitLabService>();
 
         return services;
     }
