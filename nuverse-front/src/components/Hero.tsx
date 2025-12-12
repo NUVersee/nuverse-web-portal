@@ -10,8 +10,8 @@ type HeroProps = {
 
 export function Hero({ onStart360Tour }: HeroProps) {
   const handleRequestVR = () => {
-    window.location.href =
-      "mailto:nuverse6@gmail.com?subject=VR%20Tour%20Request&body=Hi%2C%0D%0A%0D%0AI%20would%20like%20to%20request%20a%20VR%20tour%20of%20Nile%20University.%0D%0A%0D%0AThank%20you!";
+    const section = document.getElementById("contact");
+    section?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
