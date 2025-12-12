@@ -1,0 +1,39 @@
+"use client";
+
+import { useState } from "react";
+import { AIProfessorViewer } from "@/components/AIProfessorViewer";
+import { About } from "@/components/About";
+import { ChatbotButton } from "@/components/ChatbotButton";
+import { Footer } from "@/components/Footer";
+import { Header } from "@/components/Header";
+import { LabsViewer } from "@/components/LabsViewer";
+import { Tour360Viewer } from "@/components/Tour360Viewer";
+
+export default function AboutPage() {
+  const [showTour360, setShowTour360] = useState(false);
+  const [showLabs, setShowLabs] = useState(false);
+  const [showAIProfessor, setShowAIProfessor] = useState(false);
+
+  return (
+    <>
+      {showTour360 ? (
+        <Tour360Viewer onClose={() => setShowTour360(false)} />
+      ) : showLabs ? (
+        <LabsViewer onClose={() => setShowLabs(false)} />
+      ) : showAIProfessor ? (
+        <AIProfessorViewer onClose={() => setShowAIProfessor(false)} />
+      ) : (
+        <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors">
+          <Header />
+          <About
+            onStart360Tour={() => setShowTour360(true)}
+            onOpenLabs={() => setShowLabs(true)}
+            onOpenAIProfessor={() => setShowAIProfessor(true)}
+          />
+          <Footer />
+          <ChatbotButton />
+        </div>
+      )}
+    </>
+  );
+}

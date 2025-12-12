@@ -5,10 +5,14 @@
 import { Menu, Moon, Sun, X } from "lucide-react";
 import { useState } from "react";
 import { useTheme } from "./ThemeContext";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { isDarkMode, toggleTheme } = useTheme();
+  const pathname = usePathname();
+  const isHome = pathname === "/";
 
   return (
     <header className="bg-white dark:bg-gray-800 shadow-sm sticky top-0 z-50 transition-colors">
@@ -21,18 +25,36 @@ export function Header() {
 
           <div className="hidden md:flex items-center gap-8">
             <div className="flex items-baseline space-x-8">
-              <a href="#home" className="text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-3 py-2">
-                Home
-              </a>
-              <a href="#services" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-3 py-2">
-                Services
-              </a>
-              <a href="#about" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-3 py-2">
-                About
-              </a>
-              <a href="#contact" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-3 py-2">
-                Contact
-              </a>
+                <Link href="/" className="text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-3 py-2">
+                  Home
+                </Link>
+                <Link
+                  href={isHome ? "#services" : "/#services"}
+                  onClick={(e) => {
+                    if (!isHome) {
+                      e.preventDefault();
+                      window.location.href = "/#services";
+                    }
+                  }}
+                  className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-3 py-2"
+                >
+                  Services
+                </Link>
+                <Link href="/about" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-3 py-2">
+                  About
+                </Link>
+                <Link
+                  href={isHome ? "#contact" : "/#contact"}
+                  onClick={(e) => {
+                    if (!isHome) {
+                      e.preventDefault();
+                      window.location.href = "/#contact";
+                    }
+                  }}
+                  className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-3 py-2"
+                >
+                  Contact
+                </Link>
             </div>
 
             <button
@@ -64,18 +86,36 @@ export function Header() {
         {isMenuOpen && (
           <div className="md:hidden py-4 border-t dark:border-gray-700">
             <div className="flex flex-col space-y-2">
-              <a href="#home" className="text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 px-3 py-2">
+              <Link href="/" className="text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 px-3 py-2">
                 Home
-              </a>
-              <a href="#services" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 px-3 py-2">
+              </Link>
+              <Link
+                href={isHome ? "#services" : "/#services"}
+                onClick={(e) => {
+                  if (!isHome) {
+                    e.preventDefault();
+                    window.location.href = "/#services";
+                  }
+                }}
+                className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 px-3 py-2"
+              >
                 Services
-              </a>
-              <a href="#about" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 px-3 py-2">
+              </Link>
+              <Link href="/about" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 px-3 py-2">
                 About
-              </a>
-              <a href="#contact" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 px-3 py-2">
+              </Link>
+              <Link
+                href={isHome ? "#contact" : "/#contact"}
+                onClick={(e) => {
+                  if (!isHome) {
+                    e.preventDefault();
+                    window.location.href = "/#contact";
+                  }
+                }}
+                className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 px-3 py-2"
+              >
                 Contact
-              </a>
+              </Link>
             </div>
           </div>
         )}
