@@ -1,6 +1,3 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
 using NuVerse.Application.Interfaces.Repositories;
@@ -14,7 +11,7 @@ namespace NuVerse.Infrastructure.Repositories
     public class EmailSender : IEmailSender, IAsyncDisposable
     {
         private readonly EmailSettings _settings;
-        private readonly NuVerse.Domain.Configurations.EmailTemplates _templates;
+        private readonly Domain.Configurations.EmailTemplates _templates;
         private readonly ILogger<EmailSender> _logger;
         private readonly SmtpClient _client;
         private readonly SemaphoreSlim _clientLock = new SemaphoreSlim(1, 1);
@@ -120,7 +117,7 @@ namespace NuVerse.Infrastructure.Repositories
                     }
                 }
 
-                // AUTO REPLY TO USER - optional
+                // AUTO REPLY TO USER - make it required for parity with admin notification
                 if (!string.IsNullOrWhiteSpace(email))
                 {
                     try
@@ -130,12 +127,14 @@ namespace NuVerse.Infrastructure.Repositories
                             $"Hello {fullName},\n\nWe received your VR request:\n\n{reason}\n\nWe will contact you soon.\n\nRegards,\nNuVerse Team";
 
                         var userMime = BuildMimeMessage(_settings.From, email, userSubject, userBody, null);
+                        _logger.LogInformation("Sending auto-reply to {Email}", email);
                         await _client.SendAsync(userMime, CancellationToken.None);
+                        _logger.LogInformation("Auto-reply sent to {Email}", email);
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogWarning(ex, "Failed to send auto-reply to user {Email}", email);
-                        // swallow: admin message already sent, user reply is optional
+                        _logger.LogError(ex, "Failed to send auto-reply to user {Email}", email);
+                        throw; // bubble up so caller knows the overall send failed
                     }
                 }
             }
