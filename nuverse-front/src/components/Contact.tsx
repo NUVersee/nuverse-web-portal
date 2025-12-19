@@ -1,5 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-expressions
-`use client`;
+"use client";
 
 import { Facebook, Instagram, Linkedin, Mail, MapPin, Phone, Send, Twitter } from "lucide-react";
 import { useState } from "react";
@@ -8,14 +7,53 @@ export function Contact() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    message: "",
+    phone: "",
+    Reason_for_Request: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [submitting, setSubmitting] = useState(false);
+  const [status, setStatus] = useState<{ type: "success" | "error" | null; Reason_for_Request: string }>({
+    type: null,
+    Reason_for_Request: "",
+  });
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const subject = `Contact from ${formData.name}`;
-    const body = `Name: ${formData.name}%0D%0AEmail: ${formData.email}%0D%0A%0D%0AMessage:%0D%0A${formData.message}`;
-    window.location.href = `mailto:nuverse6@gmail.com?subject=${subject}&body=${body}`;
+
+    setStatus({ type: null, Reason_for_Request: "" });
+    setSubmitting(true);
+
+    const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:5000";
+    const url = `${apiBase}/api/contact`;
+
+    try {
+      const resp = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          fullName: formData.name || "Anonymous",
+          email: formData.email,
+          phoneNumber: formData.phone,
+          reason: formData.Reason_for_Request,
+          captchaToken: null, // add real token if Recaptcha is enabled
+        }),
+      });
+
+      if (!resp.ok) {
+        const text = await resp.text();
+        throw new Error(text || "Failed to send Reason_for_Request");
+      }
+
+      setStatus({ type: "success", Reason_for_Request: "Message sent successfully. We'll get back to you soon." });
+      setFormData({ name: "", email: "", phone: "", Reason_for_Request: "" });
+    } catch (err) {
+      const Reason_for_Request = err instanceof Error ? err.message : "Something went wrong.";
+      setStatus({ type: "error", Reason_for_Request });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -52,8 +90,21 @@ export function Contact() {
                 />
               </div>
               <div>
+                <label htmlFor="phone" className="block text-gray-700 dark:text-gray-300 mb-2">
+                  Phone 
+                </label>
+                <input
+                  type="tel"
+                  id="phone"
+                  value={formData.phone}
+                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                  placeholder="Your phone number"
+                />
+              </div>
+              <div>
                 <label htmlFor="email" className="block text-gray-700 dark:text-gray-300 mb-2">
-                  Email
+                  Email (Enter Gmail)
                 </label>
                 <input
                   type="email"
@@ -62,28 +113,40 @@ export function Contact() {
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   required
                   className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-                  placeholder="your.email@example.com"
+                  placeholder="youremail@gmail.com"
                 />
               </div>
               <div>
-                <label htmlFor="message" className="block text-gray-700 dark:text-gray-300 mb-2">
-                  Message
+                <label htmlFor="Reason_for_Request" className="block text-gray-700 dark:text-gray-300 mb-2">
+                  Reason for Request
                 </label>
                 <textarea
                   id="message"
-                  value={formData.message}
-                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                  value={formData.Reason_for_Request}
+                  onChange={(e) => setFormData({ ...formData, Reason_for_Request: e.target.value })}
                   required
                   rows={5}
                   className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white resize-none"
-                  placeholder="How can we help you?"
+                  placeholder="I would like to request the university VR equipment to take a virtual tour of..."
                 />
               </div>
+              {status.type && (
+                <div
+                  className={`text-sm rounded-lg p-3 ${
+                    status.type === "success"
+                      ? "bg-green-50 text-green-800 dark:bg-green-900/40 dark:text-green-100"
+                      : "bg-red-50 text-red-800 dark:bg-red-900/40 dark:text-red-100"
+                  }`}
+                >
+                  {status.Reason_for_Request}
+                </div>
+              )}
               <button
                 type="submit"
-                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-purple-600 hover:to-blue-600 text-white px-6 py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-2xl transform hover:scale-105"
+                disabled={submitting}
+                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-purple-600 hover:to-blue-600 text-white px-6 py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-2xl transform hover:scale-105 disabled:opacity-60 disabled:cursor-not-allowed"
               >
-                Send Message
+                {submitting ? "Sending..." : "Send Message"}
                 <Send size={20} />
               </button>
             </form>
