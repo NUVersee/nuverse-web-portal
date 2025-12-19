@@ -36,11 +36,20 @@ public static class DependencyInjection
             if (!string.IsNullOrWhiteSpace(useSsl) && bool.TryParse(useSsl, out var b)) opts.UseSsl = b;
         });
 
+        // Configure Chatbot settings
+        services.Configure<Configurations.ChatbotSettings>(
+            configuration.GetSection(Configurations.ChatbotSettings.SectionName));
+
         // Register infrastructure services
         // EmailSender uses MailKit and holds a reusable SMTP client — register as singleton so the client can be reused.
         services.AddTransient<IEmailSender, Repositories.EmailSender>();
-        // Recaptcha verification (uses HttpClient)
         services.AddHttpClient<IRecaptchaService, RecaptchaService>();
+        
+        services.AddScoped<IChemistryLabService, ChemistryLabService>();
+        services.AddScoped<ICircuitLabService, CircuitLabService>();
+        
+        // Register Chatbot service with HttpClient
+        services.AddHttpClient<Application.Interfaces.IChatbotService, ChatbotService>();
 
         return services;
     }

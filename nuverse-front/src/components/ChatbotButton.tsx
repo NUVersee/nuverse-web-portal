@@ -7,7 +7,10 @@ import { useState } from "react";
 type Message = {
   type: "bot" | "user";
   text: string;
+  sources?: string[];
 };
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5297";
 
 export function ChatbotButton() {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,45 +21,94 @@ export function ChatbotButton() {
     },
   ]);
   const [inputValue, setInputValue] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [sessionId] = useState(() => `session-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`);
 
   const quickQuestions = ["What programs do you offer?", "How do I apply?", "What are the admission requirements?", "Tell me about tuition fees"];
 
-  const handleSendMessage = () => {
-    if (!inputValue.trim()) return;
+  const handleSendMessage = async () => {
+    if (!inputValue.trim() || isLoading) return;
 
     const userMessage: Message = { type: "user", text: inputValue };
     setMessages((prev) => [...prev, userMessage]);
-
-    setTimeout(() => {
-      const botResponse: Message = {
-        type: "bot",
-        text: "Thank you for your question! For detailed information, please contact us at nuverse6@gmail.com or explore our VR tour to learn more about Nile University.",
-      };
-      setMessages((prev) => [...prev, botResponse]);
-    }, 1000);
-
     setInputValue("");
-  };
+    setIsLoading(true);
 
-  const handleQuickQuestion = (question: string) => {
-    const userMessage: Message = { type: "user", text: question };
-    setMessages((prev) => [...prev, userMessage]);
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/chatbot/ask`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          question: inputValue,
+          sessionId: sessionId,
+          useMemory: true,
+        }),
+      });
 
-    setTimeout(() => {
-      let response = "";
-      if (question.includes("programs")) {
-        response = "We offer programs in Engineering, Computer Science, Business, and more. Would you like to schedule a VR tour to explore our facilities?";
-      } else if (question.includes("apply")) {
-        response = "You can apply through our website or email us at nuverse6@gmail.com. Our admission team will guide you through the process!";
-      } else if (question.includes("requirements")) {
-        response = "Admission requirements vary by program. Please email nuverse6@gmail.com with your intended program for specific requirements.";
-      } else if (question.includes("tuition")) {
-        response = "For detailed tuition information and scholarship opportunities, please contact us at nuverse6@gmail.com.";
+      if (!response.ok) {
+        throw new Error("Failed to get response from chatbot");
       }
 
-      const botResponse: Message = { type: "bot", text: response };
+      const data = await response.json();
+      const botResponse: Message = {
+        type: "bot",
+        text: data.answer || "I apologize, but I couldn't generate a response. Please try again.",
+        sources: data.sources,
+      };
       setMessages((prev) => [...prev, botResponse]);
-    }, 1000);
+    } catch (error) {
+      console.error("Error calling chatbot API:", error);
+      const errorResponse: Message = {
+        type: "bot",
+        text: "I'm having trouble connecting to the server. Please try again later or contact us at nuverse6@gmail.com.",
+      };
+      setMessages((prev) => [...prev, errorResponse]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleQuickQuestion = async (question: string) => {
+    const userMessage: Message = { type: "user", text: question };
+    setMessages((prev) => [...prev, userMessage]);
+    setIsLoading(true);
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/chatbot/ask`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          question: question,
+          sessionId: sessionId,
+          useMemory: true,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to get response from chatbot");
+      }
+
+      const data = await response.json();
+      const botResponse: Message = {
+        type: "bot",
+        text: data.answer || "I apologize, but I couldn't generate a response. Please try again.",
+        sources: data.sources,
+      };
+      setMessages((prev) => [...prev, botResponse]);
+    } catch (error) {
+      console.error("Error calling chatbot API:", error);
+      const errorResponse: Message = {
+        type: "bot",
+        text: "I'm having trouble connecting to the server. Please try again later or contact us at nuverse6@gmail.com.",
+      };
+      setMessages((prev) => [...prev, errorResponse]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -84,10 +136,30 @@ export function ChatbotButton() {
                     message.type === "user" ? "bg-blue-600 text-white" : "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white"
                   }`}
                 >
-                  {message.text}
+                  <div className="whitespace-pre-wrap">{message.text}</div>
+                  {message.sources && message.sources.length > 0 && (
+                    <div className="mt-2 pt-2 border-t border-gray-300 dark:border-gray-600">
+                      <p className="text-xs opacity-75 mb-1">Sources:</p>
+                      {message.sources.map((source, idx) => (
+                        <p key={idx} className="text-xs opacity-75">• {source}</p>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
+
+            {isLoading && (
+              <div className="flex justify-start">
+                <div className="bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg p-3">
+                  <div className="flex space-x-2">
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0.1s" }}></div>
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0.2s" }}></div>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {messages.length === 1 && (
               <div className="space-y-2">
@@ -111,11 +183,16 @@ export function ChatbotButton() {
                 type="text"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
+                onKeyDown={(e) => e.key === "Enter" && !isLoading && handleSendMessage()}
                 placeholder="Type your message..."
-                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                disabled={isLoading}
+                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:opacity-50 disabled:cursor-not-allowed"
               />
-              <button onClick={handleSendMessage} className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg transition-colors">
+              <button 
+                onClick={handleSendMessage} 
+                disabled={isLoading || !inputValue.trim()}
+                className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
                 <Send size={20} />
               </button>
             </div>
