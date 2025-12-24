@@ -1,5 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-expressions
-`use client`;
+"use client";
 
 import { ThemeProvider } from "@/components/ThemeContext";
 
