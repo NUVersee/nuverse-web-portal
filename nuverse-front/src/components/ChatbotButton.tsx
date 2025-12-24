@@ -1,5 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-expressions
-`use client`;
+"use client";
 
 import { MessageCircle, Send, X } from "lucide-react";
 import { useState } from "react";
@@ -132,9 +131,8 @@ export function ChatbotButton() {
             {messages.map((message, index) => (
               <div key={index} className={`flex ${message.type === "user" ? "justify-end" : "justify-start"}`}>
                 <div
-                  className={`max-w-[80%] rounded-lg p-3 ${
-                    message.type === "user" ? "bg-blue-600 text-white" : "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white"
-                  }`}
+                  className={`max-w-[80%] rounded-lg p-3 ${message.type === "user" ? "bg-blue-600 text-white" : "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white"
+                    }`}
                 >
                   <div className="whitespace-pre-wrap">{message.text}</div>
                   {message.sources && message.sources.length > 0 && (
@@ -188,8 +186,8 @@ export function ChatbotButton() {
                 disabled={isLoading}
                 className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:opacity-50 disabled:cursor-not-allowed"
               />
-              <button 
-                onClick={handleSendMessage} 
+              <button
+                onClick={handleSendMessage}
                 disabled={isLoading || !inputValue.trim()}
                 className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >

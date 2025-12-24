@@ -1,5 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-expressions
-`use client`;
+"use client";
 
 import { CircuitBoard, Cpu, FlaskConical, Home, Microscope, TestTube, X, Zap } from "lucide-react";
 import { ImageWithFallback } from "./ImageWithFallback";

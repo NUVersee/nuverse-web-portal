@@ -1,5 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-expressions
-`use client`;
+"use client";
 
 import { Zap, Brain, FlaskConical, Globe, Smartphone, MessageCircle } from "lucide-react";
 import { ImageWithFallback } from "./ImageWithFallback";
@@ -77,7 +76,7 @@ export function About({ onOpenLabs, onOpenAIProfessor, onStart360Tour }: AboutPr
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="space-y-6">
             <h3 className="text-gray-900 dark:text-white text-2xl font-semibold">What is NUVerse?</h3>
-            
+
             <div className="space-y-4">
               <div>
                 <h4 className="text-gray-900 dark:text-white font-semibold mb-2">The Problem We Solve</h4>
@@ -85,7 +84,7 @@ export function About({ onOpenLabs, onOpenAIProfessor, onStart360Tour }: AboutPr
                   Students can't always visit campus. Distance, schedules, mobility challenges, and time zones create barriers. Prospective students arrive unprepared. Admission teams struggle during peak seasons.
                 </p>
               </div>
-              
+
               <div>
                 <h4 className="text-gray-900 dark:text-white font-semibold mb-2">Our Solution</h4>
                 <p className="text-gray-600 dark:text-gray-400">
@@ -139,7 +138,7 @@ export function About({ onOpenLabs, onOpenAIProfessor, onStart360Tour }: AboutPr
       {/* Why NUVerse Matters */}
       <div className="max-w-7xl mx-auto mb-20 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-700 rounded-3xl p-12">
         <h3 className="text-gray-900 dark:text-white text-2xl font-semibold mb-12 text-center">Why NUVerse Matters</h3>
-        
+
         <div className="grid md:grid-cols-2 gap-8">
           {benefits.map((benefit, index) => (
             <div key={index} className="flex gap-4">
@@ -160,7 +159,7 @@ export function About({ onOpenLabs, onOpenAIProfessor, onStart360Tour }: AboutPr
       {/* How Students Use NUVerse */}
       <div className="max-w-7xl mx-auto mb-20">
         <h3 className="text-gray-900 dark:text-white text-2xl font-semibold mb-12 text-center">How Students Use NUVerse</h3>
-        
+
         <div className="grid md:grid-cols-3 gap-8">
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 border-l-4 border-blue-600">
             <h4 className="text-gray-900 dark:text-white font-semibold mb-3 flex items-center gap-2">
@@ -201,7 +200,7 @@ export function About({ onOpenLabs, onOpenAIProfessor, onStart360Tour }: AboutPr
           <p className="text-blue-100 mb-8 text-lg max-w-2xl mx-auto">
             Step into your future with NUVerse. Experience Nile University like never before.
           </p>
-          
+
           <div className="flex flex-wrap gap-4 justify-center">
             <button
               onClick={onStart360Tour}

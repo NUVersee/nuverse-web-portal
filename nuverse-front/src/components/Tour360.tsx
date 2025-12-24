@@ -1,5 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-expressions
-`use client`;
+"use client";
 
 import { Info, Maximize2, Navigation, Rotate3D, Sparkles } from "lucide-react";
 import { ImageWithFallback } from "./ImageWithFallback";
