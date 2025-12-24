@@ -1,5 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-expressions
-`use client`;
+"use client";
 
 import { useState } from "react";
 import { Home, MessageCircle, Send, X } from "lucide-react";
@@ -172,11 +171,10 @@ export function AIProfessorViewer({ onClose }: AIProfessorViewerProps) {
               <button
                 key={faculty.id}
                 onClick={() => handleFacultyChange(faculty.id)}
-                className={`flex-shrink-0 px-6 py-3 rounded-xl transition-all duration-300 transform ${
-                  activeFaculty === faculty.id
+                className={`flex-shrink-0 px-6 py-3 rounded-xl transition-all duration-300 transform ${activeFaculty === faculty.id
                     ? `bg-gradient-to-r ${faculty.gradient} text-white shadow-lg scale-105`
                     : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:scale-105"
-                }`}
+                  }`}
               >
                 {faculty.name}
               </button>

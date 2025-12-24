@@ -1,36 +1,76 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# NUverse Frontend
 
-## Getting Started
+Welcome to the **NUverse** frontend, an immersive virtual reality portal for Nile University. This application allows users to explore the campus in 360°, interact with AI professors, and experience virtual laboratories.
 
-First, run the development server:
+## 🚀 Features
 
+- **360° Campus Tour**: High-resolution panoramic views of Nile University.
+- **AI Professor**: Interact with AI-driven academic advisors.
+- **VR Labs**: Virtual experiments in Chemistry and Circuits.
+- **Modern UI/UX**: Premium design with glassmorphism, dark mode support, and smooth animations.
+- **Responsive Design**: Optimized for desktops, tablets, and phones.
+
+## 🛠️ Requirements
+
+Before you begin, ensure you have the following installed:
+
+- **Node.js**: `v18.x` or higher (tested with `v20.x`)
+- **npm**: `v9.x` or higher
+
+## 📦 Installation
+
+1. Clone the repository (if you haven't already):
+   ```bash
+   git clone <repository-url>
+   cd nuverse-web-portal/nuverse-front
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+## 🏃 How to Run
+
+### Development Mode
+
+To start the development server with Hot Module Replacement (HMR):
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+### Production Build
+
+To build the application for production:
+```bash
+npm run build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then, you can start the production server:
+```bash
+npm run start
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🏗️ Technology Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Framework**: [Next.js 15+](https://nextjs.org/) (App Router)
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/)
+- **Icons**: [Lucide React](https://lucide.dev/)
+- **State/Theme**: React Context API
+- **Fonts**: Outfit (Google Fonts)
 
-## Learn More
+## 🎨 Design System
 
-To learn more about Next.js, take a look at the following resources:
+The project uses a modern design system defined in `src/app/globals.css`:
+- **Glassmorphism**: Use the `.glass` and `.dark-glass` utility classes.
+- **Typography**: `font-sans` maps to the **Outfit** font.
+- **Colors**: Semantic CSS variables for background and foreground colors.
+- **Dark Mode**: Automatically respects system preferences or user toggle.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🤝 Contributing
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Create a new branch: `git checkout -b feature/your-feature-name`
+2. Commit your changes: `git commit -m "feat: adds some feature"`
+3. Push to the branch: `git push origin feature/your-feature-name`
+4. Open a Pull Request.

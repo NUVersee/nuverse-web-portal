@@ -1,5 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-expressions
-`use client`;
+"use client";
 
 import { Brain, FlaskConical } from "lucide-react";
 import { ServiceCard } from "./ServiceCard";

@@ -1,5 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-expressions
-`use client`;
+"use client";
 /* eslint-disable @next/next/no-img-element */
 
 import { Facebook, Linkedin, Mail, MapPin, Phone, Twitter, Instagram } from "lucide-react";
