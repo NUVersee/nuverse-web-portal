@@ -1,302 +1,451 @@
 "use client";
 
-import { ChevronLeft, ChevronRight, Home, Info, X, ZoomIn, ZoomOut } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
-import { ImageWithFallback } from "./ImageWithFallback";
+import React, { Suspense, useState, useRef, useEffect, useCallback } from "react";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { OrbitControls, useTexture, Html, PerspectiveCamera } from "@react-three/drei";
+import * as THREE from "three";
+import { useTheme } from "./ThemeContext";
+import {
+  Plus,
+  Minus,
+  X,
+  ChevronLeft,
+  ChevronRight,
+  ArrowUp,
+  ArrowDown,
+  ArrowLeft,
+  ArrowRight,
+  Info,
+  RotateCcw
+} from "lucide-react";
 
 type Hotspot = {
-  x: number;
-  y: number;
+  id: string;
+  position: [number, number, number];
   title: string;
   description: string;
 };
 
-type Tour360Image = {
+type TourImage = {
   id: number;
   title: string;
-  image: string;
+  url: string;
   hotspots: Hotspot[];
 };
 
-type Tour360ViewerProps = {
-  onClose: () => void;
-};
+const TOUR_IMAGES: TourImage[] = [
+  {
+    id: 1,
+    title: "University Main Plaza",
+    url: "https://photo-sphere-viewer-data.netlify.app/assets/sphere.jpg",
+    hotspots: [
+      { id: "h1", position: [10, 2, -20], title: "Main Building", description: "The heart of the campus, housing central administration and historic halls." },
+      { id: "h2", position: [-15, -5, 10], title: "Student Union", description: "A hub for student activities, food courts, and study spaces." },
+      { id: "h3", position: [20, -2, 15], title: "Green Space", description: "Ideal for outdoor studying and campus events." }
+    ]
+  },
+  {
+    id: 2,
+    title: "Research Laboratory",
+    url: "https://cdn.aframe.io/360-image-gallery-boilerplate/img/city.jpg",
+    hotspots: [
+      { id: "l1", position: [5, 0, -10], title: "Advanced Equipment", description: "State-of-the-art research tools for molecular analysis." },
+      { id: "l2", position: [-8, -2, -5], title: "Safety Station", description: "Fully equipped with emergency shower and eye wash." }
+    ]
+  },
+  {
+    id: 3,
+    title: "Campus Library",
+    url: "https://cdn.aframe.io/360-image-gallery-boilerplate/img/sechelt.jpg",
+    hotspots: [
+      { id: "c1", position: [0, -5, -10], title: "Observation Deck", description: "Panoramic view of the entire campus from the highest point." }
+    ]
+  }
+];
 
-export function Tour360Viewer({ onClose }: Tour360ViewerProps) {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [zoom, setZoom] = useState(1);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [isDragging, setIsDragging] = useState(false);
-  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
-  const [selectedHotspot, setSelectedHotspot] = useState<Hotspot | null>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  const tourImages: Tour360Image[] = [
-    {
-      id: 1,
-      title: "Main Campus Entrance",
-      image:
-        "https://images.unsplash.com/photo-1605221011656-10dff4f1549b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx1bml2ZXJzaXR5JTIwY2FtcHVzJTIwcGFub3JhbWljfGVufDF8fHx8MTc2NTIwOTczMXww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-      hotspots: [
-        { x: 25, y: 40, title: "Main Building", description: "Our iconic main building houses administrative offices and the grand auditorium." },
-        { x: 60, y: 50, title: "Student Plaza", description: "Central meeting point for students with outdoor seating and WiFi." },
-        { x: 80, y: 35, title: "Welcome Center", description: "Visitor information and admission office located here." },
-      ],
-    },
-    {
-      id: 2,
-      title: "University Library",
-      image:
-        "https://images.unsplash.com/photo-1637455587265-2a3c2cbbcc84?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx1bml2ZXJzaXR5JTIwbGlicmFyeSUyMGludGVyaW9yfGVufDF8fHx8MTc2NTIwMTk2Nnww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-      hotspots: [
-        { x: 30, y: 30, title: "Reading Area", description: "Quiet study spaces with individual desks and comfortable seating." },
-        { x: 55, y: 45, title: "Digital Resources", description: "Computer stations with access to online databases and research tools." },
-        { x: 75, y: 40, title: "Book Collection", description: "Over 100,000 books across all academic disciplines." },
-      ],
-    },
-    {
-      id: 3,
-      title: "Modern Lecture Hall",
-      image:
-        "https://images.unsplash.com/photo-1758413350815-7b06dbbfb9a7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBsZWN0dXJlJTIwaGFsbHxlbnwxfHx8fDE3NjUxMzQ2ODB8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-      hotspots: [
-        { x: 40, y: 25, title: "Smart Board", description: "Interactive displays with AI-powered teaching assistance." },
-        { x: 50, y: 55, title: "Lecture Seating", description: "Ergonomic seating for 200+ students with built-in power outlets." },
-        { x: 70, y: 40, title: "Audio System", description: "State-of-the-art sound system for crystal clear audio." },
-      ],
-    },
-    {
-      id: 4,
-      title: "Science Laboratory",
-      image:
-        "https://images.unsplash.com/photo-1707944746620-fc0371b91906?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzY2llbmNlJTIwbGFib3JhdG9yeSUyMGVxdWlwbWVudHxlbnwxfHx8fDE3NjUyMTczNjN8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-      hotspots: [
-        { x: 35, y: 50, title: "Lab Equipment", description: "Advanced microscopes, spectrometers, and analysis tools." },
-        { x: 60, y: 45, title: "Safety Station", description: "Emergency eyewash, shower, and safety equipment readily available." },
-        { x: 75, y: 35, title: "Work Benches", description: "Individual work stations with proper ventilation and utilities." },
-      ],
-    },
-  ];
-
-  const currentImage = tourImages[currentImageIndex];
-
-  const handleZoomIn = () => {
-    setZoom((prev) => Math.min(prev + 0.5, 3));
-  };
-
-  const handleZoomOut = () => {
-    setZoom((prev) => Math.max(prev - 0.5, 1));
-    if (zoom <= 1.5) {
-      setPosition({ x: 0, y: 0 });
-    }
-  };
-
-  const handleMouseDown = (e: React.MouseEvent) => {
-    if (zoom > 1) {
-      setIsDragging(true);
-      setDragStart({ x: e.clientX - position.x, y: e.clientY - position.y });
-    }
-  };
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (isDragging && zoom > 1) {
-      const newX = e.clientX - dragStart.x;
-      const newY = e.clientY - dragStart.y;
-      const maxX = (zoom - 1) * 400;
-      const maxY = (zoom - 1) * 300;
-
-      setPosition({
-        x: Math.max(Math.min(newX, maxX), -maxX),
-        y: Math.max(Math.min(newY, maxY), -maxY),
-      });
-    }
-  };
-
-  const handleMouseUp = () => setIsDragging(false);
-
-  const nextImage = () => {
-    setCurrentImageIndex((prev) => (prev + 1) % tourImages.length);
-    setZoom(1);
-    setPosition({ x: 0, y: 0 });
-    setSelectedHotspot(null);
-  };
-
-  const prevImage = () => {
-    setCurrentImageIndex((prev) => (prev - 1 + tourImages.length) % tourImages.length);
-    setZoom(1);
-    setPosition({ x: 0, y: 0 });
-    setSelectedHotspot(null);
-  };
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "ArrowLeft") {
-        setCurrentImageIndex((prev) => (prev - 1 + tourImages.length) % tourImages.length);
-        setZoom(1);
-        setPosition({ x: 0, y: 0 });
-        setSelectedHotspot(null);
-      }
-      if (e.key === "ArrowRight") {
-        setCurrentImageIndex((prev) => (prev + 1) % tourImages.length);
-        setZoom(1);
-        setPosition({ x: 0, y: 0 });
-        setSelectedHotspot(null);
-      }
-      if (e.key === "ArrowUp") {
-        setZoom((prev) => Math.min(prev + 0.5, 3));
-      }
-      if (e.key === "ArrowDown") {
-        setZoom((prev) => {
-          const next = Math.max(prev - 0.5, 1);
-          if (next <= 1.5) {
-            setPosition({ x: 0, y: 0 });
-          }
-          return next;
-        });
-      }
-      if (e.key === "Escape") onClose();
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [onClose, tourImages.length]);
+function Scene({ url, hotspots, onHotspotClick }: { url: string, hotspots: Hotspot[], onHotspotClick: (h: Hotspot) => void }) {
+  const texture = useTexture(url);
 
   return (
-    <div className="fixed inset-0 bg-black z-50 flex flex-col">
-      <div className="bg-gray-900/95 backdrop-blur-sm px-6 py-4 flex items-center justify-between border-b border-gray-700">
-        <div className="flex items-center gap-4">
-          <button onClick={onClose} className="text-white hover:bg-gray-800 p-2 rounded-lg transition-colors">
-            <Home size={24} />
+    <>
+      <ambientLight intensity={0.5} />
+      <mesh scale={[-1, 1, 1]}>
+        <sphereGeometry args={[500, 64, 32]} />
+        <meshBasicMaterial map={texture} side={THREE.BackSide} />
+      </mesh>
+
+      {hotspots.map((hotspot) => (
+        <Html key={hotspot.id} position={hotspot.position} distanceFactor={15}>
+          <button
+            onClick={() => onHotspotClick(hotspot)}
+            className="group relative w-10 h-10 flex items-center justify-center transition-all hover:scale-125"
+          >
+            <div className="absolute inset-0 bg-brand-500 rounded-full animate-ping opacity-25"></div>
+            <div className="relative w-8 h-8 bg-brand-600/80 backdrop-blur-md rounded-full border-2 border-white/50 shadow-xl flex items-center justify-center text-white">
+              <Info size={16} />
+            </div>
           </button>
+        </Html>
+      ))}
+    </>
+  );
+}
+
+function Controls({ controlsRef, onZoomChange }: { controlsRef: React.RefObject<any>, onZoomChange: (z: number) => void }) {
+  const { camera } = useThree();
+
+  useFrame(() => {
+    if (camera instanceof THREE.PerspectiveCamera) {
+      onZoomChange(camera.fov);
+    }
+  });
+
+  return (
+    <OrbitControls
+      ref={controlsRef}
+      enablePan={false}
+      enableZoom={true}
+      rotateSpeed={-0.5}
+      dampingFactor={0.05}
+      minDistance={1}
+      maxDistance={2}
+      zoomSpeed={0.5}
+    />
+  );
+}
+
+export function Tour360Viewer({ onClose, initialIndex = 0 }: { onClose: () => void, initialIndex?: number }) {
+  const { isDarkMode } = useTheme();
+  const [currentIndex, setCurrentIndex] = useState(initialIndex);
+  const [selectedHotspot, setSelectedHotspot] = useState<Hotspot | null>(null);
+  const [fov, setFov] = useState(75);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const controlsRef = useRef<any>(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const currentTour = TOUR_IMAGES[currentIndex];
+  const [activeRotation, setActiveRotation] = useState<'up' | 'down' | 'left' | 'right' | null>(null);
+  const rotationTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const performRotation = useCallback((direction: 'up' | 'down' | 'left' | 'right') => {
+    if (!controlsRef.current) return;
+    const controls = controlsRef.current;
+    const step = 0.05;
+
+    // Directly manipulate the azimuthal and polar angles
+    switch (direction) {
+      case 'left':
+        controls.setAzimuthalAngle(controls.getAzimuthalAngle() + step);
+        break;
+      case 'right':
+        controls.setAzimuthalAngle(controls.getAzimuthalAngle() - step);
+        break;
+      case 'up':
+        controls.setPolarAngle(Math.max(0.1, controls.getPolarAngle() - step));
+        break;
+      case 'down':
+        controls.setPolarAngle(Math.min(Math.PI - 0.1, controls.getPolarAngle() + step));
+        break;
+    }
+
+    controls.update();
+  }, []);
+
+  useEffect(() => {
+    if (activeRotation) {
+      rotationTimerRef.current = setInterval(() => {
+        performRotation(activeRotation);
+      }, 16);
+    } else {
+      if (rotationTimerRef.current) clearInterval(rotationTimerRef.current);
+    }
+    return () => {
+      if (rotationTimerRef.current) clearInterval(rotationTimerRef.current);
+    };
+  }, [activeRotation, performRotation]);
+
+  const handleZoom = (delta: number) => {
+    setFov(prev => {
+      const next = Math.max(30, Math.min(100, prev + delta));
+      return next;
+    });
+  };
+
+  const handleTourChange = (index: number) => {
+    if (index === currentIndex) return;
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setCurrentIndex(index);
+      setIsTransitioning(false);
+    }, 500);
+  };
+
+  const resetView = () => {
+    if (controlsRef.current) {
+      controlsRef.current.reset();
+      setFov(75);
+    }
+  };
+
+  const glassClass = isDarkMode ? "dark-glass border-white/10" : "glass border-white/20";
+
+  if (!mounted) return null;
+
+  return (
+    <div className="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center font-sans overflow-hidden">
+      {/* Top Header */}
+      <div className="absolute top-0 left-0 right-0 p-6 flex justify-between items-center z-10 pointer-events-none">
+        <div className={`${glassClass} px-6 py-3 rounded-2xl border shadow-2xl pointer-events-auto flex items-center gap-4`}>
+          <div className="w-10 h-10 rounded-xl bg-brand-500/20 flex items-center justify-center border border-brand-500/30">
+            <Maximize2 className="text-brand-500" size={20} />
+          </div>
           <div>
-            <h2 className="text-white">{currentImage.title}</h2>
-            <p className="text-sm text-gray-400">
-              {currentImageIndex + 1} / {tourImages.length}
-            </p>
+            <h2 className="text-white text-lg font-bold leading-tight">
+              {currentTour.title}
+            </h2>
+            <p className="text-white/50 text-xs uppercase tracking-widest font-medium">Virtual Campus Experience</p>
           </div>
         </div>
 
-        <button onClick={onClose} className="text-white hover:bg-gray-800 p-2 rounded-lg transition-colors">
+        <button
+          onClick={onClose}
+          className={`${glassClass} p-4 rounded-2xl border text-white hover:bg-white/10 transition-all pointer-events-auto shadow-2xl active:scale-95`}
+        >
           <X size={24} />
         </button>
       </div>
 
-      <div className="flex-1 relative overflow-hidden">
-        <div
-          ref={containerRef}
-          className="w-full h-full flex items-center justify-center cursor-move"
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          onMouseLeave={handleMouseUp}
-        >
-          <div
-            className="relative transition-transform duration-200"
-            style={{
-              transform: `scale(${zoom}) translate(${position.x / zoom}px, ${position.y / zoom}px)`,
-              transformOrigin: "center center",
-            }}
-          >
-            <ImageWithFallback
-              src={currentImage.image}
-              alt={currentImage.title}
-              className="max-w-full max-h-[85vh] object-contain select-none"
-              draggable={false}
+      {/* Main 360 Canvas */}
+      <div className="w-full h-full cursor-grab active:cursor-grabbing relative">
+        <Canvas>
+          <PerspectiveCamera makeDefault position={[0, 0, 0.1]} fov={fov} />
+          <Suspense fallback={null}>
+            <Scene
+              key={currentTour.id}
+              url={currentTour.url}
+              hotspots={currentTour.hotspots}
+              onHotspotClick={setSelectedHotspot}
             />
+          </Suspense>
+          <Controls
+            controlsRef={controlsRef}
+            onZoomChange={(newFov) => {
+              // Only sync if the difference is significant to avoid state loops
+              if (Math.abs(newFov - fov) > 0.1) {
+                setFov(newFov);
+              }
+            }}
+          />
+        </Canvas>
 
-            {zoom === 1 &&
-              currentImage.hotspots.map((hotspot, index) => (
-                <button
-                  key={index}
-                  onClick={() => setSelectedHotspot(hotspot)}
-                  className="absolute w-8 h-8 bg-blue-600 rounded-full border-4 border-white shadow-lg hover:scale-125 transition-transform animate-pulse"
-                  style={{
-                    left: `${hotspot.x}%`,
-                    top: `${hotspot.y}%`,
-                    transform: "translate(-50%, -50%)",
-                  }}
-                >
-                  <Info className="text-white w-4 h-4 mx-auto" />
-                </button>
-              ))}
+        {/* Scene Transition Overlay */}
+        <div className={`absolute inset-0 bg-black pointer-events-none transition-opacity duration-500 ${isTransitioning ? 'opacity-100' : 'opacity-0'}`} />
+      </div>
+
+      {/* Modern Control HUD */}
+      <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-6 z-10 w-full px-4 max-w-4xl">
+
+        {/* Center Control Group */}
+        <div className="flex items-center gap-6">
+
+          {/* Zoom & Reset Side Panel */}
+          <div className={`flex flex-col gap-2 ${glassClass} p-2 rounded-2xl border shadow-2xl`}>
+            <button
+              onClick={() => handleZoom(-10)}
+              className="p-3 text-white hover:bg-brand-500 rounded-xl transition-all group"
+              title="Zoom In"
+            >
+              <Plus size={20} className="group-active:scale-125 transition-transform" />
+            </button>
+            <button
+              onClick={resetView}
+              className="p-3 bg-white/5 text-white hover:bg-white/20 rounded-xl transition-all"
+              title="Reset View"
+            >
+              <RotateCcw size={20} />
+            </button>
+            <button
+              onClick={() => handleZoom(10)}
+              className="p-3 text-white hover:bg-brand-500 rounded-xl transition-all group"
+              title="Zoom Out"
+            >
+              <Minus size={20} className="group-active:scale-75 transition-transform" />
+            </button>
+          </div>
+
+          {/* Precision Navigation Wheel */}
+          <div className={`relative ${glassClass} p-8 rounded-[2.5rem] border shadow-2xl flex items-center justify-center`}>
+            {/* Directional Pad */}
+            <div className="grid grid-cols-3 gap-2">
+              <div />
+              <button
+                onMouseDown={() => setActiveRotation('up')}
+                onMouseUp={() => setActiveRotation(null)}
+                onMouseLeave={() => setActiveRotation(null)}
+                onTouchStart={() => setActiveRotation('up')}
+                onTouchEnd={() => setActiveRotation(null)}
+                className="p-4 text-white hover:bg-brand-500 rounded-2xl transition-all hover:shadow-[0_0_25px_rgba(59,130,246,0.6)] active:scale-95 border border-white/5"
+              >
+                <ArrowUp size={24} />
+              </button>
+              <div />
+
+              <button
+                onMouseDown={() => setActiveRotation('left')}
+                onMouseUp={() => setActiveRotation(null)}
+                onMouseLeave={() => setActiveRotation(null)}
+                onTouchStart={() => setActiveRotation('left')}
+                onTouchEnd={() => setActiveRotation(null)}
+                className="p-4 text-white hover:bg-brand-500 rounded-2xl transition-all hover:shadow-[0_0_25px_rgba(59,130,246,0.6)] active:scale-95 border border-white/5"
+              >
+                <ArrowLeft size={24} />
+              </button>
+
+              {/* Central Indicator */}
+              <div className="w-16 h-16 flex items-center justify-center">
+                <div className="w-2 h-2 rounded-full bg-brand-500 animate-pulse" />
+              </div>
+
+              <button
+                onMouseDown={() => setActiveRotation('right')}
+                onMouseUp={() => setActiveRotation(null)}
+                onMouseLeave={() => setActiveRotation(null)}
+                onTouchStart={() => setActiveRotation('right')}
+                onTouchEnd={() => setActiveRotation(null)}
+                className="p-4 text-white hover:bg-brand-500 rounded-2xl transition-all hover:shadow-[0_0_25px_rgba(59,130,246,0.6)] active:scale-95 border border-white/5"
+              >
+                <ArrowRight size={24} />
+              </button>
+
+              <div />
+              <button
+                onMouseDown={() => setActiveRotation('down')}
+                onMouseUp={() => setActiveRotation(null)}
+                onMouseLeave={() => setActiveRotation(null)}
+                onTouchStart={() => setActiveRotation('down')}
+                onTouchEnd={() => setActiveRotation(null)}
+                className="p-4 text-white hover:bg-brand-500 rounded-2xl transition-all hover:shadow-[0_0_25px_rgba(59,130,246,0.6)] active:scale-95 border border-white/5"
+              >
+                <ArrowDown size={24} />
+              </button>
+              <div />
+            </div>
+          </div>
+
+          {/* Navigation Side Panel */}
+          <div className={`flex flex-col gap-2 ${glassClass} p-2 rounded-2xl border shadow-2xl`}>
+            <button
+              onClick={() => handleTourChange((currentIndex + 1) % TOUR_IMAGES.length)}
+              className="p-3 text-white hover:bg-brand-500 rounded-xl transition-all"
+              title="Next Scene"
+            >
+              <ChevronRight size={20} />
+            </button>
+            <div className="h-px bg-white/10 mx-2"></div>
+            <button
+              onClick={() => handleTourChange((currentIndex - 1 + TOUR_IMAGES.length) % TOUR_IMAGES.length)}
+              className="p-3 text-white hover:bg-brand-500 rounded-xl transition-all"
+              title="Previous Scene"
+            >
+              <ChevronLeft size={20} />
+            </button>
           </div>
         </div>
 
-        <button
-          onClick={prevImage}
-          className="absolute left-4 top-1/2 -translate-y-1/2 bg-gray-900/80 hover:bg-gray-800 text-white p-4 rounded-full transition-all hover:scale-110 shadow-xl"
-        >
-          <ChevronLeft size={32} />
-        </button>
-
-        <button
-          onClick={nextImage}
-          className="absolute right-4 top-1/2 -translate-y-1/2 bg-gray-900/80 hover:bg-gray-800 text-white p-4 rounded-full transition-all hover:scale-110 shadow-xl"
-        >
-          <ChevronRight size={32} />
-        </button>
-      </div>
-
-      <div className="bg-gray-900/95 backdrop-blur-sm px-6 py-4 flex items-center justify-between border-t border-gray-700">
-        <div className="flex items-center gap-4">
-          <button
-            onClick={handleZoomOut}
-            disabled={zoom <= 1}
-            className="text-white hover:bg-gray-800 p-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <ZoomOut size={24} />
-          </button>
-          <span className="text-white min-w-[60px] text-center">{Math.round(zoom * 100)}%</span>
-          <button
-            onClick={handleZoomIn}
-            disabled={zoom >= 3}
-            className="text-white hover:bg-gray-800 p-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <ZoomIn size={24} />
-          </button>
-        </div>
-
-        <div className="flex gap-2">
-          {tourImages.map((_, index) => (
+        {/* Thumbnails Gallery */}
+        <div className={`flex gap-4 ${glassClass} p-3 rounded-2xl border shadow-2xl`}>
+          {TOUR_IMAGES.map((tour, idx) => (
             <button
-              key={index}
-              onClick={() => {
-                setCurrentImageIndex(index);
-                setZoom(1);
-                setPosition({ x: 0, y: 0 });
-                setSelectedHotspot(null);
-              }}
-              className={`w-3 h-3 rounded-full transition-all ${index === currentImageIndex ? "bg-blue-600 w-8" : "bg-gray-600 hover:bg-gray-500"}`}
-            />
+              key={tour.id}
+              onClick={() => handleTourChange(idx)}
+              className={`relative group overflow-hidden rounded-xl border-2 transition-all w-24 h-14 ${currentIndex === idx ? 'border-brand-500 scale-105' : 'border-transparent opacity-60 hover:opacity-100'}`}
+            >
+              <img src={tour.url} alt={tour.title} className="w-full h-full object-cover" />
+              <div className="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors flex items-center justify-center">
+                <p className="text-[10px] text-white font-bold opacity-0 group-hover:opacity-100 transition-opacity bg-black/60 px-2 py-1 rounded">VIEW</p>
+              </div>
+              {currentIndex === idx && (
+                <div className="absolute inset-x-0 bottom-0 h-1 bg-brand-500"></div>
+              )}
+            </button>
           ))}
         </div>
-
-        <div className="text-gray-400 text-sm">Use arrow keys or drag to navigate</div>
       </div>
 
+      {/* Hotspot Info Modal */}
       {selectedHotspot && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setSelectedHotspot(null)}>
-          <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 max-w-md mx-4 shadow-2xl transform animate-fade-in" onClick={(e) => e.stopPropagation()}>
-            <div className="flex items-start justify-between mb-4">
-              <h3 className="text-gray-900 dark:text-white">{selectedHotspot.title}</h3>
+        <div
+          className="fixed inset-0 z-[110] bg-black/60 backdrop-blur-md flex items-center justify-center p-6 animate-fade-in"
+          onClick={() => setSelectedHotspot(null)}
+        >
+          <div
+            className={`${glassClass} w-full max-w-lg rounded-[2.5rem] border p-10 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] transform animate-float`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex justify-between items-start mb-6">
+              <div className="bg-brand-500/20 p-4 rounded-2xl border border-brand-500/30">
+                <Info className="text-brand-500" size={32} />
+              </div>
               <button
                 onClick={() => setSelectedHotspot(null)}
-                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                className="p-2 text-white/50 hover:text-white transition-colors"
+                title="Close"
               >
-                <X size={24} />
+                <X size={28} />
               </button>
             </div>
-            <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{selectedHotspot.description}</p>
+
+            <h3 className="text-3xl font-bold text-white mb-4 leading-tight">{selectedHotspot.title}</h3>
+            <p className="text-white/60 text-lg leading-relaxed mb-8">
+              {selectedHotspot.description}
+            </p>
+
             <button
               onClick={() => setSelectedHotspot(null)}
-              className="mt-6 w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-purple-600 hover:to-blue-600 text-white px-6 py-3 rounded-xl transition-all"
+              className="w-full bg-brand-500 text-white py-5 rounded-2xl font-bold text-lg hover:bg-brand-600 transition-all shadow-lg hover:shadow-brand-500/25 transform hover:-translate-y-1 active:scale-95"
             >
-              Close
+              Back to Tour
             </button>
           </div>
         </div>
       )}
+
+      {/* Instructions Overlay */}
+      <div className="absolute bottom-6 left-6 flex items-center gap-3 text-white/30 text-[10px] uppercase tracking-widest font-bold z-10 hidden lg:flex">
+        <div className="w-8 h-[1px] bg-white/20"></div>
+        <span>Drag to explore</span>
+        <div className="w-2 h-2 rounded-full bg-white/20"></div>
+        <span>Scroll to zoom</span>
+        <div className="w-2 h-2 rounded-full bg-white/20"></div>
+        <span>Click hotspots</span>
+      </div>
     </div>
   );
 }
 
+// Side-loaded icons needed for the header
+function Maximize2(props: any) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <polyline points="15 3 21 3 21 9" />
+      <polyline points="9 21 3 21 3 15" />
+      <line x1="21" y1="3" x2="14" y2="10" />
+      <line x1="3" y1="21" x2="10" y2="14" />
+    </svg>
+  );
+}
