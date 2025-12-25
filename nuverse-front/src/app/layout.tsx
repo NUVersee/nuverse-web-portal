@@ -8,7 +8,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="antialiased font-sans bg-[var(--background)] text-[var(--foreground)] min-h-screen selection:bg-blue-500/30">
+      <body className="antialiased font-sans bg-[var(--background)] text-[var(--foreground)] min-h-screen selection:bg-blue-500/30" suppressHydrationWarning={true}>
         <Providers>{children}</Providers>
       </body>
     </html>
