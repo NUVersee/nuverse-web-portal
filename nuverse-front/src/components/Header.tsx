@@ -40,8 +40,8 @@ export function Header() {
             <div className="flex items-center space-x-1">
               {[
                 { name: "Home", href: "/" },
+                { name: "About", href: isHome ? "#about" : "/#about" },
                 { name: "Services", href: isHome ? "#services" : "/#services" },
-                { name: "About", href: "/about" },
                 { name: "Contact", href: isHome ? "#contact" : "/#contact" }
               ].map((item) => (
                 <Link
@@ -89,8 +89,8 @@ export function Header() {
             <div className="flex flex-col space-y-2">
               {[
                 { name: "Home", href: "/" },
+                { name: "About", href: isHome ? "#about" : "/#about" },
                 { name: "Services", href: isHome ? "#services" : "/#services" },
-                { name: "About", href: "/about" },
                 { name: "Contact", href: isHome ? "#contact" : "/#contact" }
               ].map((item) => (
                 <Link
