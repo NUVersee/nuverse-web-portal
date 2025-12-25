@@ -1,11 +1,10 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-expressions
-`use client`;
+"use client";
 
 import { Info, Maximize2, Navigation, Rotate3D, Sparkles } from "lucide-react";
 import { ImageWithFallback } from "./ImageWithFallback";
 
 type Tour360Props = {
-  onStart360Tour: () => void;
+  onStart360Tour: (index?: number) => void;
 };
 
 export function Tour360({ onStart360Tour }: Tour360Props) {
@@ -109,7 +108,7 @@ export function Tour360({ onStart360Tour }: Tour360Props) {
             </div>
 
             <button
-              onClick={onStart360Tour}
+              onClick={() => onStart360Tour(0)}
               className="group w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-blue-600 hover:to-purple-600 text-white px-8 py-5 rounded-2xl transition-all duration-300 flex items-center justify-center gap-3 shadow-lg hover:shadow-2xl transform hover:scale-105"
             >
               <Rotate3D size={24} className="group-hover:rotate-180 transition-transform duration-500" />
@@ -120,14 +119,14 @@ export function Tour360({ onStart360Tour }: Tour360Props) {
 
         <div className="mt-16 grid md:grid-cols-4 gap-6">
           {[
-            { name: "Main Campus", icon: "🏛️", gradient: "from-blue-500 to-cyan-500" },
-            { name: "Library", icon: "📚", gradient: "from-purple-500 to-pink-500" },
-            { name: "Labs", icon: "🔬", gradient: "from-green-500 to-emerald-500" },
-            { name: "Sports Complex", icon: "⚽", gradient: "from-orange-500 to-red-500" },
+            { name: "Main Campus", icon: "🏛️", gradient: "from-blue-500 to-cyan-500", index: 0 },
+            { name: "Library", icon: "📚", gradient: "from-purple-500 to-pink-500", index: 1 },
+            { name: "Labs", icon: "🔬", gradient: "from-green-500 to-emerald-500", index: 2 },
+            { name: "Sports Complex", icon: "⚽", gradient: "from-orange-500 to-red-500", index: 0 }, // Fallback to 0 if no 4th image
           ].map((location, index) => (
             <div
               key={index}
-              onClick={onStart360Tour}
+              onClick={() => onStart360Tour(location.index)}
               className="group bg-white dark:bg-gray-800 rounded-2xl p-6 text-center hover:shadow-2xl transition-all duration-300 cursor-pointer transform hover:-translate-y-2 border-2 border-transparent hover:border-purple-600"
             >
               <div className="text-5xl mb-4 transform group-hover:scale-125 transition-transform duration-300">{location.icon}</div>
