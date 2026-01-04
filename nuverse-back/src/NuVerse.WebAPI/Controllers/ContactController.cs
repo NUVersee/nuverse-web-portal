@@ -7,6 +7,9 @@ using NuVerse.Domain.DTOs;
 
 namespace NuVerse.WebAPI.Controllers
 {
+    /// <summary>
+    /// Controller for handling contact form submissions and email requests.
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     public class ContactController : ControllerBase
@@ -15,6 +18,12 @@ namespace NuVerse.WebAPI.Controllers
         private readonly IRecaptchaService _recaptcha;
         private readonly ILogger<ContactController> _logger;
 
+        /// <summary>
+        /// Initializes a new instance of the ContactController.
+        /// </summary>
+        /// <param name="emailSender">Service for sending emails.</param>
+        /// <param name="recaptcha">Service for verifying reCAPTCHA tokens.</param>
+        /// <param name="logger">Logger for tracking requests and errors.</param>
         public ContactController(IEmailSender emailSender, IRecaptchaService recaptcha, ILogger<ContactController> logger)
         {
             _emailSender = emailSender;
@@ -22,8 +31,19 @@ namespace NuVerse.WebAPI.Controllers
             _logger = logger;
         }
 
+        /// <summary>
+        /// Processes a contact form submission, verifies captcha, and sends notification emails.
+        /// </summary>
+        /// <param name="dto">The contact form data including name, email, phone, and reason.</param>
+        /// <returns>Success status or error message.</returns>
+        /// <response code="200">Contact form submitted successfully.</response>
+        /// <response code="400">Validation failed or captcha verification failed.</response>
+        /// <response code="503">Email service temporarily unavailable.</response>
         [HttpPost]
         [EnableRateLimiting("ContactPolicy")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
         public async Task<IActionResult> Post([FromBody] ContactFormDto dto)
         {
             // Model validation is handled by [ApiController] + DataAnnotations on the DTO.
