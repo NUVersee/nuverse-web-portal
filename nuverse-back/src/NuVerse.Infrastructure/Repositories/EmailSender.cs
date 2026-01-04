@@ -13,16 +13,22 @@ namespace NuVerse.Infrastructure.Repositories
         private readonly EmailSettings _settings;
         private readonly Domain.Configurations.EmailTemplates _templates;
         private readonly ILogger<EmailSender> _logger;
+        private readonly IContactSubmissionRepository _contactSubmissionRepository;
         private readonly SmtpClient _client;
         private readonly SemaphoreSlim _clientLock = new SemaphoreSlim(1, 1);
         // 0 = not disposed, 1 = disposed
         private int _disposed;
 
-        public EmailSender(IOptions<EmailSettings> settings, IOptions<NuVerse.Domain.Configurations.EmailTemplates> templates, ILogger<EmailSender> logger)
+        public EmailSender(
+            IOptions<EmailSettings> settings, 
+            IOptions<NuVerse.Domain.Configurations.EmailTemplates> templates, 
+            ILogger<EmailSender> logger,
+            IContactSubmissionRepository contactSubmissionRepository)
         {
             _settings = settings.Value;
             _templates = templates?.Value ?? new NuVerse.Domain.Configurations.EmailTemplates();
             _logger = logger;
+            _contactSubmissionRepository = contactSubmissionRepository;
             _client = new SmtpClient();
 
             if (string.IsNullOrWhiteSpace(_settings.To))
@@ -37,6 +43,27 @@ namespace NuVerse.Infrastructure.Repositories
             // Prevent operations after DisposeAsync has started
             if (System.Threading.Interlocked.CompareExchange(ref _disposed, 0, 0) == 1)
                 throw new ObjectDisposedException(nameof(EmailSender));
+
+            // Save contact submission to database
+            try
+            {
+                var submission = new ContactSubmission
+                {
+                    Email = email ?? string.Empty,
+                    Reason = reason ?? string.Empty,
+                    FullName = fullName,
+                    PhoneNumber = phone,
+                    IsSubmitted = true,
+                    SubmittedAt = DateTime.UtcNow
+                };
+                await _contactSubmissionRepository.AddAsync(submission);
+                _logger.LogInformation("Contact submission saved to database for {Email}", email);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to save contact submission to database for {Email}", email);
+                // Continue with email sending even if database save fails
+            }
 
             var username = _settings.Username ?? Environment.GetEnvironmentVariable("SMTP_USER");
             var password = _settings.Password ?? Environment.GetEnvironmentVariable("SMTP_PASS");
