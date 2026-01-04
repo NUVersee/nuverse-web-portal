@@ -23,7 +23,7 @@ export function Contact() {
     setStatus({ type: null, Reason_for_Request: "" });
     setSubmitting(true);
 
-    const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:5000";
+    const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:5297";
     const url = `${apiBase}/api/contact`;
 
     try {
@@ -159,8 +159,8 @@ export function Contact() {
               {status.type && (
                 <div
                   className={`text-sm rounded-xl p-4 font-medium ${status.type === "success"
-                      ? "bg-green-50 text-green-800 dark:bg-green-900/40 dark:text-green-100 border border-green-200 dark:border-green-800"
-                      : "bg-red-50 text-red-800 dark:bg-red-900/40 dark:text-red-100 border border-red-200 dark:border-red-800"
+                    ? "bg-green-50 text-green-800 dark:bg-green-900/40 dark:text-green-100 border border-green-200 dark:border-green-800"
+                    : "bg-red-50 text-red-800 dark:bg-red-900/40 dark:text-red-100 border border-red-200 dark:border-red-800"
                     }`}
                 >
                   {status.Reason_for_Request}

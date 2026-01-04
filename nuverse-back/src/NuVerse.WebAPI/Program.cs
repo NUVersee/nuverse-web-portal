@@ -3,6 +3,13 @@ using NuVerse.Application;
 using NuVerse.Infrastructure;
 using Microsoft.AspNetCore.RateLimiting;
 
+// Load .env file from solution root (two directories up from WebAPI)
+var envPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", ".env");
+if (File.Exists(envPath))
+{
+    DotNetEnv.Env.Load(envPath);
+}
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
