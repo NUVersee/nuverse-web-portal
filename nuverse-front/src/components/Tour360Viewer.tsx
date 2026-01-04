@@ -63,6 +63,17 @@ const TOUR_IMAGES: TourImage[] = [
   }
 ];
 
+/**
+ * Scene Component
+ * 
+ * Renders the 360-degree sphere and associated hotspots in the Three.js scene.
+ * 
+ * @param {object} props - Component properties.
+ * @param {string} props.url - URL of the 360 panorama image.
+ * @param {Hotspot[]} props.hotspots - Array of hotspot data for the current scene.
+ * @param {(h: Hotspot) => void} props.onHotspotClick - Callback when a hotspot is clicked.
+ * @returns {JSX.Element} The Three.js mesh and HTML hotspots.
+ */
 function Scene({ url, hotspots, onHotspotClick }: { url: string, hotspots: Hotspot[], onHotspotClick: (h: Hotspot) => void }) {
   const texture = useTexture(url);
 
@@ -91,6 +102,16 @@ function Scene({ url, hotspots, onHotspotClick }: { url: string, hotspots: Hotsp
   );
 }
 
+/**
+ * Controls Component
+ * 
+ * Manages the camera controls and reports field-of-view (FOV) changes for zooming.
+ * 
+ * @param {object} props - Component properties.
+ * @param {React.RefObject<any>} props.controlsRef - Reference to the OrbitControls instance.
+ * @param {(z: number) => void} props.onZoomChange - Callback when the camera FOV changes.
+ * @returns {JSX.Element} The OrbitControls component.
+ */
 function Controls({ controlsRef, onZoomChange }: { controlsRef: React.RefObject<any>, onZoomChange: (z: number) => void }) {
   const { camera } = useThree();
 
@@ -114,6 +135,17 @@ function Controls({ controlsRef, onZoomChange }: { controlsRef: React.RefObject<
   );
 }
 
+/**
+ * Tour360Viewer Component
+ * 
+ * A full-screen overlay component that provides an immersive 360-degree virtual tour experience.
+ * Features interactive hotspots, navigation controls, and a scene gallery.
+ * 
+ * @param {object} props - Component properties.
+ * @param {() => void} props.onClose - Callback to close the viewer.
+ * @param {number} [props.initialIndex=0] - Initial scene index to display.
+ * @returns {JSX.Element} The 360 tour viewer interface.
+ */
 export function Tour360Viewer({ onClose, initialIndex = 0 }: { onClose: () => void, initialIndex?: number }) {
   const { isDarkMode } = useTheme();
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
@@ -131,6 +163,11 @@ export function Tour360Viewer({ onClose, initialIndex = 0 }: { onClose: () => vo
   const [activeRotation, setActiveRotation] = useState<'up' | 'down' | 'left' | 'right' | null>(null);
   const rotationTimerRef = useRef<NodeJS.Timeout | null>(null);
 
+  /**
+   * Performs continuous rotation in a specified direction.
+   * 
+   * @param {'up' | 'down' | 'left' | 'right'} direction - The direction to rotate.
+   */
   const performRotation = useCallback((direction: 'up' | 'down' | 'left' | 'right') => {
     if (!controlsRef.current) return;
     const controls = controlsRef.current;
@@ -168,6 +205,11 @@ export function Tour360Viewer({ onClose, initialIndex = 0 }: { onClose: () => vo
     };
   }, [activeRotation, performRotation]);
 
+  /**
+   * Adjusts the camera field of view (zoom).
+   * 
+   * @param {number} delta - The amount to change the zoom level.
+   */
   const handleZoom = (delta: number) => {
     setFov(prev => {
       const next = Math.max(30, Math.min(100, prev + delta));
@@ -175,6 +217,11 @@ export function Tour360Viewer({ onClose, initialIndex = 0 }: { onClose: () => vo
     });
   };
 
+  /**
+   * Switches the current tour scene with a transition effect.
+   * 
+   * @param {number} index - The index of the scene to switch to.
+   */
   const handleTourChange = (index: number) => {
     if (index === currentIndex) return;
     setIsTransitioning(true);
@@ -184,6 +231,9 @@ export function Tour360Viewer({ onClose, initialIndex = 0 }: { onClose: () => vo
     }, 500);
   };
 
+  /**
+   * Resets the camera orientation and zoom level to default.
+   */
   const resetView = () => {
     if (controlsRef.current) {
       controlsRef.current.reset();

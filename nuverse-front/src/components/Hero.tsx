@@ -7,7 +7,21 @@ type HeroProps = {
   onStart360Tour: () => void;
 };
 
+/**
+ * Hero Component
+ * 
+ * The initial landing section of the application.
+ * Highlights the main value proposition, provides call-to-action buttons for the 360 tour
+ * and VR kit request, and shows key platform stats.
+ * 
+ * @param {HeroProps} props - Component properties.
+ * @param {() => void} props.onStart360Tour - Callback to trigger the 360 tour.
+ * @returns {JSX.Element} The hero section.
+ */
 export function Hero({ onStart360Tour }: HeroProps) {
+  /**
+   * Smoothly scrolls the window to the contact section when triggered.
+   */
   const handleRequestVR = () => {
     const section = document.getElementById("contact");
     section?.scrollIntoView({ behavior: "smooth" });

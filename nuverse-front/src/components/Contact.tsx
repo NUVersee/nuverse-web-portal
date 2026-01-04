@@ -3,24 +3,39 @@
 import { Facebook, Instagram, Linkedin, Mail, MapPin, Phone, Send, Twitter, Sparkles } from "lucide-react";
 import { useState } from "react";
 
+/**
+ * Contact Component
+ * 
+ * Displays the contact form and contact information for Nile University.
+ * Allows users to send messages and requests for VR equipment.
+ * 
+ * @returns {JSX.Element} The contact section including form and info.
+ */
 export function Contact() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
-    Reason_for_Request: "",
+    reason: "",
   });
 
   const [submitting, setSubmitting] = useState(false);
-  const [status, setStatus] = useState<{ type: "success" | "error" | null; Reason_for_Request: string }>({
+  const [status, setStatus] = useState<{ type: "success" | "error" | null; message: string }>({
     type: null,
-    Reason_for_Request: "",
+    message: "",
   });
 
+  /**
+   * Handles the submission of the contact form.
+   * Sends form data to the backend API and displays success/error status.
+   * 
+   * @param {React.FormEvent} e - The form submit event.
+   * @returns {Promise<void>}
+   */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    setStatus({ type: null, Reason_for_Request: "" });
+    setStatus({ type: null, message: "" });
     setSubmitting(true);
 
     const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:5297";
@@ -36,7 +51,7 @@ export function Contact() {
           fullName: formData.name || "Anonymous",
           email: formData.email,
           phoneNumber: formData.phone,
-          reason: formData.Reason_for_Request,
+          reason: formData.reason,
           captchaToken: null,
         }),
       });
@@ -46,11 +61,11 @@ export function Contact() {
         throw new Error(text || "Failed to send Reason_for_Request");
       }
 
-      setStatus({ type: "success", Reason_for_Request: "Message sent successfully. We'll get back to you soon." });
-      setFormData({ name: "", email: "", phone: "", Reason_for_Request: "" });
+      setStatus({ type: "success", message: "Message sent successfully. We'll get back to you soon." });
+      setFormData({ name: "", email: "", phone: "", reason: "" });
     } catch (err) {
-      const Reason_for_Request = err instanceof Error ? err.message : "Something went wrong.";
-      setStatus({ type: "error", Reason_for_Request });
+      const message = err instanceof Error ? err.message : "Something went wrong.";
+      setStatus({ type: "error", message });
     } finally {
       setSubmitting(false);
     }
@@ -147,8 +162,8 @@ export function Contact() {
                 </label>
                 <textarea
                   id="message"
-                  value={formData.Reason_for_Request}
-                  onChange={(e) => setFormData({ ...formData, Reason_for_Request: e.target.value })}
+                  value={formData.reason}
+                  onChange={(e) => setFormData({ ...formData, reason: e.target.value })}
                   required
                   rows={5}
                   className="w-full px-5 py-3.5 border-2 border-gray-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-900 text-gray-900 dark:text-white resize-none transition-all"
@@ -163,7 +178,7 @@ export function Contact() {
                     : "bg-red-50 text-red-800 dark:bg-red-900/40 dark:text-red-100 border border-red-200 dark:border-red-800"
                     }`}
                 >
-                  {status.Reason_for_Request}
+                  {status.message}
                 </div>
               )}
 
