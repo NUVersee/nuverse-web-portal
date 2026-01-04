@@ -4,7 +4,9 @@ using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NuVerse.Application.Interfaces;
+using NuVerse.Application.Interfaces.Repositories;
 using NuVerse.Domain.DTOs;
+using NuVerse.Domain.Entities;
 using NuVerse.Infrastructure.Configurations;
 
 namespace NuVerse.Infrastructure.Services
@@ -14,15 +16,18 @@ namespace NuVerse.Infrastructure.Services
         private readonly HttpClient _httpClient;
         private readonly ILogger<ChatbotService> _logger;
         private readonly ChatbotSettings _settings;
+        private readonly IChatbotInteractionRepository _interactionRepository;
 
         public ChatbotService(
             HttpClient httpClient,
             ILogger<ChatbotService> logger,
-            IOptions<ChatbotSettings> settings)
+            IOptions<ChatbotSettings> settings,
+            IChatbotInteractionRepository interactionRepository)
         {
             _httpClient = httpClient;
             _logger = logger;
             _settings = settings.Value;
+            _interactionRepository = interactionRepository;
 
             _httpClient.BaseAddress = new Uri(_settings.BaseUrl);
             _httpClient.Timeout = TimeSpan.FromSeconds(_settings.TimeoutSeconds);
@@ -94,6 +99,26 @@ namespace NuVerse.Infrastructure.Services
                         Timestamp = DateTime.UtcNow,
                         MemorySize = 0
                     };
+                }
+
+                // Save interaction to database
+                try
+                {
+                    var interaction = new ChatbotInteraction
+                    {
+                        Question = request.Question,
+                        Answer = result.Answer,
+                        SessionId = request.SessionId,
+                        Category = result.Category,
+                        Timestamp = result.Timestamp != default ? result.Timestamp : DateTime.UtcNow
+                    };
+                    await _interactionRepository.AddAsync(interaction);
+                    _logger.LogInformation("Chatbot interaction saved to database for session {SessionId}", request.SessionId);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Failed to save chatbot interaction to database");
+                    // Continue returning the result even if database save fails
                 }
 
                 return result;
