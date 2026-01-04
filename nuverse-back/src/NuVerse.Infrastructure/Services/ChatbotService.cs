@@ -11,6 +11,10 @@ using NuVerse.Infrastructure.Configurations;
 
 namespace NuVerse.Infrastructure.Services
 {
+    /// <summary>
+    /// Service for communicating with the HuggingFace FastAPI chatbot backend.
+    /// Handles question processing, health checks, and conversation memory.
+    /// </summary>
     public class ChatbotService : IChatbotService
     {
         private readonly HttpClient _httpClient;
@@ -18,6 +22,13 @@ namespace NuVerse.Infrastructure.Services
         private readonly ChatbotSettings _settings;
         private readonly IChatbotInteractionRepository _interactionRepository;
 
+        /// <summary>
+        /// Initializes a new instance of the ChatbotService.
+        /// </summary>
+        /// <param name="httpClient">HTTP client for API requests.</param>
+        /// <param name="logger">Logger for tracking operations.</param>
+        /// <param name="settings">Chatbot configuration settings.</param>
+        /// <param name="interactionRepository">Repository for saving chat interactions.</param>
         public ChatbotService(
             HttpClient httpClient,
             ILogger<ChatbotService> logger,
@@ -36,6 +47,13 @@ namespace NuVerse.Infrastructure.Services
                 new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
+        /// <summary>
+        /// Sends a question to the HuggingFace FastAPI chatbot and returns the response.
+        /// Also saves the interaction to the database.
+        /// </summary>
+        /// <param name="request">The chatbot request containing the question.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>The chatbot response with answer, sources, and metadata.</returns>
         public async Task<ChatbotResponse> AskQuestionAsync(
             ChatbotRequest request,
             CancellationToken cancellationToken = default)
@@ -138,8 +156,11 @@ namespace NuVerse.Infrastructure.Services
             }
         }
 
-        // ---------------- HEALTH CHECK ----------------
-
+        /// <summary>
+        /// Checks the health status of the chatbot service.
+        /// </summary>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>Health check response with status information.</returns>
         public async Task<HealthCheckResponse> HealthCheckAsync(
             CancellationToken cancellationToken = default)
         {
@@ -173,8 +194,11 @@ namespace NuVerse.Infrastructure.Services
             }
         }
 
-        // ---------------- UNUSED FEATURES (SAFE STUBS) ----------------
-
+        /// <summary>
+        /// Gets the list of available question categories.
+        /// </summary>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>List of category names.</returns>
         public Task<List<string>> GetCategoriesAsync(
             CancellationToken cancellationToken = default)
         {
@@ -187,6 +211,12 @@ namespace NuVerse.Infrastructure.Services
             });
         }
 
+        /// <summary>
+        /// Detects the category for a given question (stub - returns null).
+        /// </summary>
+        /// <param name="question">The question to categorize.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>The detected category or null.</returns>
         public Task<string?> DetectCategoryAsync(
             string question,
             CancellationToken cancellationToken = default)
@@ -194,6 +224,12 @@ namespace NuVerse.Infrastructure.Services
             return Task.FromResult<string?>(null);
         }
 
+        /// <summary>
+        /// Clears the conversation memory for a session (stub - always returns true).
+        /// </summary>
+        /// <param name="sessionId">The session ID to clear.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>True if successful.</returns>
         public Task<bool> ClearMemoryAsync(
             string sessionId,
             CancellationToken cancellationToken = default)
