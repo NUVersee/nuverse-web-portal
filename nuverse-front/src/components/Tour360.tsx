@@ -7,6 +7,16 @@ type Tour360Props = {
   onStart360Tour: (index?: number) => void;
 };
 
+/**
+ * Tour360 Component
+ * 
+ * An informational section that introduces the 360-degree virtual tour feature.
+ * Features a preview image and multiple entry points to start the tour at different locations.
+ * 
+ * @param {Tour360Props} props - Component properties.
+ * @param {(index?: number) => void} props.onStart360Tour - Callback to launch the 360 tour at a specific scene index.
+ * @returns {JSX.Element} The tour introduction section.
+ */
 export function Tour360({ onStart360Tour }: Tour360Props) {
   return (
     <section id="360-tour" className="relative py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-blue-900/20 transition-colors overflow-hidden">

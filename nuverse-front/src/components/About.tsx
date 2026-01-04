@@ -8,6 +8,18 @@ type AboutProps = {
   onStart360Tour?: () => void;
 };
 
+/**
+ * About Component
+ * 
+ * Provides an overview of the NUVerse platform, its features, and benefits.
+ * Highlights the value of immersive VR experiences for prospective and current students.
+ * 
+ * @param {AboutProps} props - Component properties.
+ * @param {() => void} props.onOpenLabs - Callback to open the labs viewer.
+ * @param {() => void} props.onOpenAIProfessor - Callback to open the AI professor viewer.
+ * @param {() => void} props.onStart360Tour - Callback to start the 360 tour.
+ * @returns {JSX.Element} The about section.
+ */
 export function About({ onOpenLabs, onOpenAIProfessor, onStart360Tour }: AboutProps) {
   const features = [
     {

@@ -11,6 +11,14 @@ type Message = {
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5297";
 
+/**
+ * ChatbotButton Component
+ * 
+ * Provides a floating chat interface for interacting with the Nile University Admission Officer AI.
+ * Handles user messages, quick questions, and displays bot responses with sources.
+ * 
+ * @returns {JSX.Element} The floating chat button and chat window.
+ */
 export function ChatbotButton() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
@@ -25,6 +33,12 @@ export function ChatbotButton() {
 
   const quickQuestions = ["What programs do you offer?", "How do I apply?", "What are the admission requirements?", "Tell me about tuition fees"];
 
+  /**
+   * Sends the current input value as a message to the chatbot API.
+   * Updates the message list with the user message and the bot's response.
+   * 
+   * @returns {Promise<void>}
+   */
   const handleSendMessage = async () => {
     if (!inputValue.trim() || isLoading) return;
 
@@ -69,6 +83,12 @@ export function ChatbotButton() {
     }
   };
 
+  /**
+   * Sends a predefined quick question to the chatbot API.
+   * 
+   * @param {string} question - The quick question text to send.
+   * @returns {Promise<void>}
+   */
   const handleQuickQuestion = async (question: string) => {
     const userMessage: Message = { type: "user", text: question };
     setMessages((prev) => [...prev, userMessage]);

@@ -8,6 +8,17 @@ type ServicesProps = {
   onOpenAIProfessor?: () => void;
 };
 
+/**
+ * Services Component
+ * 
+ * Displays the VR services offered by Nile University, including virtual labs and AI professors.
+ * Includes call-to-action buttons to open specific viewers or sections.
+ * 
+ * @param {ServicesProps} props - Component properties.
+ * @param {() => void} props.onOpenLabs - Callback to open the labs viewer.
+ * @param {() => void} props.onOpenAIProfessor - Callback to open the AI professor viewer.
+ * @returns {JSX.Element} The services section.
+ */
 export function Services({ onOpenLabs, onOpenAIProfessor }: ServicesProps) {
   const services = [
     {

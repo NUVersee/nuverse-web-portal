@@ -7,6 +7,14 @@ import { useTheme } from "./ThemeContext";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 
+/**
+ * Header Component
+ * 
+ * The main navigation header of the application.
+ * Features a sticky design, theme toggle, and mobile-responsive menu.
+ * 
+ * @returns {JSX.Element} The header with navigation links and theme toggle.
+ */
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);

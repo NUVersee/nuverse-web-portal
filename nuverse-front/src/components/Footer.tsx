@@ -3,6 +3,14 @@
 
 import { Facebook, Linkedin, Mail, MapPin, Phone, Twitter, Instagram } from "lucide-react";
 
+/**
+ * Footer Component
+ * 
+ * Displays the application footer with quick links, contact information,
+ * social media links, and copyright notice.
+ * 
+ * @returns {JSX.Element} The footer section.
+ */
 export function Footer() {
   return (
     <footer className="bg-gray-900 dark:bg-black text-white py-12 px-4 sm:px-6 lg:px-8 transition-colors">
