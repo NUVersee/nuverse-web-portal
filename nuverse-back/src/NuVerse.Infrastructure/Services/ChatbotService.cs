@@ -1,13 +1,14 @@
-using System.Net.Http.Json;
+﻿using System.Net.Http.Headers;
+using System.Text;
+using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using NuVerse.Application.Interfaces;
 using NuVerse.Domain.DTOs;
 using NuVerse.Infrastructure.Configurations;
-using NuVerse.Application.Interfaces;
 
 namespace NuVerse.Infrastructure.Services
 {
-
     public class ChatbotService : IChatbotService
     {
         private readonly HttpClient _httpClient;
@@ -19,294 +20,160 @@ namespace NuVerse.Infrastructure.Services
             ILogger<ChatbotService> logger,
             IOptions<ChatbotSettings> settings)
         {
-            _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _settings = settings?.Value ?? throw new ArgumentNullException(nameof(settings));
+            _httpClient = httpClient;
+            _logger = logger;
+            _settings = settings.Value;
 
             _httpClient.BaseAddress = new Uri(_settings.BaseUrl);
             _httpClient.Timeout = TimeSpan.FromSeconds(_settings.TimeoutSeconds);
+            _httpClient.DefaultRequestHeaders.Accept.Clear();
+            _httpClient.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        public async Task<ChatbotResponse> AskQuestionAsync(ChatbotRequest request, CancellationToken cancellationToken = default)
+        public async Task<ChatbotResponse> AskQuestionAsync(
+            ChatbotRequest request,
+            CancellationToken cancellationToken = default)
         {
             try
             {
-                _logger.LogInformation("Sending question to RAG API: {Question}", request.Question);
+                _logger.LogInformation(
+                    "Sending question to HF FastAPI: {Question}",
+                    request.Question);
 
+                // 🔹 EXACT payload FastAPI expects
                 var payload = new
                 {
-                    question = request.Question,
-                    session_id = request.SessionId ?? "default",
-                    use_memory = request.UseMemory
+                    question = request.Question
                 };
 
-                var response = await _httpClient.PostAsJsonAsync("/ask", payload, cancellationToken);
-                response.EnsureSuccessStatusCode();
+                var httpResponse = await _httpClient.PostAsync(
+                    "/ask",
+                    new StringContent(
+                        JsonSerializer.Serialize(payload),
+                        Encoding.UTF8,
+                        "application/json"),
+                    cancellationToken);
 
-                // Get raw content for parsing
-                var rawContent = await response.Content.ReadAsStringAsync(cancellationToken);
-                _logger.LogInformation("Raw response from RAG API: {Response}", rawContent);
+                var rawResponse = await httpResponse.Content
+                    .ReadAsStringAsync(cancellationToken);
 
-                string actualAnswer = string.Empty;
-                List<string> sources = new List<string>();
-                
-                // Check if response is plain text format (Python object string representation)
-                if (rawContent.Contains("message=Message(") && rawContent.Contains("content="))
+                if (!httpResponse.IsSuccessStatusCode)
                 {
-                    _logger.LogInformation("Parsing string format response");
-                    
-                    // Extract content using a simpler approach - find content=\" or content=' and extract until \", thinking= or ', thinking=
-                    // Use regex to properly handle escaped sequences
-                    var match = System.Text.RegularExpressions.Regex.Match(
-                        rawContent,
-                        @"content=\\?[""'](.+?)\\?[""'],?\s*thinking=",
-                        System.Text.RegularExpressions.RegexOptions.Singleline
-                    );
-                    
-                    if (match.Success)
-                    {
-                        actualAnswer = match.Groups[1].Value;
-                        
-                        // The content may have double-escaped sequences from JSON -> Python string
-                        // Unescape them: \\n -> \n in the JSON becomes \n in our string
-                        actualAnswer = actualAnswer
-                            .Replace("\\\\n", "\n")   // \\n in JSON -> \n
-                            .Replace("\\\\r", "\r")   // \\r in JSON -> \r
-                            .Replace("\\\\t", "\t")   // \\t in JSON -> \t
-                            .Replace("\\\\'", "'")    // \\' in JSON -> '
-                            .Replace("\\\\\"", "\"")  // \\" in JSON -> "
-                            .Replace("\\n", "\n")     // \n directly
-                            .Replace("\\r", "\r")     // \r directly
-                            .Replace("\\t", "\t")     // \t directly
-                            .Replace("\\'", "'")      // \' directly
-                            .Replace("\\\"", "\"")    // \" directly
-                            .Replace("\\\\", "\\");   // \\\\ -> \ or \\ -> \
-                        
-                        _logger.LogInformation("Extracted answer: {Answer}", actualAnswer);
-                    }
-                    else
-                    {
-                        _logger.LogWarning("Could not extract content with regex, trying fallback");
-                        
-                        // Fallback: find content= and extract everything until , thinking=
-                        var contentIdx = rawContent.IndexOf("content=");
-                        if (contentIdx >= 0)
-                        {
-                            var thinkingIdx = rawContent.IndexOf(", thinking=", contentIdx);
-                            if (thinkingIdx > contentIdx)
-                            {
-                                var fullContent = rawContent.Substring(contentIdx, thinkingIdx - contentIdx);
-                                // Extract just the value between quotes
-                                var valueMatch = System.Text.RegularExpressions.Regex.Match(
-                                    fullContent,
-                                    @"content=\\?[""'](.+?)\\?[""']$",
-                                    System.Text.RegularExpressions.RegexOptions.Singleline
-                                );
-                                if (valueMatch.Success)
-                                {
-                                    actualAnswer = valueMatch.Groups[1].Value
-                                        .Replace("\\n", "\n")
-                                        .Replace("\\r", "\r")
-                                        .Replace("\\t", "\t")
-                                        .Replace("\\\"", "\"")
-                                        .Replace("\\'", "'")
-                                        .Replace("\\\\", "\\");
-                                }
-                            }
-                        }
-                    }
+                    _logger.LogError(
+                        "HF returned {StatusCode}: {Body}",
+                        httpResponse.StatusCode,
+                        rawResponse);
 
-                    // Extract sources from "Sources:" section
-                    var sourcesStartIndex = rawContent.IndexOf("Sources:");
-                    if (sourcesStartIndex >= 0)
+                    return new ChatbotResponse
                     {
-                        var sourcesSection = rawContent.Substring(sourcesStartIndex);
-                        var sourceMatches = System.Text.RegularExpressions.Regex.Matches(
-                            sourcesSection,
-                            @"•\s*([^\n\r]+)"
-                        );
-                        
-                        foreach (System.Text.RegularExpressions.Match sourceMatch in sourceMatches)
-                        {
-                            sources.Add(sourceMatch.Groups[1].Value.Trim());
-                        }
-                    }
-                }
-                else
-                {
-                    // Try to parse as JSON
-                    try
-                    {
-                        var result = System.Text.Json.JsonSerializer.Deserialize<ChatbotApiResponse>(rawContent);
-                        
-                        if (result != null)
-                        {
-                            if (result.Message != null && !string.IsNullOrEmpty(result.Message.Content))
-                            {
-                                actualAnswer = result.Message.Content;
-                            }
-                            else if (!string.IsNullOrEmpty(result.Answer))
-                            {
-                                actualAnswer = result.Answer;
-                            }
-                            sources = result.Sources ?? new List<string>();
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.LogWarning(ex, "Failed to parse as JSON");
-                    }
+                        Answer = "The chatbot service is currently unavailable.",
+                        Category = null,
+                        Sources = new List<string>(),
+                        Timestamp = DateTime.UtcNow,
+                        MemorySize = 0
+                    };
                 }
 
-                if (string.IsNullOrEmpty(actualAnswer))
+                _logger.LogDebug("HF raw response: {Body}", rawResponse);
+
+                var result = JsonSerializer.Deserialize<ChatbotResponse>(
+                    rawResponse,
+                    new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    });
+
+                if (result == null || string.IsNullOrWhiteSpace(result.Answer))
                 {
-                    _logger.LogError("Unable to extract answer from response: {Response}", rawContent);
-                    actualAnswer = "Unable to process response from chatbot service";
+                    return new ChatbotResponse
+                    {
+                        Answer = "The chatbot returned an empty response.",
+                        Category = null,
+                        Sources = new List<string>(),
+                        Timestamp = DateTime.UtcNow,
+                        MemorySize = 0
+                    };
                 }
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogCritical(ex, "HF FastAPI connection failed");
 
                 return new ChatbotResponse
                 {
-                    Answer = actualAnswer,
+                    Answer = $"Chatbot connection error: {ex.Message}",
                     Category = null,
-                    Sources = sources,
+                    Sources = new List<string>(),
                     Timestamp = DateTime.UtcNow,
                     MemorySize = 0
                 };
             }
-            catch (HttpRequestException ex)
-            {
-                _logger.LogError(ex, "HTTP error when calling RAG API");
-                throw new Exception("Failed to communicate with chatbot service", ex);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error asking question to RAG API");
-                throw;
-            }
         }
 
-        public async Task<List<string>> GetCategoriesAsync(CancellationToken cancellationToken = default)
+        // ---------------- HEALTH CHECK ----------------
+
+        public async Task<HealthCheckResponse> HealthCheckAsync(
+            CancellationToken cancellationToken = default)
         {
             try
             {
-                _logger.LogInformation("Fetching categories from RAG API");
-
-                var response = await _httpClient.GetAsync("/categories", cancellationToken);
-                response.EnsureSuccessStatusCode();
-
-                var result = await response.Content.ReadFromJsonAsync<CategoryApiResponse>(cancellationToken);
-                
-                return result?.Categories ?? new List<string>();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error fetching categories from RAG API");
-                throw;
-            }
-        }
-
-        public async Task<string?> DetectCategoryAsync(string question, CancellationToken cancellationToken = default)
-        {
-            try
-            {
-                _logger.LogInformation("Detecting category for question: {Question}", question);
-
-                var payload = new { question };
-                var response = await _httpClient.PostAsJsonAsync("/detect-category", payload, cancellationToken);
-                response.EnsureSuccessStatusCode();
-
-                var result = await response.Content.ReadFromJsonAsync<CategoryApiResponse>(cancellationToken);
-                
-                return result?.Detected;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error detecting category from RAG API");
-                throw;
-            }
-        }
-
-        public async Task<bool> ClearMemoryAsync(string sessionId, CancellationToken cancellationToken = default)
-        {
-            try
-            {
-                _logger.LogInformation("Clearing memory for session: {SessionId}", sessionId);
-
-                var payload = new { session_id = sessionId };
-                var response = await _httpClient.PostAsJsonAsync("/clear-memory", payload, cancellationToken);
-                response.EnsureSuccessStatusCode();
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error clearing memory in RAG API");
-                return false;
-            }
-        }
-
-        public async Task<HealthCheckResponse> HealthCheckAsync(CancellationToken cancellationToken = default)
-        {
-            try
-            {
-                _logger.LogInformation("Checking RAG API health");
-
-                var response = await _httpClient.GetAsync("/health", cancellationToken);
-                response.EnsureSuccessStatusCode();
-
-                var result = await response.Content.ReadFromJsonAsync<HealthCheckApiResponse>(cancellationToken);
-                
-                if (result == null)
-                {
-                    throw new InvalidOperationException("Failed to deserialize health check response");
-                }
+                var response = await _httpClient.GetAsync(
+                    "/docs",
+                    cancellationToken);
 
                 return new HealthCheckResponse
                 {
-                    Status = result.Status,
-                    Ollama = result.Ollama,
-                    ActiveSessions = result.ActiveSessions,
-                    Timestamp = DateTime.Parse(result.Timestamp)
+                    Status = response.IsSuccessStatusCode
+                        ? "healthy"
+                        : "unhealthy",
+                    Ollama = "HuggingFace FastAPI",
+                    ActiveSessions = 0,
+                    Timestamp = DateTime.UtcNow
                 };
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error checking RAG API health");
-                throw;
+                _logger.LogError(ex, "Health check failed");
+
+                return new HealthCheckResponse
+                {
+                    Status = "unhealthy",
+                    Ollama = ex.Message,
+                    ActiveSessions = 0,
+                    Timestamp = DateTime.UtcNow
+                };
             }
         }
 
-        #region Internal API Response Models
-        
-        private class ChatbotApiResponse
+        // ---------------- UNUSED FEATURES (SAFE STUBS) ----------------
+
+        public Task<List<string>> GetCategoriesAsync(
+            CancellationToken cancellationToken = default)
         {
-            public string Answer { get; set; } = string.Empty;
-            public string? Category { get; set; }
-            public List<string>? Sources { get; set; }
-            public string Timestamp { get; set; } = string.Empty;
-            public int MemorySize { get; set; }
-            public MessageContent? Message { get; set; }
+            return Task.FromResult(new List<string>
+            {
+                "Admissions",
+                "Fees",
+                "Academics",
+                "IT & Systems"
+            });
         }
 
-        private class MessageContent
+        public Task<string?> DetectCategoryAsync(
+            string question,
+            CancellationToken cancellationToken = default)
         {
-            public string Content { get; set; } = string.Empty;
+            return Task.FromResult<string?>(null);
         }
 
-        private class CategoryApiResponse
+        public Task<bool> ClearMemoryAsync(
+            string sessionId,
+            CancellationToken cancellationToken = default)
         {
-            public List<string>? Categories { get; set; }
-            public string? Detected { get; set; }
+            return Task.FromResult(true);
         }
-
-        private class HealthCheckApiResponse
-        {
-            public string Status { get; set; } = string.Empty;
-            public string Ollama { get; set; } = string.Empty;
-            public int ActiveSessions { get; set; }
-            public string Timestamp { get; set; } = string.Empty;
-        }
-
-        #endregion
     }
 }
