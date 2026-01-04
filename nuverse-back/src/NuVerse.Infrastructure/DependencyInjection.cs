@@ -45,8 +45,7 @@ public static class DependencyInjection
         services.AddTransient<IEmailSender, Repositories.EmailSender>();
         services.AddHttpClient<IRecaptchaService, RecaptchaService>();
         
-        services.AddScoped<IChemistryLabService, ChemistryLabService>();
-        services.AddScoped<ICircuitLabService, CircuitLabService>();
+
         
         // Register Chatbot service with HttpClient
         services.AddHttpClient<Application.Interfaces.IChatbotService, ChatbotService>();
