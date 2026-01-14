@@ -33,7 +33,7 @@ const EXPERIMENTS: Experiment[] = [
     title: "Acid-Base Titration",
     description: "Learn to determine the concentration of an acid using a base solution",
     icon: <FlaskConical size={24} />,
-    color: "from-purple-500 to-pink-500",
+    color: "from-nu-red-500 to-nu-red-700",
     category: 'chemistry',
     steps: [
       { id: 1, title: "Prepare the burette", description: "Fill the burette with NaOH solution", completed: false, animation: "burette-fill" },
@@ -48,7 +48,7 @@ const EXPERIMENTS: Experiment[] = [
     title: "Chemical Reactions",
     description: "Observe different types of chemical reactions and their properties",
     icon: <TestTube size={24} />,
-    color: "from-pink-500 to-rose-500",
+    color: "from-nu-blue-500 to-nu-blue-700",
     category: 'chemistry',
     steps: [
       { id: 1, title: "Prepare reactants", description: "Measure and prepare chemical solutions", completed: false, animation: "prepare-chemicals" },
@@ -62,7 +62,7 @@ const EXPERIMENTS: Experiment[] = [
     title: "pH Testing",
     description: "Determine the pH of various solutions using indicators",
     icon: <Beaker size={24} />,
-    color: "from-violet-500 to-purple-500",
+    color: "from-nu-blue-500 to-nu-red-500",
     category: 'chemistry',
     steps: [
       { id: 1, title: "Prepare samples", description: "Gather different solution samples", completed: false, animation: "prepare-samples" },
@@ -77,7 +77,7 @@ const EXPERIMENTS: Experiment[] = [
     title: "Series Circuit",
     description: "Build and analyze a basic series electrical circuit",
     icon: <CircuitBoard size={24} />,
-    color: "from-blue-500 to-cyan-500",
+    color: "from-[#b6192e] to-[#ffc1ac]",
     category: 'physics',
     steps: [
       { id: 1, title: "Connect battery", description: "Place battery on the circuit board", completed: false, animation: "place-battery" },
@@ -92,7 +92,7 @@ const EXPERIMENTS: Experiment[] = [
     title: "Parallel Circuit",
     description: "Explore the properties of parallel electrical circuits",
     icon: <Zap size={24} />,
-    color: "from-cyan-500 to-teal-500",
+    color: "from-nu-peach-300 to-nu-peach-500",
     category: 'physics',
     steps: [
       { id: 1, title: "Setup power source", description: "Connect the power supply", completed: false, animation: "setup-power" },
@@ -106,7 +106,7 @@ const EXPERIMENTS: Experiment[] = [
     title: "Ohm's Law",
     description: "Verify the relationship between voltage, current, and resistance",
     icon: <Cpu size={24} />,
-    color: "from-indigo-500 to-blue-500",
+    color: "from-[#b6192e] to-[#ffc1ac]",
     category: 'physics',
     steps: [
       { id: 1, title: "Setup circuit", description: "Build a simple circuit with variable resistor", completed: false, animation: "setup-circuit" },
@@ -123,7 +123,7 @@ function AnimationVisualizer({ experiment, currentStep }: { experiment: Experime
   // Chemistry animations
   if (experiment.category === 'chemistry') {
     return (
-      <div className="relative w-full h-full bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-950/20 dark:to-pink-950/20 rounded-2xl overflow-hidden">
+      <div className="relative w-full h-full bg-gradient-to-br from-nu-red-50/50 to-nu-peach-50/50 dark:from-nu-red-950/20 dark:to-nu-peach-950/20 rounded-2xl overflow-hidden">
         {/* Background grid */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0" style={{
@@ -136,10 +136,10 @@ function AnimationVisualizer({ experiment, currentStep }: { experiment: Experime
         <div className="relative h-full flex items-center justify-center p-8">
           {completedSteps === 0 && (
             <div className="text-center">
-              <div className="w-32 h-32 mx-auto mb-6 rounded-full bg-gradient-to-br from-purple-200 to-pink-200 dark:from-purple-800 dark:to-pink-800 flex items-center justify-center">
-                {experiment.icon}
+              <div className="w-32 h-32 mx-auto mb-6 rounded-full bg-gradient-to-br from-nu-red-200 to-nu-peach-200 dark:from-nu-red-800 dark:to-nu-peach-800 flex items-center justify-center border-4 border-nu-red-500/20 transition-all group-hover:scale-110">
+                <div className="text-nu-red-500 dark:text-nu-red-400">{experiment.icon}</div>
               </div>
-              <p className="text-gray-600 dark:text-gray-400 text-lg font-medium">Click on steps to begin experiment</p>
+              <p className="text-nu-blue-900 dark:text-white/60 text-lg font-black uppercase tracking-tight">Click on steps to begin</p>
             </div>
           )}
 
@@ -149,10 +149,10 @@ function AnimationVisualizer({ experiment, currentStep }: { experiment: Experime
               {/* Burette */}
               <div className="absolute top-0 right-1/4 transform translate-x-1/2">
                 <div className={`w-16 h-48 bg-gradient-to-b from-gray-300 to-gray-400 dark:from-gray-600 dark:to-gray-700 rounded-b-lg border-4 border-gray-400 dark:border-gray-500 transition-all duration-1000 ${completedSteps >= 1 ? 'opacity-100' : 'opacity-0'}`}>
-                  <div className={`absolute bottom-0 left-0 right-0 bg-gradient-to-t from-blue-400 to-blue-300 rounded-b transition-all duration-1000 ${completedSteps >= 1 ? 'h-3/4' : 'h-0'}`} />
+                  <div className={`absolute bottom-0 left-0 right-0 bg-gradient-to-t from-nu-blue-400 to-nu-blue-300 rounded-b transition-all duration-1000 ${completedSteps >= 1 ? 'h-3/4' : 'h-0'}`} />
                 </div>
                 {completedSteps >= 3 && (
-                  <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-1 h-24 bg-blue-400 animate-drip" />
+                  <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-1 h-24 bg-nu-blue-400 animate-drip" />
                 )}
               </div>
 
@@ -164,10 +164,10 @@ function AnimationVisualizer({ experiment, currentStep }: { experiment: Experime
                     <div className="absolute bottom-0 w-full h-32 bg-gradient-to-b from-transparent to-gray-200 dark:to-gray-700 rounded-b-full border-4 border-gray-400 dark:border-gray-500">
                       {/* Solution */}
                       <div className={`absolute bottom-0 left-0 right-0 rounded-b-full transition-all duration-1000 ${completedSteps >= 4
-                        ? 'bg-gradient-to-t from-pink-400 to-pink-300 h-24'
+                        ? 'bg-gradient-to-t from-nu-red-500 to-nu-red-400 h-24 shadow-[0_0_20px_rgba(182,25,46,0.3)]'
                         : completedSteps >= 2
-                          ? 'bg-gradient-to-t from-red-400 to-red-300 h-20'
-                          : 'bg-gradient-to-t from-red-400 to-red-300 h-16'
+                          ? 'bg-gradient-to-t from-nu-red-400/80 to-nu-red-300/80 h-20'
+                          : 'bg-gradient-to-t from-nu-red-300/60 to-nu-red-200/60 h-16'
                         }`} />
                     </div>
                     {/* Flask neck */}
@@ -178,7 +178,7 @@ function AnimationVisualizer({ experiment, currentStep }: { experiment: Experime
 
               {/* Completion checkmark */}
               {completedSteps === experiment.steps.length && (
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 rounded-full bg-green-500 flex items-center justify-center animate-scale-in shadow-2xl">
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 rounded-full bg-nu-blue-500 flex items-center justify-center animate-scale-in shadow-2xl border-4 border-white/20">
                   <Check size={64} className="text-white" />
                 </div>
               )}
@@ -190,7 +190,7 @@ function AnimationVisualizer({ experiment, currentStep }: { experiment: Experime
             <div className="relative w-full max-w-md flex items-center justify-center gap-8">
               {/* Test tube 1 */}
               <div className={`w-20 h-40 bg-gradient-to-b from-gray-300 to-gray-400 dark:from-gray-600 dark:to-gray-700 rounded-b-2xl border-4 border-gray-400 dark:border-gray-500 transition-all duration-1000 ${completedSteps >= 1 ? 'opacity-100' : 'opacity-0'}`}>
-                <div className="absolute bottom-0 left-0 right-0 h-3/4 bg-gradient-to-t from-blue-500 to-blue-400 rounded-b-2xl" />
+                <div className="absolute bottom-0 left-0 right-0 h-3/4 bg-gradient-to-t from-nu-blue-500 to-nu-blue-400 rounded-b-2xl" />
               </div>
 
               {/* Plus sign */}
@@ -200,7 +200,7 @@ function AnimationVisualizer({ experiment, currentStep }: { experiment: Experime
 
               {/* Test tube 2 */}
               <div className={`w-20 h-40 bg-gradient-to-b from-gray-300 to-gray-400 dark:from-gray-600 dark:to-gray-700 rounded-b-2xl border-4 border-gray-400 dark:border-gray-500 transition-all duration-1000 ${completedSteps >= 1 ? 'opacity-100' : 'opacity-0'}`}>
-                <div className="absolute bottom-0 left-0 right-0 h-3/4 bg-gradient-to-t from-yellow-500 to-yellow-400 rounded-b-2xl" />
+                <div className="absolute bottom-0 left-0 right-0 h-3/4 bg-gradient-to-t from-nu-peach-400 to-nu-peach-300 rounded-b-2xl" />
               </div>
 
               {/* Arrow */}
@@ -214,7 +214,7 @@ function AnimationVisualizer({ experiment, currentStep }: { experiment: Experime
               {completedSteps >= 3 && (
                 <div className="absolute bottom-0 right-0 w-32 h-48 animate-scale-in">
                   <div className="relative w-full h-full bg-gradient-to-b from-gray-300 to-gray-400 dark:from-gray-600 dark:to-gray-700 rounded-b-2xl border-4 border-gray-400 dark:border-gray-500">
-                    <div className="absolute bottom-0 left-0 right-0 h-3/4 bg-gradient-to-t from-green-500 to-green-400 rounded-b-2xl animate-bubble" />
+                    <div className="absolute bottom-0 left-0 right-0 h-3/4 bg-gradient-to-t from-nu-blue-500 to-nu-blue-400 rounded-b-2xl animate-bubble" />
                     {/* Precipitate */}
                     <div className="absolute bottom-0 left-0 right-0 h-8 bg-white/50 rounded-b-2xl" />
                   </div>
@@ -228,9 +228,9 @@ function AnimationVisualizer({ experiment, currentStep }: { experiment: Experime
             <div className="relative w-full max-w-lg">
               <div className="flex items-end justify-center gap-4">
                 {[
-                  { color: 'from-red-500 to-red-400', label: 'Acidic', show: 1 },
-                  { color: 'from-yellow-500 to-yellow-400', label: 'Neutral', show: 2 },
-                  { color: 'from-green-500 to-green-400', label: 'Basic', show: 3 },
+                  { color: 'from-nu-red-500 to-nu-red-400', label: 'Acidic', show: 1 },
+                  { color: 'from-nu-peach-400 to-nu-peach-300', label: 'Neutral', show: 2 },
+                  { color: 'from-nu-blue-500 to-nu-blue-400', label: 'Basic', show: 3 },
                 ].map((sample, idx) => (
                   <div key={idx} className={`transition-all duration-1000 ${completedSteps >= sample.show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
                     <div className="w-24 h-32 bg-gradient-to-b from-gray-300 to-gray-400 dark:from-gray-600 dark:to-gray-700 rounded-2xl border-4 border-gray-400 dark:border-gray-500">
@@ -249,7 +249,7 @@ function AnimationVisualizer({ experiment, currentStep }: { experiment: Experime
 
   // Physics animations
   return (
-    <div className="relative w-full h-full bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-950/20 dark:to-cyan-950/20 rounded-2xl overflow-hidden">
+    <div className="relative w-full h-full bg-gradient-to-br from-nu-blue-50 to-nu-red-50 dark:from-nu-blue-950/20 dark:to-nu-red-950/20 rounded-2xl overflow-hidden">
       {/* Background grid */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute inset-0" style={{
@@ -262,7 +262,7 @@ function AnimationVisualizer({ experiment, currentStep }: { experiment: Experime
       <div className="relative h-full flex items-center justify-center p-8">
         {completedSteps === 0 && (
           <div className="text-center">
-            <div className="w-32 h-32 mx-auto mb-6 rounded-full bg-gradient-to-br from-blue-200 to-cyan-200 dark:from-blue-800 dark:to-cyan-800 flex items-center justify-center">
+            <div className="w-32 h-32 mx-auto mb-6 rounded-full bg-gradient-to-br from-nu-blue-200 to-nu-red-200 dark:from-nu-blue-800 dark:to-nu-red-800 flex items-center justify-center">
               {experiment.icon}
             </div>
             <p className="text-gray-600 dark:text-gray-400 text-lg font-medium">Click on steps to begin experiment</p>
@@ -274,7 +274,7 @@ function AnimationVisualizer({ experiment, currentStep }: { experiment: Experime
           <div className="relative w-full max-w-2xl h-64">
             {/* Battery */}
             <div className={`absolute left-8 top-1/2 transform -translate-y-1/2 transition-all duration-1000 ${completedSteps >= 1 ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}`}>
-              <div className="w-16 h-24 bg-gradient-to-r from-red-500 to-red-600 rounded-lg border-4 border-gray-700 flex items-center justify-center">
+              <div className="w-16 h-24 bg-gradient-to-r from-nu-red-500 to-nu-red-600 rounded-lg border-4 border-white/10 flex items-center justify-center">
                 <div className="text-white font-bold text-2xl">+</div>
               </div>
               <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs font-semibold text-gray-700 dark:text-gray-300">9V</div>
@@ -304,10 +304,10 @@ function AnimationVisualizer({ experiment, currentStep }: { experiment: Experime
             {completedSteps >= 3 && (
               <>
                 <div className="absolute right-32 top-1/2 transform -translate-y-1/2 animate-scale-in">
-                  <div className={`w-12 h-12 rounded-full border-4 border-yellow-600 flex items-center justify-center ${completedSteps >= 3 ? 'bg-yellow-400 shadow-[0_0_30px_rgba(250,204,21,0.8)] animate-pulse' : 'bg-gray-300'}`}>
-                    <div className="w-4 h-4 rounded-full bg-yellow-200" />
+                  <div className={`w-12 h-12 rounded-full border-4 border-nu-peach-500 flex items-center justify-center ${completedSteps >= 3 ? 'bg-nu-peach-300 shadow-[0_0_30px_rgba(255,193,172,0.8)] animate-pulse' : 'bg-white/10'}`}>
+                    <div className="w-4 h-4 rounded-full bg-white shadow-inner" />
                   </div>
-                  <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs font-semibold text-gray-700 dark:text-gray-300">LED</div>
+                  <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-[10px] font-black uppercase tracking-widest text-nu-peach-300">LED</div>
                 </div>
 
                 {/* Wires completing circuit */}
@@ -321,9 +321,9 @@ function AnimationVisualizer({ experiment, currentStep }: { experiment: Experime
             {/* Multimeter */}
             {completedSteps >= 4 && (
               <div className="absolute right-8 bottom-8 animate-scale-in">
-                <div className="w-32 h-24 bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg border-4 border-gray-600 p-2">
-                  <div className="w-full h-full bg-green-900 rounded flex items-center justify-center">
-                    <div className="text-green-400 font-mono text-lg font-bold">9.0V</div>
+                <div className="w-32 h-24 bg-gradient-to-br from-nu-dark to-black rounded-lg border-4 border-white/10 p-2 shadow-2xl">
+                  <div className="w-full h-full bg-nu-blue-900/50 rounded flex items-center justify-center">
+                    <div className="text-nu-red-400 font-mono text-lg font-bold">9.0V</div>
                   </div>
                 </div>
               </div>
@@ -332,10 +332,10 @@ function AnimationVisualizer({ experiment, currentStep }: { experiment: Experime
             {/* Current calculation */}
             {completedSteps >= 5 && (
               <div className="absolute top-8 left-1/2 transform -translate-x-1/2 animate-scale-in">
-                <div className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-2xl border-2 border-blue-500">
+                <div className="bg-nu-dark/90 backdrop-blur-xl rounded-xl p-4 shadow-2xl border-2 border-nu-red-500">
                   <div className="text-center font-mono">
                     <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">I = V / R</div>
-                    <div className="text-lg font-bold text-blue-600 dark:text-blue-400">I = 90mA</div>
+                    <div className="text-lg font-bold text-nu-red-600 dark:text-nu-red-400">I = 90mA</div>
                   </div>
                 </div>
               </div>
@@ -348,7 +348,7 @@ function AnimationVisualizer({ experiment, currentStep }: { experiment: Experime
           <div className="relative w-full max-w-2xl h-80">
             {/* Power source */}
             <div className={`absolute left-8 top-1/2 transform -translate-y-1/2 transition-all duration-1000 ${completedSteps >= 1 ? 'opacity-100' : 'opacity-0'}`}>
-              <div className="w-16 h-24 bg-gradient-to-r from-red-500 to-red-600 rounded-lg border-4 border-gray-700 flex items-center justify-center">
+              <div className="w-16 h-24 bg-gradient-to-r from-nu-red-500 to-nu-red-600 rounded-lg border-4 border-white/10 flex items-center justify-center">
                 <div className="text-white font-bold text-2xl">+</div>
               </div>
             </div>
@@ -400,13 +400,13 @@ function AnimationVisualizer({ experiment, currentStep }: { experiment: Experime
             {completedSteps >= 4 && (
               <>
                 <div className="absolute right-24 top-12 animate-scale-in">
-                  <div className="w-8 h-8 rounded-full bg-green-400 shadow-[0_0_20px_rgba(74,222,128,0.8)] animate-pulse" />
+                  <div className="w-8 h-8 rounded-full bg-nu-blue-400 shadow-[0_0_20px_rgba(56,71,107,0.8)] animate-pulse" />
                 </div>
                 <div className="absolute right-24 top-1/2 transform -translate-y-1/2 animate-scale-in">
-                  <div className="w-8 h-8 rounded-full bg-green-400 shadow-[0_0_20px_rgba(74,222,128,0.8)] animate-pulse" />
+                  <div className="w-8 h-8 rounded-full bg-nu-blue-400 shadow-[0_0_20px_rgba(56,71,107,0.8)] animate-pulse" />
                 </div>
                 <div className="absolute right-24 bottom-12 animate-scale-in">
-                  <div className="w-8 h-8 rounded-full bg-green-400 shadow-[0_0_20px_rgba(74,222,128,0.8)] animate-pulse" />
+                  <div className="w-8 h-8 rounded-full bg-nu-blue-400 shadow-[0_0_20px_rgba(56,71,107,0.8)] animate-pulse" />
                 </div>
               </>
             )}
@@ -430,8 +430,8 @@ function AnimationVisualizer({ experiment, currentStep }: { experiment: Experime
 
                   {/* Variable resistor */}
                   <div className="absolute left-44 top-1/2 transform -translate-y-1/2">
-                    <div className="w-24 h-10 bg-gradient-to-r from-amber-600 to-amber-700 rounded border-2 border-amber-800 flex items-center justify-center">
-                      <span className="text-white text-sm font-bold">Variable R</span>
+                    <div className="w-24 h-10 bg-gradient-to-r from-nu-red-500 to-nu-red-700 rounded border-2 border-white/20 flex items-center justify-center shadow-lg">
+                      <span className="text-white text-xs font-black uppercase tracking-tight">Regulator</span>
                     </div>
                   </div>
 
@@ -445,7 +445,7 @@ function AnimationVisualizer({ experiment, currentStep }: { experiment: Experime
               {/* Voltage measurement */}
               {completedSteps >= 2 && (
                 <div className="absolute top-8 left-1/2 transform -translate-x-1/2 animate-scale-in">
-                  <div className="bg-blue-500 text-white px-4 py-2 rounded-lg font-mono font-bold shadow-lg">
+                  <div className="bg-nu-blue-500 text-white px-4 py-2 rounded-lg font-mono font-bold shadow-lg">
                     V = 12V
                   </div>
                 </div>
@@ -463,12 +463,12 @@ function AnimationVisualizer({ experiment, currentStep }: { experiment: Experime
               {/* Calculation result */}
               {completedSteps >= 4 && (
                 <div className="absolute right-8 top-1/2 transform -translate-y-1/2 animate-scale-in">
-                  <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-2xl border-4 border-purple-500">
+                  <div className="bg-nu-dark/90 backdrop-blur-md rounded-xl p-6 shadow-2xl border-4 border-nu-red-500">
                     <div className="text-center">
-                      <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">Ohm's Law</div>
-                      <div className="text-lg font-mono font-bold text-purple-600 dark:text-purple-400 mb-2">V = I × R</div>
-                      <div className="text-2xl font-mono font-bold text-gray-900 dark:text-white">R = 24Ω</div>
-                      <Check size={32} className="text-green-500 mx-auto mt-3" />
+                      <div className="text-[10px] font-black uppercase tracking-widest text-nu-red-500 mb-2">Verification</div>
+                      <div className="text-lg font-mono font-bold text-white mb-2 underline decoration-nu-red-500">V = I × R</div>
+                      <div className="text-2xl font-mono font-black text-white">R = 24Ω</div>
+                      <Check size={32} className="text-nu-peach-300 mx-auto mt-3 animate-bounce" />
                     </div>
                   </div>
                 </div>
@@ -489,7 +489,7 @@ function ExperimentModal({ experiment, onClose, onStepClick }: { experiment: Exp
 
   return (
     <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
-      <div className="relative w-full max-w-7xl h-[90vh] bg-white dark:bg-gray-900 rounded-3xl shadow-2xl overflow-hidden">
+      <div className="relative w-full max-w-7xl h-[90vh] bg-nu-deep rounded-3xl shadow-2xl overflow-hidden">
         {/* Header */}
         <div className={`bg-gradient-to-r ${experiment.color} p-6 text-white`}>
           <div className="flex items-center justify-between mb-4">
@@ -590,7 +590,7 @@ function ExperimentCard({ experiment, onClick }: { experiment: Experiment; onCli
       <div className={`absolute -inset-0.5 bg-gradient-to-r ${experiment.color} rounded-3xl blur opacity-20 group-hover:opacity-40 transition-opacity`}></div>
 
       {/* Card content */}
-      <div className="relative bg-white dark:bg-gray-800 rounded-3xl p-6 shadow-xl border border-gray-200 dark:border-gray-700 hover:shadow-2xl transition-all duration-300 group-hover:scale-105">
+      <div className="relative bg-nu-dark/60 backdrop-blur-md rounded-3xl p-6 shadow-xl border border-white/5 hover:shadow-2xl transition-all duration-300 group-hover:scale-105">
         <div className="flex items-start gap-4 mb-4">
           <div className={`p-4 rounded-2xl bg-gradient-to-br ${experiment.color} text-white shadow-lg`}>
             {experiment.icon}
@@ -652,9 +652,9 @@ export function LabsViewer({ onClose }: LabsViewerProps) {
   const currentExperiments = experiments.filter(exp => exp.category === activeTab);
 
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-gray-900 dark:to-black z-50 overflow-y-auto">
+    <div className="fixed inset-0 bg-nu-dark/90 backdrop-blur-3xl z-50 overflow-y-auto">
       {/* Header */}
-      <div className="sticky top-0 z-20 backdrop-blur-xl bg-white/80 dark:bg-gray-900/80 border-b border-gray-200 dark:border-gray-800 shadow-lg">
+      <div className="sticky top-0 z-20 backdrop-blur-xl bg-nu-deep/80 border-b border-white/5 shadow-lg">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <button
@@ -664,7 +664,7 @@ export function LabsViewer({ onClose }: LabsViewerProps) {
               <Home size={24} />
             </button>
             <div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+              <h1 className="text-2xl font-black bg-gradient-to-r from-[#121521] via-[#38476b] via-[#b6192e] to-[#ffc1ac] bg-clip-text text-transparent uppercase tracking-tight">
                 Virtual Lab Experiments
               </h1>
               <p className="text-sm text-gray-600 dark:text-gray-400">Interactive Chemistry & Physics Labs</p>
@@ -684,9 +684,9 @@ export function LabsViewer({ onClose }: LabsViewerProps) {
           <div className="flex gap-2 pb-4">
             <button
               onClick={() => setActiveTab('chemistry')}
-              className={`flex items-center gap-3 px-6 py-3 rounded-xl font-semibold transition-all duration-300 ${activeTab === 'chemistry'
-                ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg shadow-purple-500/30'
-                : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
+              className={`flex items-center gap-3 px-6 py-3 rounded-xl font-black uppercase tracking-tight transition-all duration-300 ${activeTab === 'chemistry'
+                ? 'bg-gradient-to-r from-nu-red-500 to-nu-red-700 text-white shadow-lg shadow-nu-red-500/30'
+                : 'bg-white/5 border border-white/10 text-white/50 hover:bg-white/10'
                 }`}
             >
               <FlaskConical size={20} />
@@ -694,9 +694,9 @@ export function LabsViewer({ onClose }: LabsViewerProps) {
             </button>
             <button
               onClick={() => setActiveTab('physics')}
-              className={`flex items-center gap-3 px-6 py-3 rounded-xl font-semibold transition-all duration-300 ${activeTab === 'physics'
-                ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg shadow-blue-500/30'
-                : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
+              className={`flex items-center gap-3 px-6 py-3 rounded-xl font-black uppercase tracking-tight transition-all duration-300 ${activeTab === 'physics'
+                ? 'bg-gradient-to-r from-nu-blue-500 to-nu-blue-700 text-white shadow-lg shadow-nu-blue-500/30'
+                : 'bg-white/5 border border-white/10 text-white/50 hover:bg-white/10'
                 }`}
             >
               <Zap size={20} />
@@ -710,9 +710,9 @@ export function LabsViewer({ onClose }: LabsViewerProps) {
       <div className="max-w-7xl mx-auto px-6 py-12">
         {/* Hero Section */}
         <div className="mb-12 text-center">
-          <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 border border-purple-200 dark:border-purple-800 mb-6">
-            <Atom className="text-purple-600 dark:text-purple-400" size={24} />
-            <span className="text-purple-900 dark:text-purple-300 font-semibold">
+          <div className="badge mb-6">
+            <Atom className="text-nu-red-500" size={24} />
+            <span className="text-white font-black uppercase tracking-widest ml-2">
               {activeTab === 'chemistry' ? 'Chemistry Laboratory' : 'Physics Laboratory'}
             </span>
           </div>

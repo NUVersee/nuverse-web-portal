@@ -1,159 +1,127 @@
 "use client";
 
-import { Zap, Brain, FlaskConical, Globe, Sparkles, Check } from "lucide-react";
+import React, { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import {
+    Rocket,
+    Eye,
+    User,
+    Code,
+    Box,
+    PenTool,
+    Brain,
+    Laptop
+} from "lucide-react";
+
+if (typeof window !== "undefined") {
+    gsap.registerPlugin(ScrollTrigger);
+}
 
 type AboutProps = {
-  onOpenLabs?: () => void;
-  onOpenAIProfessor?: () => void;
-  onStart360Tour?: () => void;
+    onStart360Tour: (indexOrUrl?: number | string) => void;
+    onOpenLabs: () => void;
+    onOpenAIProfessor: () => void;
 };
 
-export function About({ onOpenLabs, onOpenAIProfessor, onStart360Tour }: AboutProps) {
-  const features = [
-    {
-      icon: Globe,
-      title: "360° Campus Tour",
-      description: "Explore every corner of Nile University from anywhere in the world",
-    },
-    {
-      icon: Brain,
-      title: "AI Professors",
-      description: "Get instant answers and personalized guidance from AI faculty experts",
-    },
-    {
-      icon: FlaskConical,
-      title: "Virtual Labs",
-      description: "Conduct safe experiments in chemistry and physics laboratories",
-    },
-    {
-      icon: Zap,
-      title: "Interactive Learning",
-      description: "Engage with immersive educational experiences in VR",
-    },
-  ];
+export function About({ onStart360Tour, onOpenLabs, onOpenAIProfessor }: AboutProps) {
+    const containerRef = useRef<HTMLDivElement>(null);
 
-  const benefits = [
-    "Explore from anywhere, anytime",
-    "Make informed decisions before applying",
-    "Reduce anxiety for new students",
-    "Experience cutting-edge technology",
-  ];
+    useEffect(() => {
+        const ctx = gsap.context(() => {
+            // Mission & Vision Animation
+            gsap.utils.toArray<HTMLElement>(".mv-item").forEach((item) => {
+                gsap.to(item, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1,
+                    scrollTrigger: {
+                        trigger: item,
+                        start: "top 80%",
+                        toggleActions: "play none none reverse"
+                    }
+                });
+            });
 
-  return (
-    <section id="about" className="relative py-24 px-4 sm:px-6 lg:px-8 bg-white dark:bg-gray-900 transition-colors overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-30">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-400/20 dark:bg-blue-600/10 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-400/20 dark:bg-purple-600/10 rounded-full blur-3xl"></div>
-      </div>
+            // Team Animation
+            gsap.to(".section-header", {
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                scrollTrigger: {
+                    trigger: ".section-header",
+                    start: "top 80%"
+                }
+            });
 
-      <div className="max-w-7xl mx-auto relative z-10">
-        {/* Header */}
-        <div className="text-center mb-20">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-200 dark:border-blue-800 mb-6">
-            <Sparkles className="text-blue-600 dark:text-blue-400" size={20} />
-            <span className="text-sm font-semibold bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
-              ABOUT NUVERSE
-            </span>
-          </div>
+            gsap.utils.toArray<HTMLElement>(".team-member").forEach((member, i) => {
+                gsap.to(member, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.8,
+                    delay: i * 0.1,
+                    scrollTrigger: {
+                        trigger: member,
+                        start: "top 85%"
+                    }
+                });
+            });
 
-          <h2 className="text-5xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
-            Step Into Your <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">Future</span>
-          </h2>
+            // Floating shapes animation handled by CSS/global
+        }, containerRef);
 
-          <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed">
-            NUVerse is an AI-driven VR experience that transforms how students explore Nile University.
-            Walk through our campus, meet AI professors, and discover your future—all from your device.
-          </p>
-        </div>
+        return () => ctx.revert();
+    }, []);
 
-        {/* Features Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
-          {features.map((feature, index) => {
-            const Icon = feature.icon;
-            return (
-              <div
-                key={index}
-                className="group bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 dark:border-gray-700"
-              >
-                <div className="bg-gradient-to-br from-blue-500 to-purple-500 p-4 rounded-2xl w-fit mb-6 shadow-lg group-hover:scale-110 transition-transform">
-                  <Icon className="text-white" size={28} />
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">{feature.title}</h3>
-                <p className="text-gray-600 dark:text-gray-400 leading-relaxed">{feature.description}</p>
-              </div>
-            );
-          })}
-        </div>
+    return (
+        <section id="about" ref={containerRef} className="about-container relative overflow-hidden transition-colors">
+            {/* Floating Shapes */}
+            <div className="floating-shapes absolute inset-0 pointer-events-none z-0">
+                <div className="shape shape-1"></div>
+                <div className="shape shape-2"></div>
+                <div className="shape shape-3"></div>
+            </div>
 
-        {/* Benefits Section */}
-        <div className="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-800 dark:to-gray-900 rounded-3xl p-12 mb-20 border border-blue-100 dark:border-gray-700">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
-                Why Choose NUVerse?
-              </h3>
-              <div className="space-y-4">
-                {benefits.map((benefit, index) => (
-                  <div key={index} className="flex items-center gap-4">
-                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center shadow-lg">
-                      <Check className="text-white" size={18} />
+            {/* Mission Section */}
+            <section className="mission-section relative z-10 min-h-screen flex flex-col justify-center py-20">
+                <div className="container mx-auto px-6">
+                    <div className="section-header text-center mb-20 opacity-0 translate-y-10">
+                        <h1 className="text-5xl md:text-8xl font-black uppercase tracking-tighter text-white">
+                            Driven by <span className="gradient-text bg-gradient-to-r from-[#121521] via-[#38476b] via-[#b6192e] to-[#ffc1ac] bg-clip-text text-transparent">Innovation</span>
+                        </h1>
                     </div>
-                    <p className="text-lg text-gray-700 dark:text-gray-300 font-medium">{benefit}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
 
-            <div className="space-y-6">
-              <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-xl border-l-4 border-blue-500">
-                <p className="text-gray-600 dark:text-gray-400 italic mb-2">
-                  "I explored the campus, talked to the AI professor, and knew Engineering was my path."
-                </p>
-                <p className="text-sm text-gray-500 dark:text-gray-500 font-semibold">— Prospective Student</p>
-              </div>
+                    <div className="grid md:grid-cols-2 gap-16">
+                        <div className="mv-item opacity-0 translate-y-10 flex flex-col items-start">
+                            <div className="w-16 h-16 rounded-full bg-nu-red-500/20 flex items-center justify-center mb-6 relative group">
+                                <Rocket className="w-8 h-8 text-white relative z-10" />
+                                <div className="absolute inset-0 bg-nu-red-500/40 rounded-full blur-xl group-hover:blur-2xl transition-all"></div>
+                            </div>
+                            <h2 className="section-h3 mb-4 text-nu-red-500">Our Mission</h2>
+                            <div className="w-16 h-1 bg-gradient-to-r from-nu-red-500 to-transparent mb-6"></div>
+                            <p className="text-gray-600 dark:text-gray-300 text-lg leading-relaxed max-w-lg">
+                                To revolutionize the university exploration experience by bridging the gap between
+                                physical and digital reality. We aim to provide an immersive, accessible, and
+                                interactive platform that empowers students to discover their future campus from anywhere in the world.
+                            </p>
+                        </div>
 
-              <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-xl border-l-4 border-purple-500">
-                <p className="text-gray-600 dark:text-gray-400 italic mb-2">
-                  "The virtual labs helped me understand complex concepts before even starting classes."
-                </p>
-                <p className="text-sm text-gray-500 dark:text-gray-500 font-semibold">— Current Student</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* CTA */}
-        <div className="text-center">
-          <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-3xl p-12 shadow-2xl">
-            <h3 className="text-3xl font-bold text-white mb-4">Ready to Explore?</h3>
-            <p className="text-blue-100 mb-8 text-lg max-w-2xl mx-auto">
-              Experience Nile University like never before with our immersive virtual platform
-            </p>
-
-            <div className="flex flex-wrap gap-4 justify-center">
-              <button
-                onClick={onStart360Tour}
-                className="bg-white text-blue-600 px-8 py-4 rounded-xl font-bold hover:bg-blue-50 transition-all duration-300 transform hover:scale-105 shadow-lg"
-              >
-                Start 360° Tour
-              </button>
-              <button
-                onClick={onOpenAIProfessor}
-                className="border-2 border-white text-white px-8 py-4 rounded-xl font-bold hover:bg-white hover:text-blue-600 transition-all duration-300 transform hover:scale-105"
-              >
-                Meet AI Professor
-              </button>
-              <button
-                onClick={onOpenLabs}
-                className="border-2 border-white text-white px-8 py-4 rounded-xl font-bold hover:bg-white hover:text-purple-600 transition-all duration-300 transform hover:scale-105"
-              >
-                Explore Labs
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
+                        <div className="mv-item opacity-0 translate-y-10 flex flex-col items-start">
+                            <div className="w-16 h-16 rounded-full bg-nu-blue-500/20 flex items-center justify-center mb-6 relative group">
+                                <Eye className="w-8 h-8 text-white relative z-10" />
+                                <div className="absolute inset-0 bg-nu-blue-500/40 rounded-full blur-xl group-hover:blur-2xl transition-all"></div>
+                            </div>
+                            <h2 className="section-h3 mb-4 text-nu-blue-600 dark:text-nu-blue-300">Our Vision</h2>
+                            <div className="w-16 h-1 bg-gradient-to-r from-nu-blue-500 to-transparent mb-6"></div>
+                            <p className="text-gray-600 dark:text-gray-300 text-lg leading-relaxed max-w-lg">
+                                To become the leading standard for virtual academic tours, creating a global
+                                educational metaverse where every student can experience, interact with, and belong
+                                to their dream university environment without boundaries.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section>
+    );
 }

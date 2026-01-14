@@ -1,7 +1,10 @@
 using System;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NuVerse.Application.Interfaces.Repositories;
+using NuVerse.Infrastructure.Data;
+using NuVerse.Infrastructure.Repositories;
 using NuVerse.Infrastructure.Services;
 using NuVerse.Domain.Entities;
 
@@ -11,6 +14,19 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
+        // Configure DbContext with SQL Server
+        var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING") 
+            ?? configuration.GetConnectionString("DefaultConnection");
+        
+        services.AddDbContext<NuVerseDbContext>(options =>
+            options.UseSqlServer(connectionString, sqlOptions =>
+            {
+                sqlOptions.EnableRetryOnFailure(
+                    maxRetryCount: 3,
+                    maxRetryDelay: TimeSpan.FromSeconds(10),
+                    errorNumbersToAdd: null);
+            }));
+
         // Bind email settings from configuration (appsettings / user-secrets / env)
         services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
         // Bind email templates for subjects and bodies
@@ -40,13 +56,16 @@ public static class DependencyInjection
         services.Configure<Configurations.ChatbotSettings>(
             configuration.GetSection(Configurations.ChatbotSettings.SectionName));
 
+        // Register repositories
+        services.AddScoped<IChatbotInteractionRepository, ChatbotInteractionRepository>();
+        services.AddScoped<IContactSubmissionRepository, ContactSubmissionRepository>();
+
         // Register infrastructure services
         // EmailSender uses MailKit and holds a reusable SMTP client — register as singleton so the client can be reused.
         services.AddTransient<IEmailSender, Repositories.EmailSender>();
         services.AddHttpClient<IRecaptchaService, RecaptchaService>();
         
-        services.AddScoped<IChemistryLabService, ChemistryLabService>();
-        services.AddScoped<ICircuitLabService, CircuitLabService>();
+
         
         // Register Chatbot service with HttpClient
         services.AddHttpClient<Application.Interfaces.IChatbotService, ChatbotService>();
@@ -54,3 +73,4 @@ public static class DependencyInjection
         return services;
     }
 }
+

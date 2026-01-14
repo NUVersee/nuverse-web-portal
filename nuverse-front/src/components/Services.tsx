@@ -1,14 +1,37 @@
 "use client";
 
+import { useRef } from "react";
 import { Brain, FlaskConical, Sparkles } from "lucide-react";
+import { motion, useInView } from "framer-motion";
 import { ServiceCard } from "./ServiceCard";
 
 type ServicesProps = {
   onOpenLabs?: () => void;
   onOpenAIProfessor?: () => void;
+  onStartTour?: () => void;
 };
 
-export function Services({ onOpenLabs, onOpenAIProfessor }: ServicesProps) {
+/**
+ * Services Component
+ *
+ * Displays the VR services offered by Nile University, including virtual labs and AI professors.
+ * Includes call-to-action buttons to open specific viewers or sections.
+ *
+ * @param {ServicesProps} props - Component properties.
+ * @param {() => void} props.onOpenLabs - Callback to open the labs viewer.
+ * @param {() => void} props.onOpenAIProfessor - Callback to open the AI professor viewer.
+ * @param {() => void} props.onStartTour - Callback to start the 360 tour.
+ * @returns {JSX.Element} The services section.
+ */
+export function Services({ onOpenLabs, onOpenAIProfessor, onStartTour }: ServicesProps) {
+  const headerRef = useRef(null);
+  const cardsRef = useRef(null);
+  const statsRef = useRef(null);
+
+  const headerInView = useInView(headerRef, { once: true, margin: "-100px" });
+  const cardsInView = useInView(cardsRef, { once: true, margin: "-50px" });
+  const statsInView = useInView(statsRef, { once: true, margin: "-50px" });
+
   const services = [
     {
       icon: FlaskConical,
@@ -30,69 +53,124 @@ export function Services({ onOpenLabs, onOpenAIProfessor }: ServicesProps) {
       features: ["4 Faculty Experts", "Personalized Learning", "24/7 Availability", "Interactive Q&A"],
       onClick: onOpenAIProfessor,
     },
+    {
+      icon: Sparkles,
+      title: "360 Campus Tour",
+      description:
+        "Embark on a high-definition 360-degree virtual journey through Nile University. Visit our modern campus, state-of-the-art facilities, and vibrant student spaces from the comfort of your home.",
+      image: "/Images/immersive vr.png",
+      features: ["360° Panorama", "Guided Navigation", "Mobile Friendly", "Virtual Reality Ready"],
+      onClick: onStartTour,
+    },
   ];
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+        delayChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 40 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut" as const,
+      },
+    },
+  };
+
+  const statVariants = {
+    hidden: { opacity: 0, scale: 0.8 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: {
+        duration: 0.5,
+        ease: "easeOut" as const,
+      },
+    },
+  };
+
   return (
-    <section id="services" className="relative py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-white via-gray-50 to-white dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-colors overflow-hidden">
+    <section id="services" className="relative py-24 px-4 sm:px-6 lg:px-8 overflow-hidden">
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-blue-400/10 dark:bg-blue-600/5 rounded-full blur-3xl animate-float"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-400/10 dark:bg-purple-600/5 rounded-full blur-3xl animate-float-delay"></div>
+        <motion.div
+          animate={{ y: [0, -20, 0] }}
+          transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
+          className="absolute top-20 left-10 w-72 h-72 bg-nu-blue-500/10 rounded-full blur-3xl"
+        />
+        <motion.div
+          animate={{ y: [0, 20, 0] }}
+          transition={{ repeat: Infinity, duration: 8, ease: "easeInOut" }}
+          className="absolute bottom-20 right-10 w-96 h-96 bg-nu-red-500/10 rounded-full blur-3xl"
+        />
       </div>
 
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Enhanced Header */}
-        <div className="text-center mb-20">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-200 dark:border-blue-800 mb-6">
-            <Sparkles className="text-blue-600 dark:text-blue-400" size={20} />
-            <span className="text-sm font-semibold bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
-              IMMERSIVE EXPERIENCES
-            </span>
-          </div>
+        <motion.div
+          ref={headerRef}
+          initial={{ opacity: 0, y: 40 }}
+          animate={headerInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-20"
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={headerInView ? { opacity: 1, scale: 1 } : {}}
+            transition={{ delay: 0.2 }}
+            className="badge mb-6"
+          >
+            <Sparkles className="text-nu-peach-300" size={20} />
+            <span className="ml-2">IMMERSIVE EXPERIENCES</span>
+          </motion.div>
 
-          <h2 className="text-5xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
-            Our VR <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">Services</span>
-          </h2>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            animate={headerInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.3 }}
+            className="text-5xl md:text-8xl font-black uppercase tracking-tighter text-gray-900 dark:text-white mb-6 leading-tight"
+          >
+            Our VR <span className="gradient-text bg-gradient-to-r from-[#121521] via-[#38476b] via-[#b6192e] to-[#ffc1ac] bg-clip-text text-transparent">Services</span>
+          </motion.h2>
 
-          <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed">
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={headerInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.4 }}
+            className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed"
+          >
             Discover how our virtual reality platform brings Nile University closer to you with immersive, interactive experiences that redefine learning.
-          </p>
-        </div>
+          </motion.p>
+        </motion.div>
 
-        {/* Service Cards with stagger animation */}
-        <div className="grid md:grid-cols-2 gap-10 max-w-6xl mx-auto">
+        <motion.div
+          ref={cardsRef}
+          variants={containerVariants}
+          initial="hidden"
+          animate={cardsInView ? "visible" : "hidden"}
+          className="flex overflow-x-auto gap-8 pb-12 px-4 snap-x snap-mandatory custom-scrollbar"
+        >
           {services.map((service, index) => (
-            <div
+            <motion.div
               key={index}
-              className="animate-fade-in-up"
-              style={{ animationDelay: `${index * 150}ms` }}
+              variants={itemVariants}
+              className="min-w-[300px] md:min-w-[400px] snap-center"
             >
               <ServiceCard {...service} />
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
 
-        {/* Stats Section */}
-        <div className="mt-24 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-5xl mx-auto">
-          {[
-            { value: "12+", label: "Virtual Labs" },
-            { value: "4", label: "AI Professors" },
-            { value: "360°", label: "Campus Tour" },
-            { value: "24/7", label: "Availability" },
-          ].map((stat, index) => (
-            <div
-              key={index}
-              className="text-center p-6 rounded-2xl bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
-            >
-              <div className="text-4xl md:text-5xl font-black bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
-                {stat.value}
-              </div>
-              <div className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide">
-                {stat.label}
-              </div>
-            </div>
-          ))}
-        </div>
       </div>
     </section>
   );

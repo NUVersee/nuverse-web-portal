@@ -1,54 +1,763 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
 @import "tailwindcss";
 
-@theme {
-  --color-brand-50: hsla(220, 100%, 97%, 1);
-  --color-brand-100: hsla(220, 100%, 92%, 1);
-  --color-brand-500: hsla(220, 100%, 54%, 1);
-  --color-brand-600: hsla(220, 100%, 44%, 1);
-
-  --color-accent-500: hsla(280, 100%, 60%, 1);
-  --color-accent-600: hsla(280, 100%, 50%, 1);
-
-  --font-sans: "Outfit", "Inter", ui-sans-serif, system-ui;
+/* =========================================================
+   FONT DEFINITIONS - Rostex Font Family
+========================================================= */
+@font-face {
+  font-family: "RostexDisplay";
+  src: url("/fonts/rostex/Rostex-Oblique.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
 }
 
+@font-face {
+  font-family: "RostexDisplay";
+  src: url("/fonts/rostex/Rostex-Oblique.ttf") format("truetype");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "RostexBody";
+  src: url("/fonts/rostex/Rostex-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "RostexBody";
+  src: url("/fonts/rostex/Rostex-Regular.otf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "RostexUI";
+  src: url("/fonts/rostex/Rostex-Regular.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* =========================================================
+   NUVERSE COLOR THEME - Unified Design System
+========================================================= */
+@theme {
+  /* Primary Navy/Dark Colors */
+  --nu-dark: #121521;
+  --nu-deep: #05101c;
+  --nu-navy: #081a2c;
+
+  /* Blue Tones */
+  --nu-blue-50: #e8eef5;
+  --nu-blue-100: #c5d3e8;
+  --nu-blue-200: #9eb8d9;
+  --nu-blue-300: #7096c4;
+  --nu-blue-400: #4a75af;
+  --nu-blue-500: #38476b;
+  --nu-blue-600: #2d3a5a;
+  --nu-blue-700: #232d48;
+  --nu-blue-800: #1a2137;
+  --nu-blue-900: #121521;
+
+  /* Accent & Action Colors */
+  --nu-vibrant-red: #ff4b2b;
+  --nu-purple: #9f28e3;
+  --nu-gold: #bbae19;
+
+  /* Accent Red Colors */
+  --nu-red-50: #fce8eb;
+  --nu-red-100: #f7c6cc;
+  --nu-red-200: #f09fa9;
+  --nu-red-300: #e97686;
+  --nu-red-400: #e24e63;
+  --nu-red-500: #b6192e;
+  --nu-red-600: #9a1526;
+  --nu-red-700: #7e111f;
+  --nu-red-800: #620d17;
+  --nu-red-900: #450910;
+
+  /* Peach/Gold Accent */
+  --nu-peach-50: #fff8f6;
+  --nu-peach-100: #ffe9e3;
+  --nu-peach-200: #ffd7cc;
+  --nu-peach-300: #ffc1ac;
+  --nu-peach-400: #ffab8c;
+  --nu-peach-500: #f5956e;
+  --nu-peach-600: #d98058;
+  --nu-peach-700: #bd6a43;
+  --nu-peach-800: #a1552e;
+  --nu-peach-900: #85401a;
+
+  /* Semantic Colors */
+  --brand-primary: var(--nu-red-500);
+  --brand-secondary: var(--nu-blue-500);
+  --brand-accent: var(--nu-peach-300);
+  --brand-dark: var(--nu-dark);
+
+  /* Brand Gradients */
+  --nu-gradient-brand: linear-gradient(90deg, #121521, #38476b, #b6192e, #ffc1ac);
+  --nu-gradient-text: linear-gradient(45deg, #38476b, #b6192e, #ffc1ac);
+  --nu-gradient-action: linear-gradient(45deg, #b6192e, #ff4b2b);
+
+  /* Section Backgrounds */
+  --color-section-hero: #05101c;
+  --color-section-about: #081a2c;
+  --color-section-services: #0a1f33;
+  --color-section-contact: #05101c;
+
+  /* Font Variables */
+  --font-display: "RostexDisplay", sans-serif;
+  --font-body: "RostexBody", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-ui: "RostexUI", system-ui, sans-serif;
+  --font-sans: "RostexBody", "Outfit", "Inter", ui-sans-serif, system-ui;
+
+  /* Typography Scale */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  --text-4xl: 2.25rem;
+  --text-5xl: 3rem;
+  --text-6xl: 4rem;
+  --text-7xl: 5rem;
+  --text-8xl: 6rem;
+}
+
+/* Dark mode variant */
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* =========================================================
+   BASE STYLES
+========================================================= */
 @layer base {
+  :root {
+    /* Background Gradient Stops - Unified Dark Theme */
+    --bg-dark: #05101c;
+    --bg-mid1: #081a2c;
+    --bg-mid2: #121521;
+    --bg-end: #1a2137;
+
+    /* Accent Colors - Premium Dark Optimized */
+    --accent-warm: var(--nu-peach-300);
+    --accent-soft: var(--nu-blue-400);
+    --accent-red: var(--nu-red-500);
+    --accent-gold: var(--nu-peach-300);
+
+    /* UI Colors */
+    --foreground: #ffffff;
+    --foreground-muted: rgba(255, 255, 255, 0.8);
+    --background: #05101c;
+
+    /* Section Specific Backgrounds for Variance */
+    --bg-section-hero: #05101c;
+    --bg-section-about: #081a2c;
+    --bg-section-services: #0a1f33;
+    --bg-section-contact: #05101c;
+
+    /* Card/Glass Colors */
+    --card-bg: rgba(18, 30, 49, 0.85);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-bg: rgba(255, 255, 255, 0.05);
+
+    /* Selection */
+    --selection-bg: var(--accent-red);
+    --selection-text: #ffffff;
+  }
+
+  /* Keep .dark variant for compatibility but pointing to same dark theme */
+  .dark {
+    --background: #05101c;
+  }
+
+  html,
+  body {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+
   html {
     scroll-behavior: smooth;
+    font-size: 16px;
   }
 
   body {
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    line-height: 1.6;
+    background: radial-gradient(circle at 0% 0%, var(--nu-dark), var(--nu-blue-500), var(--nu-red-500), var(--nu-peach-300)) fixed;
+    color: var(--foreground);
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     @apply transition-colors duration-300;
   }
 
-  :root {
-    color-scheme: light;
-    --background: white;
-    --foreground: #0f172a;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-display);
+    line-height: 1.1;
+    margin: 0;
+    font-weight: 700;
   }
 
-  .dark {
-    color-scheme: dark;
-    --background: #020617;
-    --foreground: #f8fafc;
+  p {
+    margin: 0;
+  }
+
+  ::selection {
+    background: var(--selection-bg);
+    color: var(--selection-text);
+  }
+
+  /* Custom Minimal Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--bg-dark);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--nu-blue-400);
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--nu-red-500);
+  }
+
+  /* Firefox */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--nu-blue-400) var(--bg-dark);
   }
 }
 
+/* Beautiful Gradient Background Option */
+.gradient-bg {
+  background: radial-gradient(circle at 10% 40%,
+      var(--bg-dark),
+      var(--bg-mid1),
+      var(--bg-mid2),
+      var(--bg-end));
+}
+
+/* =========================================================
+   UTILITY CLASSES
+ ========================================================= */
 @utility glass {
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.125);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 @utility dark-glass {
-  background: rgba(15, 23, 42, 0.7);
-  backdrop-filter: blur(12px);
+  background: rgba(18, 21, 33, 0.85);
+  backdrop-filter: blur(15px);
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
+@utility nu-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  border: 1px solid var(--glass-border);
+  transition: all 0.3s ease;
+}
+
+@utility nu-card-hover {
+  border-color: var(--accent-warm);
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+@utility section-h1 {
+  font-family: var(--font-display);
+  font-size: var(--text-4xl);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.05em;
+  @apply md:text-6xl;
+}
+
+@utility section-h2 {
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  @apply md:text-5xl;
+}
+
+@utility section-h3 {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  @apply md:text-2xl;
+}
+
+/* 3D Transform Utilities */
+@utility perspective-1000 {
+  perspective: 1000px;
+}
+
+@utility transform-style-3d {
+  transform-style: preserve-3d;
+}
+
+@utility backface-hidden {
+  backface-visibility: hidden;
+}
+
+@utility preserve-3d {
+  transform-style: preserve-3d;
+}
+
+/* =========================================================
+   GRADIENT HELPERS
+ ========================================================= */
+.gradient-text {
+  background: var(--nu-gradient-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.gradient-text-red {
+  background: var(--nu-gradient-action);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.gradient-brand {
+  background: var(--nu-gradient-brand);
+}
+
+.gradient-border {
+  border-image: var(--nu-gradient-brand) 1;
+}
+
+.gradient-bg-radial {
+  background: radial-gradient(circle at center,
+      var(--nu-deep),
+      var(--nu-navy),
+      var(--nu-dark));
+}
+
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 4px;
+  width: 0%;
+  background: var(--nu-gradient-brand);
+  background-size: 200% auto;
+  z-index: 9999;
+}
+
+/* =========================================================
+   FLOATING BACKGROUND SHAPES
+ ========================================================= */
+.floating-shapes {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.shape {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+}
+
+.shape-1 {
+  top: -10%;
+  left: -10%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, var(--nu-blue-400), transparent 70%);
+  opacity: 0.5;
+}
+
+.shape-2 {
+  bottom: 10%;
+  right: -5%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, var(--nu-red-500), transparent 70%);
+  opacity: 0.4;
+}
+
+.shape-3 {
+  top: 40%;
+  left: 40%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, var(--nu-peach-300), transparent 70%);
+  opacity: 0.3;
+}
+
+/* =========================================================
+   BUTTONS
+ ========================================================= */
+.btn-primary {
+  padding: 15px 40px;
+  background: linear-gradient(90deg, #121521, #38476b, #b6192e, #ffc1ac);
+  background-size: 200% auto;
+  color: white;
+  text-decoration: none;
+  border-radius: 30px;
+  font-weight: bold;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(182, 25, 46, 0.4);
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.btn-primary:hover {
+  background-position: right center;
+  transform: translateY(-2px);
+  box-shadow: 0 15px 30px rgba(182, 25, 46, 0.5);
+}
+
+.btn-outline {
+  padding: 12px 30px;
+  background: transparent;
+  color: var(--nu-peach-300);
+  border: 1px solid rgba(255, 193, 172, 0.3);
+  border-radius: 50px;
+  font-weight: bold;
+  cursor: pointer;
+  letter-spacing: 2px;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+}
+
+.btn-outline:hover {
+  background: rgba(255, 193, 172, 0.1);
+  border-color: var(--nu-peach-300);
+  box-shadow: 0 0 30px rgba(255, 193, 172, 0.2);
+}
+
+.btn-gradient {
+  background: var(--nu-gradient-brand);
+  background-size: 200% auto;
+  color: white;
+  padding: 14px 30px;
+  border: none;
+  border-radius: 50px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.btn-gradient:hover {
+  background-position: right center;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(182, 25, 46, 0.6);
+}
+
+/* =========================================================
+   CARDS
+========================================================= */
+.service-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid var(--glass-border);
+  transition: all 0.4s ease;
+  cursor: pointer;
+}
+
+.service-card:hover {
+  border-color: var(--accent-warm);
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.feature-card {
+  padding: 40px;
+  background: var(--glass-bg);
+  border-radius: 15px;
+  border: 1px solid var(--glass-border);
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--accent-warm);
+  transform: translateY(-5px);
+}
+
+.feature-card h3 {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  color: var(--accent-warm);
+  margin-bottom: 15px;
+}
+
+/* =========================================================
+   PROGRESS & LOADERS
+========================================================= */
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent-red), var(--accent-warm));
+  z-index: 1000;
+}
+
+.loader-spinner {
+  width: 60px;
+  height: 60px;
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-top-color: var(--accent-red);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* =========================================================
+   AI CHAT WIDGET STYLES
+========================================================= */
+.ai-bubble {
+  background: linear-gradient(135deg, var(--accent-soft), var(--accent-red));
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+  animation: bobble 3s ease-in-out infinite;
+}
+
+.ai-bubble:hover {
+  border-color: var(--accent-warm);
+  box-shadow: 0 0 20px rgba(182, 25, 46, 0.6);
+}
+
+.ai-chat-window {
+  background: var(--card-bg);
+  backdrop-filter: blur(15px);
+  border-radius: 20px;
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+}
+
+.chat-header {
+  background: linear-gradient(90deg, var(--accent-soft), var(--bg-dark));
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.user-message {
+  background: linear-gradient(135deg, var(--accent-red), var(--accent-soft));
+  color: white;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.bot-message {
+  background: rgba(255, 255, 255, 0.1);
+  color: #e0e0e0;
+  border-radius: 15px;
+}
+
+/* =========================================================
+   TEAM SECTION
+========================================================= */
+.team-member {
+  text-align: center;
+  transition: transform 0.4s ease;
+  cursor: pointer;
+}
+
+.team-member:hover {
+  transform: translateY(-10px);
+}
+
+.img-ring {
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  background: linear-gradient(45deg, var(--accent-soft), var(--accent-red), var(--accent-warm), var(--accent-soft));
+  background-size: 300% 300%;
+  opacity: 0.5;
+  animation: spinGradient 4s linear infinite;
+  transition: all 0.3s;
+}
+
+.team-member:hover .img-ring {
+  opacity: 1;
+  filter: blur(5px);
+}
+
+/* =========================================================
+   NAVBAR STYLING
+========================================================= */
+.navbar-gradient {
+  background: linear-gradient(90deg, var(--bg-dark), var(--accent-soft), var(--accent-red), var(--accent-warm));
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, white, var(--accent-warm));
+  transition: width 0.4s ease;
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  width: 100%;
+}
+
+/* =========================================================
+   360 TOUR STYLES
+========================================================= */
+.tour-overlay {
+  background: black;
+  clip-path: circle(0% at 50% 50%);
+  transition: clip-path 0.5s ease;
+}
+
+.tour-overlay.active {
+  clip-path: circle(100% at 50% 50%);
+}
+
+.tour-btn {
+  background: linear-gradient(45deg, var(--bg-dark), var(--accent-soft), var(--accent-red), var(--accent-warm));
+  background-size: 200% auto;
+  color: white;
+  padding: 14px 30px;
+  border: none;
+  border-radius: 50px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.tour-btn:hover {
+  background-position: right center;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(182, 25, 46, 0.6);
+}
+
+/* =========================================================
+   CAROUSEL STYLES
+========================================================= */
+.carousel-card {
+  background: var(--bg-dark);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.6);
+  border: 1px solid var(--glass-border);
+}
+
+.carousel-card:hover {
+  border-color: var(--accent-warm);
+}
+
+/* =========================================================
+   SECTION HEADERS
+========================================================= */
+.section-header h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  line-height: 1.1;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  color: white;
+  text-align: center;
+}
+
+.badge {
+  display: inline-block;
+  padding: 6px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: var(--accent-warm);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.separator {
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-red), transparent);
+}
+
+/* =========================================================
+   ICON STYLING
+========================================================= */
+.icon-box {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.4rem;
+  color: var(--accent-warm);
+  background: linear-gradient(135deg, var(--bg-dark), var(--accent-soft));
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.icon-glow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--accent-red), var(--accent-warm));
+  filter: blur(25px);
+  opacity: 0.6;
+  border-radius: 50%;
+  z-index: -1;
+}
+
+/* =========================================================
+   ANIMATIONS
+========================================================= */
 @keyframes float {
 
   0%,
@@ -61,51 +770,9 @@
   }
 }
 
-@keyframes float-delay {
-
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(-15px);
-  }
-}
-
-@keyframes fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-
+@keyframes spin {
   to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fade-in-delay {
-  from {
-    opacity: 0;
-    transform: translateX(20px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes slide-in {
-  from {
-    opacity: 0;
-    transform: translateX(-10px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateX(0);
+    transform: rotate(360deg);
   }
 }
 
@@ -121,75 +788,118 @@
   }
 }
 
-@keyframes slide-right {
+@keyframes fade-in {
   from {
     opacity: 0;
-    transform: translateX(100px);
   }
 
   to {
     opacity: 1;
-    transform: translateX(0);
   }
 }
 
-@keyframes slide-left {
-  from {
-    opacity: 0;
-    transform: translateX(-100px);
+@keyframes spinGradient {
+  0% {
+    background-position: 0% 50%;
   }
 
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes bobble {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+
+  33% {
+    transform: translateY(-10px) rotate(5deg);
+  }
+
+  66% {
+    transform: translateY(5px) rotate(-5deg);
+  }
+
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+}
+
+@keyframes typing {
   to {
-    opacity: 1;
-    transform: translateX(0);
+    width: 100%;
   }
 }
 
+@keyframes blink {
+  50% {
+    border-color: transparent;
+  }
+}
+
+/* Animation Classes */
 .animate-float {
   animation: 3s ease-in-out infinite float;
 }
 
-.animate-float-delay {
-  animation: 4s ease-in-out infinite float-delay;
-}
-
-.animate-fade-in {
-  animation: 0.8s ease-out fade-in;
-}
-
-.animate-fade-in-delay {
-  animation: 0.8s ease-out 0.2s both fade-in-delay;
-}
-
-.animate-slide-in {
-  animation: 0.4s ease-out slide-in;
+.animate-spin-slow {
+  animation: spin 8s linear infinite;
 }
 
 .animate-bounce-slow {
   animation: 2s ease-in-out infinite bounce-slow;
 }
 
-.animate-slide-right {
-  animation: 0.5s ease-out slide-right;
+.animate-fade-in {
+  animation: 0.8s ease-out fade-in;
 }
 
-.animate-slide-left {
-  animation: 0.5s ease-out slide-left;
+.animate-bobble {
+  animation: bobble 3s ease-in-out infinite;
 }
 
-@keyframes fade-in-up {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
+/* =========================================================
+   RESPONSIVE STYLES
+========================================================= */
+@media (max-width: 992px) {
+  .section-header h1 {
+    font-size: 2.8rem;
   }
 
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  .section-title {
+    font-size: 2.5rem;
   }
 }
 
-.animate-fade-in-up {
-  animation: fade-in-up 0.6s ease-out forwards;
-  opacity: 0;
+@media (max-width: 768px) {
+  .shape {
+    display: none;
+  }
+
+  .social-links {
+    gap: 30px;
+  }
+
+  .ai-chat-window {
+    width: 90%;
+    right: 5%;
+    left: 5%;
+  }
+}
+
+@media (max-width: 576px) {
+  .section-header h1 {
+    font-size: 2rem;
+  }
+
+  .btn-primary,
+  .btn-outline {
+    padding: 12px 25px;
+    font-size: 0.9rem;
+  }
 }

@@ -8,21 +8,38 @@ using MimeKit;
 
 namespace NuVerse.Infrastructure.Repositories
 {
+    /// <summary>
+    /// Service for sending emails and managing SMTP connections using MailKit.
+    /// Also handles persisting contact form submissions to the database.
+    /// </summary>
     public class EmailSender : IEmailSender, IAsyncDisposable
     {
         private readonly EmailSettings _settings;
         private readonly Domain.Configurations.EmailTemplates _templates;
         private readonly ILogger<EmailSender> _logger;
+        private readonly IContactSubmissionRepository _contactSubmissionRepository;
         private readonly SmtpClient _client;
         private readonly SemaphoreSlim _clientLock = new SemaphoreSlim(1, 1);
         // 0 = not disposed, 1 = disposed
         private int _disposed;
 
-        public EmailSender(IOptions<EmailSettings> settings, IOptions<NuVerse.Domain.Configurations.EmailTemplates> templates, ILogger<EmailSender> logger)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EmailSender"/> class.
+        /// </summary>
+        /// <param name="settings">Configured email settings (Host, Port, Credentials, etc.).</param>
+        /// <param name="templates">Email templates for subjects and bodies.</param>
+        /// <param name="logger">Logger for recording activities and errors.</param>
+        /// <param name="contactSubmissionRepository">Repository for persisting contact form submissions.</param>
+        public EmailSender(
+            IOptions<EmailSettings> settings, 
+            IOptions<NuVerse.Domain.Configurations.EmailTemplates> templates, 
+            ILogger<EmailSender> logger,
+            IContactSubmissionRepository contactSubmissionRepository)
         {
             _settings = settings.Value;
             _templates = templates?.Value ?? new NuVerse.Domain.Configurations.EmailTemplates();
             _logger = logger;
+            _contactSubmissionRepository = contactSubmissionRepository;
             _client = new SmtpClient();
 
             if (string.IsNullOrWhiteSpace(_settings.To))
@@ -32,11 +49,41 @@ namespace NuVerse.Infrastructure.Repositories
             }
         }
 
+        /// <summary>
+        /// Sends a contact form submission email and an auto-reply to the user.
+        /// Persists the submission data to the database before sending.
+        /// </summary>
+        /// <param name="fullName">The full name of the sender.</param>
+        /// <param name="email">The email address of the sender.</param>
+        /// <param name="phone">The phone number of the sender.</param>
+        /// <param name="reason">The message or reason for contact.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         public async Task SendEmailAsync(string fullName, string email, string phone, string reason)
         {
             // Prevent operations after DisposeAsync has started
             if (System.Threading.Interlocked.CompareExchange(ref _disposed, 0, 0) == 1)
                 throw new ObjectDisposedException(nameof(EmailSender));
+
+            // Save contact submission to database
+            try
+            {
+                var submission = new ContactSubmission
+                {
+                    Email = email ?? string.Empty,
+                    Reason = reason ?? string.Empty,
+                    FullName = fullName,
+                    PhoneNumber = phone,
+                    IsSubmitted = true,
+                    SubmittedAt = DateTime.UtcNow
+                };
+                await _contactSubmissionRepository.AddAsync(submission);
+                _logger.LogInformation("Contact submission saved to database for {Email}", email);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to save contact submission to database for {Email}", email);
+                // Continue with email sending even if database save fails
+            }
 
             var username = _settings.Username ?? Environment.GetEnvironmentVariable("SMTP_USER");
             var password = _settings.Password ?? Environment.GetEnvironmentVariable("SMTP_PASS");
@@ -144,6 +191,15 @@ namespace NuVerse.Infrastructure.Repositories
             }
         }
 
+        /// <summary>
+        /// Formats an email template by replacing placeholders with actual values.
+        /// </summary>
+        /// <param name="template">The template string containing placeholders like {FullName}, {Email}, etc.</param>
+        /// <param name="fullName">The sender's name.</param>
+        /// <param name="email">The sender's email.</param>
+        /// <param name="phone">The sender's phone.</param>
+        /// <param name="reason">The sender's message.</param>
+        /// <returns>The formatted string.</returns>
         private static string? Format(string? template, string fullName, string email, string phone, string reason)
         {
             if (string.IsNullOrWhiteSpace(template))
@@ -156,6 +212,15 @@ namespace NuVerse.Infrastructure.Repositories
                 .Replace("{Reason}", reason);
         }
 
+        /// <summary>
+        /// Builds a MimeMessage for sending via SMTP.
+        /// </summary>
+        /// <param name="from">The sender address.</param>
+        /// <param name="to">The recipient address.</param>
+        /// <param name="subject">The email subject.</param>
+        /// <param name="body">The email text body.</param>
+        /// <param name="replyTo">An optional reply-to address.</param>
+        /// <returns>A configured MimeMessage.</returns>
         private MimeMessage BuildMimeMessage(string from, string to, string subject, string body, string? replyTo)
         {
             var message = new MimeMessage();
@@ -191,6 +256,10 @@ namespace NuVerse.Infrastructure.Repositories
             return message;
         }
 
+        /// <summary>
+        /// Disconnects and disposes of the SMTP client.
+        /// </summary>
+        /// <returns>A ValueTask representing the asynchronous operation.</returns>
         public async ValueTask DisposeAsync()
         {
             await _clientLock.WaitAsync();

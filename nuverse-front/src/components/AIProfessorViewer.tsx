@@ -34,10 +34,10 @@ export function AIProfessorViewer({ onClose }: AIProfessorViewerProps) {
     {
       id: "engineering",
       name: "Engineering",
-      gradient: "from-blue-600 to-cyan-600",
-      accentText: "text-blue-600",
-      accentBg: "from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-900/10",
-      accentBorder: "border-blue-200 dark:border-blue-800",
+      gradient: "from-nu-blue-600 to-nu-blue-400",
+      accentText: "text-nu-blue-500",
+      accentBg: "from-nu-blue-50 to-nu-blue-100 dark:from-nu-blue-900/20 dark:to-nu-blue-900/10",
+      accentBorder: "border-nu-blue-200 dark:border-nu-blue-800",
       professor: {
         name: "Dr. Ahmed Hassan",
         image:
@@ -58,10 +58,10 @@ export function AIProfessorViewer({ onClose }: AIProfessorViewerProps) {
     {
       id: "cs",
       name: "Computer Science",
-      gradient: "from-purple-600 to-pink-600",
-      accentText: "text-purple-600",
-      accentBg: "from-purple-50 to-pink-100 dark:from-purple-900/20 dark:to-pink-900/10",
-      accentBorder: "border-purple-200 dark:border-purple-800",
+      gradient: "from-nu-red-600 to-nu-red-400",
+      accentText: "text-nu-red-500",
+      accentBg: "from-nu-red-50 to-nu-red-100 dark:from-nu-red-900/20 dark:to-nu-red-900/10",
+      accentBorder: "border-nu-red-200 dark:border-nu-red-800",
       professor: {
         name: "Dr. Sara Mohamed",
         image:
@@ -106,10 +106,10 @@ export function AIProfessorViewer({ onClose }: AIProfessorViewerProps) {
     {
       id: "business",
       name: "Business",
-      gradient: "from-orange-600 to-red-600",
-      accentText: "text-orange-600",
-      accentBg: "from-orange-50 to-red-100 dark:from-orange-900/20 dark:to-red-900/10",
-      accentBorder: "border-orange-200 dark:border-orange-800",
+      gradient: "from-[#b6192e] to-[#ffc1ac]",
+      accentText: "text-nu-red-600",
+      accentBg: "from-nu-red-50 to-nu-peach-50 dark:from-nu-red-900/20 dark:to-nu-peach-900/10",
+      accentBorder: "border-nu-red-200 dark:border-nu-peach-300",
       professor: {
         name: "Dr. Omar Khalil",
         image:
@@ -153,8 +153,8 @@ export function AIProfessorViewer({ onClose }: AIProfessorViewerProps) {
               <Home size={24} />
             </button>
             <div>
-              <h1 className="text-white">AI Faculty Advisors</h1>
-              <p className="text-sm text-white/90">Get personalized guidance from our AI professors</p>
+              <h1 className="text-white font-black uppercase tracking-tighter">AI <span className="text-nu-red-500">Faculty</span> Advisors</h1>
+              <p className="text-sm text-white/70 font-medium">Get personalized guidance from our AI professors</p>
             </div>
           </div>
 
@@ -172,8 +172,8 @@ export function AIProfessorViewer({ onClose }: AIProfessorViewerProps) {
                 key={faculty.id}
                 onClick={() => handleFacultyChange(faculty.id)}
                 className={`flex-shrink-0 px-6 py-3 rounded-xl transition-all duration-300 transform ${activeFaculty === faculty.id
-                    ? `bg-gradient-to-r ${faculty.gradient} text-white shadow-lg scale-105`
-                    : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:scale-105"
+                  ? `bg-gradient-to-r ${faculty.gradient} text-white shadow-lg scale-105`
+                  : "bg-nu-dark/40 text-white/70 hover:scale-105"
                   }`}
               >
                 {faculty.name}
@@ -188,7 +188,7 @@ export function AIProfessorViewer({ onClose }: AIProfessorViewerProps) {
           <div className="space-y-6">
             <div className="relative group">
               <div className={`absolute inset-0 bg-gradient-to-r ${currentFaculty.gradient} rounded-3xl blur-2xl opacity-30 group-hover:opacity-40 transition-opacity`}></div>
-              <div className="relative bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8 transform group-hover:scale-105 transition-all duration-300">
+              <div className="relative w-full max-w-6xl h-[85vh] bg-nu-dark/90 backdrop-blur-2xl rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row border border-white/10">
                 <div className="flex items-start gap-6">
                   <div className="relative">
                     <div className={`absolute inset-0 bg-gradient-to-r ${currentFaculty.gradient} rounded-2xl blur opacity-50`}></div>
@@ -224,7 +224,7 @@ export function AIProfessorViewer({ onClose }: AIProfessorViewerProps) {
                 value={question}
                 onChange={(e) => setQuestion(e.target.value)}
                 placeholder={`Ask ${currentFaculty.professor.name} anything about ${currentFaculty.name}...`}
-                className="w-full px-4 py-3 border dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-600 dark:bg-gray-700 dark:text-white resize-none"
+                className="w-full px-4 py-3 border dark:border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-nu-red-500 dark:bg-nu-dark/80 dark:text-white resize-none"
                 rows={4}
               />
               <button
