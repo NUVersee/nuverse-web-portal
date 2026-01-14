@@ -119,7 +119,6 @@ namespace NuVerse.Infrastructure.Services
                     };
                 }
 
-                // Save interaction to database
                 try
                 {
                     var interaction = new ChatbotInteraction
@@ -128,7 +127,9 @@ namespace NuVerse.Infrastructure.Services
                         Answer = result.Answer,
                         SessionId = request.SessionId,
                         Category = result.Category,
-                        Timestamp = result.Timestamp != default ? result.Timestamp : DateTime.UtcNow
+                        Timestamp = result.Timestamp != default 
+                            ? DateTime.SpecifyKind(result.Timestamp, DateTimeKind.Utc) 
+                            : DateTime.UtcNow
                     };
                     await _interactionRepository.AddAsync(interaction);
                     _logger.LogInformation("Chatbot interaction saved to database for session {SessionId}", request.SessionId);
