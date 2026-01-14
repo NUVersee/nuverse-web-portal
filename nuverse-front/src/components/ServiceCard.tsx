@@ -24,7 +24,7 @@ export function ServiceCard({ icon: Icon, title, description, image, features, o
 
   return (
     <div
-      className="group bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer"
+      className="group bg-nu-dark/60 backdrop-blur-md rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 cursor-pointer border border-white/5 hover:border-nu-peach-300/30"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={handleClick}
@@ -35,22 +35,22 @@ export function ServiceCard({ icon: Icon, title, description, image, features, o
           alt={title}
           className={`w-full h-full object-cover transition-transform duration-500 ${isHovered ? "scale-110" : "scale-100"}`}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/30 to-purple-600/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-nu-dark via-nu-dark/40 to-transparent transition-colors" />
+        <div className="absolute inset-0 bg-gradient-to-tr from-[#b6192e]/20 to-[#38476b]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
         <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="bg-gradient-to-br from-blue-600 to-purple-600 p-3 rounded-xl shadow-lg transform group-hover:rotate-12 transition-transform duration-300">
+            <div className="bg-gradient-to-br from-[#b6192e] to-[#ffc1ac] p-3 rounded-xl shadow-lg transform group-hover:rotate-12 transition-transform duration-300">
               <Icon className="text-white" size={24} />
             </div>
-            <h3 className="text-white">{title}</h3>
+            <h3 className="section-h3 text-white">{title}</h3>
           </div>
           <ArrowUpRight className="text-white opacity-0 group-hover:opacity-100 transition-opacity" size={24} />
         </div>
       </div>
 
       <div className="p-6">
-        <p className="text-gray-600 dark:text-gray-400 mb-4 leading-relaxed">{description}</p>
+        <p className="text-gray-300 mb-6 leading-relaxed font-medium transition-colors">{description}</p>
 
         <div className="space-y-2 mb-4">
           {features.slice(0, isExpanded ? features.length : 3).map((feature, index) => (
@@ -59,8 +59,8 @@ export function ServiceCard({ icon: Icon, title, description, image, features, o
               className="flex items-center gap-2 text-gray-700 dark:text-gray-300 animate-slide-in"
               style={{ animationDelay: `${index * 100}ms` }}
             >
-              <div className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-blue-600 to-purple-600"></div>
-              <span>{feature}</span>
+              <div className="w-2 h-2 rounded-full bg-gradient-to-r from-[#b6192e] to-[#ffc1ac] shadow-[0_0_10px_rgba(182,25,46,0.5)]"></div>
+              <span className="text-gray-300">{feature}</span>
             </div>
           ))}
         </div>
@@ -70,7 +70,7 @@ export function ServiceCard({ icon: Icon, title, description, image, features, o
             e.stopPropagation();
             setIsExpanded(!isExpanded);
           }}
-          className="text-transparent bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text hover:from-purple-600 hover:to-blue-600 transition-all flex items-center gap-1 group"
+          className="text-nu-peach-300 hover:text-white transition-colors flex items-center gap-1 group font-bold uppercase tracking-widest text-xs"
         >
           {isExpanded ? "Show Less" : "Explore More"}
           <ChevronRight

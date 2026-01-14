@@ -13,11 +13,12 @@ export default function AboutPage() {
   const [showTour360, setShowTour360] = useState(false);
   const [showLabs, setShowLabs] = useState(false);
   const [showAIProfessor, setShowAIProfessor] = useState(false);
+  const [startTourIndex, setStartTourIndex] = useState<number | string>(0);
 
   return (
     <>
       {showTour360 ? (
-        <Tour360Viewer onClose={() => setShowTour360(false)} />
+        <Tour360Viewer onClose={() => setShowTour360(false)} initialIndex={startTourIndex} />
       ) : showLabs ? (
         <LabsViewer onClose={() => setShowLabs(false)} />
       ) : showAIProfessor ? (
@@ -26,7 +27,10 @@ export default function AboutPage() {
         <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors">
           <Header />
           <About
-            onStart360Tour={() => setShowTour360(true)}
+            onStart360Tour={(index?: number | string) => {
+              setStartTourIndex(index ?? 0);
+              setShowTour360(true);
+            }}
             onOpenLabs={() => setShowLabs(true)}
             onOpenAIProfessor={() => setShowAIProfessor(true)}
           />

@@ -16,7 +16,8 @@ import {
   ArrowLeft,
   ArrowRight,
   Info,
-  RotateCcw
+  RotateCcw,
+  Maximize2
 } from "lucide-react";
 
 type Hotspot = {
@@ -37,7 +38,7 @@ const TOUR_IMAGES: TourImage[] = [
   {
     id: 1,
     title: "University Main Plaza",
-    url: "https://photo-sphere-viewer-data.netlify.app/assets/sphere.jpg",
+    url: "/Images/360 images/image1.jpg",
     hotspots: [
       { id: "h1", position: [10, 2, -20], title: "Main Building", description: "The heart of the campus, housing central administration and historic halls." },
       { id: "h2", position: [-15, -5, 10], title: "Student Union", description: "A hub for student activities, food courts, and study spaces." },
@@ -46,20 +47,37 @@ const TOUR_IMAGES: TourImage[] = [
   },
   {
     id: 2,
-    title: "Research Laboratory",
-    url: "https://cdn.aframe.io/360-image-gallery-boilerplate/img/city.jpg",
+    title: "Campus Library",
+    url: "/Images/360 images/library.webp",
     hotspots: [
-      { id: "l1", position: [5, 0, -10], title: "Advanced Equipment", description: "State-of-the-art research tools for molecular analysis." },
-      { id: "l2", position: [-8, -2, -5], title: "Safety Station", description: "Fully equipped with emergency shower and eye wash." }
+      { id: "c1", position: [0, -5, -10], title: "Observation Deck", description: "Panoramic view of the entire campus from the highest point." }
     ]
   },
   {
     id: 3,
-    title: "Campus Library",
-    url: "https://cdn.aframe.io/360-image-gallery-boilerplate/img/sechelt.jpg",
+    title: "Research Laboratory",
+    url: "/Images/360 images/image2.jpg", // Using image2 as placeholder for Labs if needed
     hotspots: [
-      { id: "c1", position: [0, -5, -10], title: "Observation Deck", description: "Panoramic view of the entire campus from the highest point." }
+      { id: "l1", position: [5, 0, -10], title: "Advanced Equipment", description: "State-of-the-art research tools for molecular analysis." }
     ]
+  },
+  {
+    id: 4,
+    title: "Sports Complex",
+    url: "/Images/360 images/image3.jpg",
+    hotspots: []
+  },
+  {
+    id: 5,
+    title: "Innovation Hub",
+    url: "/Images/360 images/image4.jpg",
+    hotspots: []
+  },
+  {
+    id: 6,
+    title: "Study Halls",
+    url: "/Images/360 images/image5.jpg",
+    hotspots: []
   }
 ];
 
@@ -143,12 +161,20 @@ function Controls({ controlsRef, onZoomChange }: { controlsRef: React.RefObject<
  * 
  * @param {object} props - Component properties.
  * @param {() => void} props.onClose - Callback to close the viewer.
- * @param {number} [props.initialIndex=0] - Initial scene index to display.
+ * @param {number|string} [props.initialIndex=0] - Initial scene index or URL to display.
  * @returns {JSX.Element} The 360 tour viewer interface.
  */
-export function Tour360Viewer({ onClose, initialIndex = 0 }: { onClose: () => void, initialIndex?: number }) {
+export function Tour360Viewer({ onClose, initialIndex = 0 }: { onClose: () => void, initialIndex?: number | string }) {
   const { isDarkMode } = useTheme();
-  const [currentIndex, setCurrentIndex] = useState(initialIndex);
+
+  // Resolve initial index
+  const resolveIndex = () => {
+    if (typeof initialIndex === 'number') return initialIndex;
+    const found = TOUR_IMAGES.findIndex(img => img.url === initialIndex);
+    return found !== -1 ? found : 0;
+  };
+
+  const [currentIndex, setCurrentIndex] = useState(resolveIndex());
   const [selectedHotspot, setSelectedHotspot] = useState<Hotspot | null>(null);
   const [fov, setFov] = useState(75);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -249,23 +275,23 @@ export function Tour360Viewer({ onClose, initialIndex = 0 }: { onClose: () => vo
     <div className="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center font-sans overflow-hidden">
       {/* Top Header */}
       <div className="absolute top-0 left-0 right-0 p-6 flex justify-between items-center z-10 pointer-events-none">
-        <div className={`${glassClass} px-6 py-3 rounded-2xl border shadow-2xl pointer-events-auto flex items-center gap-4`}>
-          <div className="w-10 h-10 rounded-xl bg-brand-500/20 flex items-center justify-center border border-brand-500/30">
-            <Maximize2 className="text-brand-500" size={20} />
+        <div className="bg-nu-dark/80 backdrop-blur-md px-5 py-2.5 rounded-2xl border border-white/10 shadow-2xl pointer-events-auto flex items-center gap-3">
+          <div className="w-9 h-9 rounded-xl bg-nu-red-500/20 flex items-center justify-center border border-nu-red-500/30">
+            <Maximize2 className="text-nu-red-500" size={18} />
           </div>
           <div>
-            <h2 className="text-white text-lg font-bold leading-tight">
+            <h2 className="text-white text-base font-black uppercase tracking-tight leading-tight">
               {currentTour.title}
             </h2>
-            <p className="text-white/50 text-xs uppercase tracking-widest font-medium">Virtual Campus Experience</p>
+            <p className="text-nu-peach-300 text-[10px] uppercase tracking-[0.2em] font-bold opacity-80">Virtual Campus Experience</p>
           </div>
         </div>
 
         <button
           onClick={onClose}
-          className={`${glassClass} p-4 rounded-2xl border text-white hover:bg-white/10 transition-all pointer-events-auto shadow-2xl active:scale-95`}
+          className="bg-nu-red-500 text-white p-3.5 rounded-2xl hover:bg-nu-red-600 transition-all pointer-events-auto shadow-2xl active:scale-95 border border-white/10"
         >
-          <X size={24} />
+          <X size={20} />
         </button>
       </div>
 
@@ -303,34 +329,34 @@ export function Tour360Viewer({ onClose, initialIndex = 0 }: { onClose: () => vo
         <div className="flex items-center gap-6">
 
           {/* Zoom & Reset Side Panel */}
-          <div className={`flex flex-col gap-2 ${glassClass} p-2 rounded-2xl border shadow-2xl`}>
+          <div className="flex flex-col gap-1.5 bg-nu-dark/80 backdrop-blur-md p-1.5 rounded-2xl border border-white/10 shadow-2xl">
             <button
               onClick={() => handleZoom(-10)}
-              className="p-3 text-white hover:bg-brand-500 rounded-xl transition-all group"
+              className="p-2.5 text-white hover:bg-nu-red-500 rounded-xl transition-all group"
               title="Zoom In"
             >
-              <Plus size={20} className="group-active:scale-125 transition-transform" />
+              <Plus size={18} className="group-active:scale-125 transition-transform" />
             </button>
             <button
               onClick={resetView}
-              className="p-3 bg-white/5 text-white hover:bg-white/20 rounded-xl transition-all"
+              className="p-2.5 bg-white/5 text-white hover:bg-white/20 rounded-xl transition-all"
               title="Reset View"
             >
-              <RotateCcw size={20} />
+              <RotateCcw size={18} />
             </button>
             <button
               onClick={() => handleZoom(10)}
-              className="p-3 text-white hover:bg-brand-500 rounded-xl transition-all group"
+              className="p-2.5 text-white hover:bg-nu-red-500 rounded-xl transition-all group"
               title="Zoom Out"
             >
-              <Minus size={20} className="group-active:scale-75 transition-transform" />
+              <Minus size={18} className="group-active:scale-75 transition-transform" />
             </button>
           </div>
 
           {/* Precision Navigation Wheel */}
-          <div className={`relative ${glassClass} p-8 rounded-[2.5rem] border shadow-2xl flex items-center justify-center`}>
+          <div className="relative bg-nu-dark/80 backdrop-blur-md p-5 rounded-[2.5rem] border border-white/10 shadow-2xl flex items-center justify-center scale-90 md:scale-100">
             {/* Directional Pad */}
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-3 gap-1.5">
               <div />
               <button
                 onMouseDown={() => setActiveRotation('up')}
@@ -338,9 +364,9 @@ export function Tour360Viewer({ onClose, initialIndex = 0 }: { onClose: () => vo
                 onMouseLeave={() => setActiveRotation(null)}
                 onTouchStart={() => setActiveRotation('up')}
                 onTouchEnd={() => setActiveRotation(null)}
-                className="p-4 text-white hover:bg-brand-500 rounded-2xl transition-all hover:shadow-[0_0_25px_rgba(59,130,246,0.6)] active:scale-95 border border-white/5"
+                className="p-3.5 text-white hover:bg-nu-blue-500 rounded-2xl transition-all hover:shadow-[0_0_20px_rgba(59,130,246,0.3)] active:scale-95 border border-white/5"
               >
-                <ArrowUp size={24} />
+                <ArrowUp size={20} />
               </button>
               <div />
 
@@ -350,14 +376,14 @@ export function Tour360Viewer({ onClose, initialIndex = 0 }: { onClose: () => vo
                 onMouseLeave={() => setActiveRotation(null)}
                 onTouchStart={() => setActiveRotation('left')}
                 onTouchEnd={() => setActiveRotation(null)}
-                className="p-4 text-white hover:bg-brand-500 rounded-2xl transition-all hover:shadow-[0_0_25px_rgba(59,130,246,0.6)] active:scale-95 border border-white/5"
+                className="p-3.5 text-white hover:bg-nu-blue-500 rounded-2xl transition-all hover:shadow-[0_0_20px_rgba(59,130,246,0.3)] active:scale-95 border border-white/5"
               >
-                <ArrowLeft size={24} />
+                <ArrowLeft size={20} />
               </button>
 
               {/* Central Indicator */}
-              <div className="w-16 h-16 flex items-center justify-center">
-                <div className="w-2 h-2 rounded-full bg-brand-500 animate-pulse" />
+              <div className="w-12 h-12 flex items-center justify-center">
+                <div className="w-2 h-2 rounded-full bg-nu-red-500 animate-pulse shadow-[0_0_10px_rgba(182,25,46,0.5)]" />
               </div>
 
               <button
@@ -366,9 +392,9 @@ export function Tour360Viewer({ onClose, initialIndex = 0 }: { onClose: () => vo
                 onMouseLeave={() => setActiveRotation(null)}
                 onTouchStart={() => setActiveRotation('right')}
                 onTouchEnd={() => setActiveRotation(null)}
-                className="p-4 text-white hover:bg-brand-500 rounded-2xl transition-all hover:shadow-[0_0_25px_rgba(59,130,246,0.6)] active:scale-95 border border-white/5"
+                className="p-3.5 text-white hover:bg-nu-blue-500 rounded-2xl transition-all hover:shadow-[0_0_20px_rgba(59,130,246,0.3)] active:scale-95 border border-white/5"
               >
-                <ArrowRight size={24} />
+                <ArrowRight size={20} />
               </button>
 
               <div />
@@ -378,49 +404,44 @@ export function Tour360Viewer({ onClose, initialIndex = 0 }: { onClose: () => vo
                 onMouseLeave={() => setActiveRotation(null)}
                 onTouchStart={() => setActiveRotation('down')}
                 onTouchEnd={() => setActiveRotation(null)}
-                className="p-4 text-white hover:bg-brand-500 rounded-2xl transition-all hover:shadow-[0_0_25px_rgba(59,130,246,0.6)] active:scale-95 border border-white/5"
+                className="p-3.5 text-white hover:bg-nu-blue-500 rounded-2xl transition-all hover:shadow-[0_0_20px_rgba(59,130,246,0.3)] active:scale-95 border border-white/5"
               >
-                <ArrowDown size={24} />
+                <ArrowDown size={20} />
               </button>
               <div />
             </div>
           </div>
 
           {/* Navigation Side Panel */}
-          <div className={`flex flex-col gap-2 ${glassClass} p-2 rounded-2xl border shadow-2xl`}>
+          <div className="flex flex-col gap-1.5 bg-nu-dark/80 backdrop-blur-md p-1.5 rounded-2xl border border-white/10 shadow-2xl">
             <button
               onClick={() => handleTourChange((currentIndex + 1) % TOUR_IMAGES.length)}
-              className="p-3 text-white hover:bg-brand-500 rounded-xl transition-all"
+              className="p-2.5 text-white hover:bg-nu-blue-500 rounded-xl transition-all"
               title="Next Scene"
             >
-              <ChevronRight size={20} />
+              <ChevronRight size={18} />
             </button>
             <div className="h-px bg-white/10 mx-2"></div>
             <button
               onClick={() => handleTourChange((currentIndex - 1 + TOUR_IMAGES.length) % TOUR_IMAGES.length)}
-              className="p-3 text-white hover:bg-brand-500 rounded-xl transition-all"
+              className="p-2.5 text-white hover:bg-nu-blue-500 rounded-xl transition-all"
               title="Previous Scene"
             >
-              <ChevronLeft size={20} />
+              <ChevronLeft size={18} />
             </button>
           </div>
         </div>
 
         {/* Thumbnails Gallery */}
-        <div className={`flex gap-4 ${glassClass} p-3 rounded-2xl border shadow-2xl`}>
+        <div className="flex gap-3 bg-nu-dark/80 backdrop-blur-md p-2 rounded-2xl border border-white/10 shadow-2xl overflow-x-auto max-w-full">
           {TOUR_IMAGES.map((tour, idx) => (
             <button
               key={tour.id}
               onClick={() => handleTourChange(idx)}
-              className={`relative group overflow-hidden rounded-xl border-2 transition-all w-24 h-14 ${currentIndex === idx ? 'border-brand-500 scale-105' : 'border-transparent opacity-60 hover:opacity-100'}`}
+              className={`relative group flex-shrink-0 overflow-hidden rounded-xl border-2 transition-all w-20 h-12 ${currentIndex === idx ? 'border-nu-red-500 scale-105 shadow-[0_0_15px_rgba(182,25,46,0.4)]' : 'border-transparent opacity-50 hover:opacity-100'}`}
             >
               <img src={tour.url} alt={tour.title} className="w-full h-full object-cover" />
-              <div className="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors flex items-center justify-center">
-                <p className="text-[10px] text-white font-bold opacity-0 group-hover:opacity-100 transition-opacity bg-black/60 px-2 py-1 rounded">VIEW</p>
-              </div>
-              {currentIndex === idx && (
-                <div className="absolute inset-x-0 bottom-0 h-1 bg-brand-500"></div>
-              )}
+              <div className="absolute inset-x-0 bottom-0 h-0.5 bg-nu-red-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
             </button>
           ))}
         </div>
@@ -433,12 +454,12 @@ export function Tour360Viewer({ onClose, initialIndex = 0 }: { onClose: () => vo
           onClick={() => setSelectedHotspot(null)}
         >
           <div
-            className={`${glassClass} w-full max-w-lg rounded-[2.5rem] border p-10 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] transform animate-float`}
+            className="bg-nu-dark/90 backdrop-blur-xl w-full max-w-lg rounded-[2.5rem] border border-white/10 p-10 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] transform animate-float"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-start mb-6">
-              <div className="bg-brand-500/20 p-4 rounded-2xl border border-brand-500/30">
-                <Info className="text-brand-500" size={32} />
+              <div className="bg-nu-red-500/20 p-4 rounded-2xl border border-nu-red-500/30">
+                <Info className="text-nu-red-500" size={32} />
               </div>
               <button
                 onClick={() => setSelectedHotspot(null)}
@@ -449,14 +470,14 @@ export function Tour360Viewer({ onClose, initialIndex = 0 }: { onClose: () => vo
               </button>
             </div>
 
-            <h3 className="text-3xl font-bold text-white mb-4 leading-tight">{selectedHotspot.title}</h3>
-            <p className="text-white/60 text-lg leading-relaxed mb-8">
+            <h3 className="text-3xl font-black uppercase tracking-tight text-white mb-4 leading-tight">{selectedHotspot.title}</h3>
+            <p className="text-white/70 text-lg leading-relaxed mb-8">
               {selectedHotspot.description}
             </p>
 
             <button
               onClick={() => setSelectedHotspot(null)}
-              className="w-full bg-brand-500 text-white py-5 rounded-2xl font-bold text-lg hover:bg-brand-600 transition-all shadow-lg hover:shadow-brand-500/25 transform hover:-translate-y-1 active:scale-95"
+              className="w-full bg-gradient-to-r from-[#b6192e] to-[#ff4b2b] text-white py-5 rounded-2xl font-black uppercase tracking-widest text-sm hover:opacity-90 transition-all shadow-lg hover:shadow-nu-red-500/25 transform hover:-translate-y-1 active:scale-95"
             >
               Back to Tour
             </button>
@@ -473,29 +494,63 @@ export function Tour360Viewer({ onClose, initialIndex = 0 }: { onClose: () => vo
         <div className="w-2 h-2 rounded-full bg-white/20"></div>
         <span>Click hotspots</span>
       </div>
+
+      <TutorialOverlay />
     </div>
   );
 }
 
-// Side-loaded icons needed for the header
-function Maximize2(props: any) {
+function TutorialOverlay() {
+  const [isVisible, setIsVisible] = useState(true);
+
+  if (!isVisible) return null;
+
   return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <polyline points="15 3 21 3 21 9" />
-      <polyline points="9 21 3 21 3 15" />
-      <line x1="21" y1="3" x2="14" y2="10" />
-      <line x1="3" y1="21" x2="10" y2="14" />
-    </svg>
+    <div className="fixed inset-0 z-[200] bg-black/80 backdrop-blur-sm flex items-center justify-center animate-fade-in p-4">
+      <div className="bg-white/10 dark:bg-gray-900/90 border border-white/20 backdrop-blur-xl rounded-2xl p-8 max-w-md w-full shadow-2xl transform scale-100 animate-scale-in text-center">
+        <div className="w-16 h-16 bg-brand-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg shadow-brand-500/40 animate-bounce">
+          <RotateCcw className="text-white" size={32} />
+        </div>
+
+        <h2 className="text-3xl font-bold text-white mb-2">Controls</h2>
+        <p className="text-white/70 mb-8">Explore the campus like a pro:</p>
+
+        <div className="space-y-4 mb-8 text-left">
+          <div className="flex items-center justify-between p-3 bg-white/5 rounded-xl border border-white/10">
+            <div className="flex gap-1">
+              <span className="w-8 h-8 flex items-center justify-center bg-white/10 rounded border border-white/20 font-mono text-sm font-bold text-white">W</span>
+              <span className="w-8 h-8 flex items-center justify-center bg-white/10 rounded border border-white/20 font-mono text-sm font-bold text-white">A</span>
+              <span className="w-8 h-8 flex items-center justify-center bg-white/10 rounded border border-white/20 font-mono text-sm font-bold text-white">S</span>
+              <span className="w-8 h-8 flex items-center justify-center bg-white/10 rounded border border-white/20 font-mono text-sm font-bold text-white">D</span>
+            </div>
+            <span className="text-white/80 font-medium">Move Camera</span>
+          </div>
+
+          <div className="flex items-center justify-between p-3 bg-white/5 rounded-xl border border-white/10">
+            <div className="flex gap-1">
+              <span className="px-2 h-8 flex items-center justify-center bg-white/10 rounded border border-white/20 font-mono text-sm font-bold text-white">Shift</span>
+              <span className="px-2 h-8 flex items-center justify-center bg-white/10 rounded border border-white/20 font-mono text-sm font-bold text-white">Ctrl</span>
+            </div>
+            <span className="text-white/80 font-medium">Zoom In / Out</span>
+          </div>
+
+          <div className="flex items-center justify-between p-3 bg-white/5 rounded-xl border border-white/10">
+            <div className="w-8 h-8 flex items-center justify-center bg-white/10 rounded-full border border-white/20">
+              <div className="w-1 h-3 bg-white/50 rounded-full animate-pulse"></div>
+            </div>
+            <span className="text-white/80 font-medium">Drag & Scroll</span>
+          </div>
+        </div>
+
+        <button
+          onClick={() => setIsVisible(false)}
+          className="w-full py-4 bg-nu-red-500 hover:bg-nu-red-600 text-white font-black uppercase tracking-widest text-sm rounded-xl shadow-lg hover:shadow-nu-red-500/30 transition-all transform hover:-translate-y-1 active:scale-95"
+        >
+          Got it, Let's Go!
+        </button>
+      </div>
+    </div>
   );
 }
+
+

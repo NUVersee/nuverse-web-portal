@@ -134,24 +134,24 @@ export function ChatbotButton() {
     <>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 z-50 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-purple-600 hover:to-blue-600 text-white rounded-full p-4 shadow-2xl transition-all duration-300 hover:scale-110 animate-bounce-slow"
+        className="fixed bottom-6 right-6 z-50 bg-gradient-to-r from-[#b6192e] to-[#ff4b2b] hover:from-[#ff4b2b] hover:to-[#b6192e] text-white rounded-full p-4 shadow-2xl transition-all duration-300 hover:scale-110 animate-bounce-slow border border-white/20"
         aria-label="Open chat"
       >
         {isOpen ? <X size={24} /> : <MessageCircle size={24} />}
       </button>
 
       {isOpen && (
-        <div className="fixed bottom-24 right-6 z-50 w-96 max-w-[calc(100vw-3rem)] bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden">
-          <div className="bg-blue-600 text-white p-4">
-            <h3>Admission Officer</h3>
-            <p className="text-sm opacity-90">Ask me anything about Nile University</p>
+        <div className="fixed bottom-24 right-6 z-50 w-96 max-w-[calc(100vw-3rem)] bg-nu-dark/60 backdrop-blur-xl rounded-2xl shadow-2xl overflow-hidden border border-white/10">
+          <div className="bg-gradient-to-r from-nu-red-500 to-nu-red-600 text-white p-5 border-b border-white/10">
+            <h3 className="font-black uppercase tracking-tight">Admission Officer</h3>
+            <p className="text-xs opacity-80 font-bold uppercase tracking-widest mt-0.5">Nile University AI</p>
           </div>
 
-          <div className="h-96 overflow-y-auto p-4 space-y-4 bg-gray-50 dark:bg-gray-900">
+          <div className="h-96 overflow-y-auto p-4 space-y-4 bg-nu-dark/50">
             {messages.map((message, index) => (
               <div key={index} className={`flex ${message.type === "user" ? "justify-end" : "justify-start"}`}>
                 <div
-                  className={`max-w-[80%] rounded-lg p-3 ${message.type === "user" ? "bg-blue-600 text-white" : "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white"
+                  className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm font-medium ${message.type === "user" ? "bg-nu-blue-500 text-white rounded-tr-none" : "bg-white/10 dark:bg-nu-dark/80 text-gray-900 dark:text-white rounded-tl-none border border-white/10"
                     }`}
                 >
                   <div className="whitespace-pre-wrap">{message.text}</div>
@@ -186,7 +186,7 @@ export function ChatbotButton() {
                   <button
                     key={index}
                     onClick={() => handleQuickQuestion(question)}
-                    className="block w-full text-left text-sm bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-900 dark:text-white p-2 rounded-lg transition-colors"
+                    className="block w-full text-left text-sm bg-nu-dark/40 hover:bg-white/5 text-white p-2 rounded-lg transition-colors border border-white/5"
                   >
                     {question}
                   </button>
@@ -195,7 +195,7 @@ export function ChatbotButton() {
             )}
           </div>
 
-          <div className="p-4 bg-white dark:bg-gray-800 border-t dark:border-gray-700">
+          <div className="p-4 bg-nu-deep border-t border-white/10">
             <div className="flex gap-2">
               <input
                 type="text"
@@ -204,14 +204,14 @@ export function ChatbotButton() {
                 onKeyDown={(e) => e.key === "Enter" && !isLoading && handleSendMessage()}
                 placeholder="Type your message..."
                 disabled={isLoading}
-                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 px-4 py-2 border border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-nu-red-500 bg-white/5 dark:bg-nu-dark/50 text-gray-900 dark:text-white disabled:opacity-50 disabled:cursor-not-allowed"
               />
               <button
                 onClick={handleSendMessage}
                 disabled={isLoading || !inputValue.trim()}
-                className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="bg-nu-red-500 hover:bg-nu-red-600 text-white p-3 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-nu-red-500/20 active:scale-95"
               >
-                <Send size={20} />
+                <Send size={18} />
               </button>
             </div>
           </div>

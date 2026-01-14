@@ -31,16 +31,16 @@ export function Header() {
   }, []);
 
   return (
-    <header className={`sticky top-0 z-50 transition-all duration-500 ${isScrolled ? "glass dark:dark-glass shadow-lg py-2" : "bg-transparent py-4"}`}>
+    <header className={`sticky top-0 z-50 transition-all duration-500 ${isScrolled ? "bg-nu-dark/40 backdrop-blur-xl border-b border-white/5 shadow-2xl py-2" : "bg-transparent py-4"}`}>
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <Link href="/" className="flex items-center gap-3 group transition-transform hover:scale-105">
             <div className="relative">
-              <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
+              <div className="absolute -inset-1 bg-gradient-to-r from-nu-blue-600 to-nu-red-600 rounded-full blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
               <img src="/nuverse-logo.png" alt="NUverse Logo" className="relative h-12 w-12 rounded-full border-2 border-white dark:border-gray-800 shadow-md" />
             </div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 bg-clip-text text-transparent">
-              NUverse
+            <span className="text-2xl font-black text-white uppercase tracking-tighter">
+              NU<span className="text-nu-red-500">verse</span>
             </span>
           </Link>
 
@@ -55,7 +55,7 @@ export function Header() {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className="relative text-gray-700 dark:text-gray-300 font-medium hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-4 py-2 rounded-full hover:bg-blue-50/50 dark:hover:bg-blue-900/20"
+                  className="relative text-white font-bold hover:text-nu-peach-300 transition-colors px-4 py-2 rounded-full hover:bg-white/10 uppercase tracking-widest text-sm"
                 >
                   {item.name}
                 </Link>
@@ -64,7 +64,7 @@ export function Header() {
 
             <button
               onClick={toggleTheme}
-              className="p-3 rounded-2xl bg-gray-100/50 dark:bg-gray-800/50 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-300 group shadow-sm border border-gray-200/50 dark:border-gray-700/50"
+              className="p-3 rounded-2xl bg-white/5 hover:bg-white/10 transition-all duration-300 group shadow-sm border border-white/10"
               aria-label="Toggle theme"
             >
               {isDarkMode ? (
@@ -78,14 +78,14 @@ export function Header() {
           <div className="md:hidden flex items-center gap-3">
             <button
               onClick={toggleTheme}
-              className="p-2.5 rounded-xl bg-gray-100/50 dark:bg-gray-800/50 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+              className="p-2.5 rounded-xl bg-white/5 hover:bg-white/10 transition-colors"
               aria-label="Toggle theme"
             >
               {isDarkMode ? <Sun size={20} className="text-yellow-400" /> : <Moon size={20} className="text-gray-700" />}
             </button>
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="p-2.5 rounded-xl bg-gray-100/80 dark:bg-gray-800/80 text-gray-700 dark:text-gray-300 transition-colors"
+              className="p-2.5 rounded-xl bg-white/5 text-white transition-colors"
             >
               {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -105,7 +105,7 @@ export function Header() {
                   key={item.name}
                   href={item.href}
                   onClick={() => setIsMenuOpen(false)}
-                  className="text-gray-900 dark:text-white font-semibold hover:text-blue-600 dark:hover:text-blue-400 px-4 py-3 rounded-2xl hover:bg-white/50 dark:hover:bg-gray-800/50 transition-colors"
+                  className="text-white font-semibold hover:text-nu-red-500 px-4 py-3 rounded-2xl hover:bg-white/5 transition-colors"
                 >
                   {item.name}
                 </Link>
