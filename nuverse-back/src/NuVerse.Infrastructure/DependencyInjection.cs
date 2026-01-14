@@ -19,12 +19,12 @@ public static class DependencyInjection
             ?? configuration.GetConnectionString("DefaultConnection");
         
         services.AddDbContext<NuVerseDbContext>(options =>
-            options.UseSqlServer(connectionString, sqlOptions =>
+            options.UseNpgsql(connectionString, sqlOptions =>
             {
                 sqlOptions.EnableRetryOnFailure(
                     maxRetryCount: 3,
                     maxRetryDelay: TimeSpan.FromSeconds(10),
-                    errorNumbersToAdd: null);
+                    errorCodesToAdd: null);
             }));
 
         // Bind email settings from configuration (appsettings / user-secrets / env)

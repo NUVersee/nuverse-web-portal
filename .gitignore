@@ -56,3 +56,34 @@ nunit-*.xml
 # Environment files with secrets
 .env
 *.env
+
+# Next.js
+nuverse-front/.next/
+nuverse-front/node_modules/
+nuverse-front/.turbo/
+
+# Node
+node_modules/
+.pnp
+.pnp.js
+
+# Log files
+*.log
+backend.log
+
+# IDE
+.vs/
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Large binary assets (use Git LFS or CDN instead)
+nuverse-front/public/Images/*.jpg
+nuverse-front/public/Images/*.png
+nuverse-front/public/models/*.glb
+nuverse-front/public/sounds/*.mp3
+*.vsidx
+CodeChunks.db
