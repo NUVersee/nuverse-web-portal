@@ -223,29 +223,17 @@
     color: var(--selection-text);
   }
 
-  /* Custom Minimal Scrollbar */
+  /* Hide all scrollbars but keep scroll functionality */
   ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background: var(--bg-dark);
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: var(--nu-blue-400);
-    border-radius: 10px;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: var(--nu-red-500);
+    display: none;
+    width: 0;
+    height: 0;
   }
 
   /* Firefox */
   * {
-    scrollbar-width: thin;
-    scrollbar-color: var(--nu-blue-400) var(--bg-dark);
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
 }
 
@@ -329,6 +317,10 @@
 
 @utility preserve-3d {
   transform-style: preserve-3d;
+}
+
+@utility overflow-wrap-anywhere {
+  overflow-wrap: anywhere;
 }
 
 /* =========================================================

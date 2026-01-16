@@ -1,7 +1,7 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 
-import { Menu, Moon, Sun, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useTheme } from "./ThemeContext";
 import { usePathname } from "next/navigation";
@@ -31,7 +31,7 @@ export function Header() {
   }, []);
 
   return (
-    <header className={`sticky top-0 z-50 transition-all duration-500 ${isScrolled ? "bg-nu-dark/40 backdrop-blur-xl border-b border-white/5 shadow-2xl py-2" : "bg-transparent py-4"}`}>
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled ? "bg-nu-dark/40 backdrop-blur-xl border-b border-white/5 shadow-2xl py-2" : "bg-transparent py-4"}`}>
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <Link href="/" className="flex items-center gap-3 group transition-transform hover:scale-105">
@@ -62,27 +62,11 @@ export function Header() {
               ))}
             </div>
 
-            <button
-              onClick={toggleTheme}
-              className="p-3 rounded-2xl bg-white/5 hover:bg-white/10 transition-all duration-300 group shadow-sm border border-white/10"
-              aria-label="Toggle theme"
-            >
-              {isDarkMode ? (
-                <Sun size={20} className="text-yellow-400 group-hover:rotate-45 transition-transform" />
-              ) : (
-                <Moon size={20} className="text-gray-700 group-hover:-rotate-12 transition-transform" />
-              )}
-            </button>
+
           </div>
 
           <div className="md:hidden flex items-center gap-3">
-            <button
-              onClick={toggleTheme}
-              className="p-2.5 rounded-xl bg-white/5 hover:bg-white/10 transition-colors"
-              aria-label="Toggle theme"
-            >
-              {isDarkMode ? <Sun size={20} className="text-yellow-400" /> : <Moon size={20} className="text-gray-700" />}
-            </button>
+
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="p-2.5 rounded-xl bg-white/5 text-white transition-colors"
