@@ -86,8 +86,8 @@ export function About({ onStart360Tour, onOpenLabs, onOpenAIProfessor }: AboutPr
             <section className="mission-section relative z-10 min-h-screen flex flex-col justify-center py-20">
                 <div className="container mx-auto px-6">
                     <div className="section-header text-center mb-20 opacity-0 translate-y-10">
-                        <h1 className="text-5xl md:text-8xl font-black uppercase tracking-tighter text-white">
-                            Driven by <span className="gradient-text bg-gradient-to-r from-[#121521] via-[#38476b] via-[#b6192e] to-[#ffc1ac] bg-clip-text text-transparent">Innovation</span>
+                        <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-white">
+                            Driven by Innovation
                         </h1>
                     </div>
 

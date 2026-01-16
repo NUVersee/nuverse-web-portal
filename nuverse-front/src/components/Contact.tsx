@@ -84,8 +84,8 @@ export function Contact() {
             <span className="ml-2">GET IN TOUCH</span>
           </div>
 
-          <h2 className="section-h1 text-white mb-6 uppercase">
-            Let's <span className="gradient-text bg-gradient-to-r from-[#121521] via-[#38476b] via-[#b6192e] to-[#ffc1ac] bg-clip-text text-transparent">Connect</span>
+          <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-gray-900 dark:text-white mb-6 leading-tight">
+            Let's Connect
           </h2>
 
           <p className="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">

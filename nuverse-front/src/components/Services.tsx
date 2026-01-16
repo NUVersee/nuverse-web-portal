@@ -140,7 +140,7 @@ export function Services({ onOpenLabs, onOpenAIProfessor, onStartTour }: Service
             transition={{ delay: 0.3 }}
             className="text-5xl md:text-8xl font-black uppercase tracking-tighter text-gray-900 dark:text-white mb-6 leading-tight"
           >
-            Our VR <span className="gradient-text bg-gradient-to-r from-[#121521] via-[#38476b] via-[#b6192e] to-[#ffc1ac] bg-clip-text text-transparent">Services</span>
+            Our VR <span className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-gray-900 dark:text-white mb-6 leading-tight">Services</span>
           </motion.h2>
 
           <motion.p

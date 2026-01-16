@@ -32,16 +32,13 @@ export function Header() {
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled ? "bg-nu-dark/40 backdrop-blur-xl border-b border-white/5 shadow-2xl py-2" : "bg-transparent py-4"}`}>
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+      <nav className="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-24">
           <Link href="/" className="flex items-center gap-3 group transition-transform hover:scale-105">
-            <div className="relative">
+            <div className="relative -mt-6 ml-20">
               <div className="absolute -inset-1 bg-gradient-to-r from-nu-blue-600 to-nu-red-600 rounded-full blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
-              <img src="/nuverse-logo.png" alt="NUverse Logo" className="relative h-12 w-12 rounded-full border-2 border-white dark:border-gray-800 shadow-md" />
+              <img src="/Images/NUverse Logo.png" alt="NUverse Logo" className="relative h-20 w-35 rounded-full border-2 border-white dark:border-gray-800 shadow-2xl" />
             </div>
-            <span className="text-2xl font-black text-white uppercase tracking-tighter">
-              NU<span className="text-nu-red-500">verse</span>
-            </span>
           </Link>
 
           <div className="hidden md:flex items-center gap-8">
