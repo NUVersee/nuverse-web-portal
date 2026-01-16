@@ -1,12 +1,15 @@
 "use client";
-
 import { useRef, useMemo } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { OrbitControls, useGLTF, Environment } from "@react-three/drei";
+import { useGLTF, Environment } from "@react-three/drei";
+import { EffectComposer, Bloom, Vignette } from "@react-three/postprocessing";
 import * as THREE from "three";
-import { useScroll, useTransform, MotionValue } from "framer-motion";
+import { MotionValue } from "framer-motion";
 
-// Particle system component
+const BloomEffect = Bloom as any;
+const VignetteEffect = Vignette as any;
+const EffectComposerAny = EffectComposer as any;
+
 function Particles({ count = 3000 }) {
     const mesh = useRef<THREE.Points>(null);
 
@@ -30,6 +33,21 @@ function Particles({ count = 3000 }) {
         return [positions, colors];
     }, [count]);
 
+    const circleTexture = useMemo(() => {
+        if (typeof document === 'undefined') return null;
+        const canvas = document.createElement('canvas');
+        canvas.width = 32;
+        canvas.height = 32;
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+            ctx.beginPath();
+            ctx.arc(16, 16, 14, 0, Math.PI * 2);
+            ctx.fillStyle = 'white';
+            ctx.fill();
+        }
+        return new THREE.CanvasTexture(canvas);
+    }, []);
+
     useFrame((state) => {
         if (mesh.current) {
             mesh.current.rotation.y += 0.0002;
@@ -51,38 +69,80 @@ function Particles({ count = 3000 }) {
             </bufferGeometry>
             <pointsMaterial
                 size={0.15}
+                map={circleTexture}
                 transparent
-                opacity={0.6}
-                blending={THREE.AdditiveBlending}
+                alphaTest={0.5}
+                opacity={0.8}
                 vertexColors
             />
         </points>
     );
 }
 
-// VR Headset model with scroll-based animation
+const KEYFRAMES = [
+    { t: 0.0, camPos: [0, 1, 8], modelRot: [0, 0, 0], scale: 10 },
+    { t: 0.18, camPos: [0.2, 1.1, 7.8], modelRot: [0.02, 0.05, 0], scale: 10.2 },
+    { t: 0.22, camPos: [-5, 1, 6], modelRot: [0, Math.PI * 0.5, 0], scale: 9 },
+    { t: 0.38, camPos: [-5.2, 0.9, 5.8], modelRot: [0, Math.PI * 0.55, 0.05], scale: 9.2 },
+    { t: 0.42, camPos: [2, -2, 7], modelRot: [0.2, Math.PI, 0], scale: 9 },
+    { t: 0.58, camPos: [2.2, -1.8, 6.8], modelRot: [0.15, Math.PI * 1.05, 0], scale: 9.2 },
+    { t: 0.62, camPos: [4, 1, 5], modelRot: [0, 0, 0], scale: 8.5 },
+    { t: 0.78, camPos: [3, 0.8, 4], modelRot: [0, Math.PI, 0], scale: 9.5 },
+    { t: 0.85, camPos: [0, 0, 2], modelRot: [0, Math.PI, 0], scale: 11 },
+    { t: 0.92, camPos: [0, 0, 0.8], modelRot: [0, Math.PI, 0], scale: 12 },
+    { t: 1.0, camPos: [0, 0, 0.0], modelRot: [0, Math.PI, 0], scale: 14 },
+];
+
+function interpolateKeyframes(progress: number) {
+    const t = Math.max(0, Math.min(1, progress));
+
+    let prevFrame = KEYFRAMES[0];
+    let nextFrame = KEYFRAMES[KEYFRAMES.length - 1];
+
+    for (let i = 0; i < KEYFRAMES.length - 1; i++) {
+        if (t >= KEYFRAMES[i].t && t <= KEYFRAMES[i + 1].t) {
+            prevFrame = KEYFRAMES[i];
+            nextFrame = KEYFRAMES[i + 1];
+            break;
+        }
+    }
+
+    const range = nextFrame.t - prevFrame.t;
+    const localT = range === 0 ? 0 : (t - prevFrame.t) / range;
+
+    const ease = (t: number) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    const smoothT = ease(localT);
+    const camPos = new THREE.Vector3().fromArray(prevFrame.camPos).lerp(new THREE.Vector3().fromArray(nextFrame.camPos), smoothT);
+    const modelRot = new THREE.Euler(
+        THREE.MathUtils.lerp(prevFrame.modelRot[0], nextFrame.modelRot[0], smoothT),
+        THREE.MathUtils.lerp(prevFrame.modelRot[1], nextFrame.modelRot[1], smoothT),
+        THREE.MathUtils.lerp(prevFrame.modelRot[2], nextFrame.modelRot[2], smoothT)
+    );
+    const scale = THREE.MathUtils.lerp(prevFrame.scale, nextFrame.scale, smoothT);
+
+    return { camPos, modelRot, scale };
+}
+
 function VRModel({ scrollProgress }: { scrollProgress: MotionValue<number> }) {
     const modelRef = useRef<THREE.Group>(null);
     const { camera } = useThree();
     const { scene } = useGLTF("/models/oculus_quest_2.glb");
-
-    useFrame(() => {
+    useFrame((state) => {
         if (modelRef.current) {
             const progress = scrollProgress.get();
-
-            // Rotate model based on scroll
-            modelRef.current.rotation.y = Math.PI * 0.25 + progress * Math.PI * 3;
-            modelRef.current.rotation.x = Math.sin(progress * Math.PI) * 0.15;
-
-            // Scale based on scroll
-            const scale = 10 + Math.sin(progress * Math.PI) * 2; // Scale matched to Landing.js (~10)
+            const { camPos, modelRot, scale } = interpolateKeyframes(progress);
+            const time = state.clock.getElapsedTime();
+            const floatY = Math.sin(time * 0.5) * 0.05;
+            const floatRot = Math.cos(time * 0.3) * 0.02;
+            modelRef.current.rotation.set(
+                modelRot.x + floatRot,
+                modelRot.y,
+                modelRot.z
+            );
+            modelRef.current.position.y = floatY;
             modelRef.current.scale.setScalar(scale);
-
-            // Camera movement based on scroll
-            const cameraZ = 8 - progress * 4;
-            const cameraY = 1 + Math.sin(progress * Math.PI) * 2;
-            camera.position.z = THREE.MathUtils.lerp(camera.position.z, cameraZ, 0.05);
-            camera.position.y = THREE.MathUtils.lerp(camera.position.y, cameraY, 0.05);
+            camera.position.lerp(camPos, 0.08);
+            camera.lookAt(0, 0, 0);
         }
     });
 
@@ -119,18 +179,14 @@ export function VRHeadsetScene({ scrollProgress }: VRHeadsetSceneProps) {
                 {/* VR Headset */}
                 <VRModel scrollProgress={scrollProgress} />
 
-                {/* Controls */}
-                <OrbitControls
-                    enableZoom={false}
-                    enablePan={false}
-                    autoRotate
-                    autoRotateSpeed={0.3}
-                    maxPolarAngle={Math.PI / 2}
-                    minPolarAngle={Math.PI / 3}
-                />
+                {/* Environment Fog for depth */}
+                <fog attach="fog" args={["#0a0f1f", 5, 40]} />
 
-                {/* Environment */}
-                <fog attach="fog" args={["#0a0f1f", 15, 100]} />
+                {/* Post Processing Effects */}
+                <EffectComposerAny disableNormalPass>
+                    <BloomEffect luminanceThreshold={1} mipmapBlur intensity={0.4} radius={0.6} />
+                    <VignetteEffect eskil={false} offset={0.1} darkness={0.5} />
+                </EffectComposerAny>
             </Canvas>
         </div>
     );

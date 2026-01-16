@@ -18,7 +18,7 @@ export function Footer() {
         <div className="grid md:grid-cols-4 gap-8 mb-8">
           <div>
             <div className="flex items-center gap-3 mb-4">
-              <img src="/nuverse-logo.png" alt="NUverse Logo" className="h-10 w-10 rounded-full" />
+              <img src="/Images/NUverse Logo.png" alt="NUverse Logo" className="h-10 w-10 rounded-full" />
               <h4 className="text-white font-black uppercase tracking-tighter">NU<span className="text-nu-red-500">verse</span></h4>
             </div>
             <p className="text-gray-400">Experience the future of education through immersive virtual reality technology.</p>

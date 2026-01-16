@@ -495,62 +495,11 @@ export function Tour360Viewer({ onClose, initialIndex = 0 }: { onClose: () => vo
         <span>Click hotspots</span>
       </div>
 
-      <TutorialOverlay />
+
     </div>
   );
 }
 
-function TutorialOverlay() {
-  const [isVisible, setIsVisible] = useState(true);
 
-  if (!isVisible) return null;
-
-  return (
-    <div className="fixed inset-0 z-[200] bg-black/80 backdrop-blur-sm flex items-center justify-center animate-fade-in p-4">
-      <div className="bg-white/10 dark:bg-gray-900/90 border border-white/20 backdrop-blur-xl rounded-2xl p-8 max-w-md w-full shadow-2xl transform scale-100 animate-scale-in text-center">
-        <div className="w-16 h-16 bg-brand-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg shadow-brand-500/40 animate-bounce">
-          <RotateCcw className="text-white" size={32} />
-        </div>
-
-        <h2 className="text-3xl font-bold text-white mb-2">Controls</h2>
-        <p className="text-white/70 mb-8">Explore the campus like a pro:</p>
-
-        <div className="space-y-4 mb-8 text-left">
-          <div className="flex items-center justify-between p-3 bg-white/5 rounded-xl border border-white/10">
-            <div className="flex gap-1">
-              <span className="w-8 h-8 flex items-center justify-center bg-white/10 rounded border border-white/20 font-mono text-sm font-bold text-white">W</span>
-              <span className="w-8 h-8 flex items-center justify-center bg-white/10 rounded border border-white/20 font-mono text-sm font-bold text-white">A</span>
-              <span className="w-8 h-8 flex items-center justify-center bg-white/10 rounded border border-white/20 font-mono text-sm font-bold text-white">S</span>
-              <span className="w-8 h-8 flex items-center justify-center bg-white/10 rounded border border-white/20 font-mono text-sm font-bold text-white">D</span>
-            </div>
-            <span className="text-white/80 font-medium">Move Camera</span>
-          </div>
-
-          <div className="flex items-center justify-between p-3 bg-white/5 rounded-xl border border-white/10">
-            <div className="flex gap-1">
-              <span className="px-2 h-8 flex items-center justify-center bg-white/10 rounded border border-white/20 font-mono text-sm font-bold text-white">Shift</span>
-              <span className="px-2 h-8 flex items-center justify-center bg-white/10 rounded border border-white/20 font-mono text-sm font-bold text-white">Ctrl</span>
-            </div>
-            <span className="text-white/80 font-medium">Zoom In / Out</span>
-          </div>
-
-          <div className="flex items-center justify-between p-3 bg-white/5 rounded-xl border border-white/10">
-            <div className="w-8 h-8 flex items-center justify-center bg-white/10 rounded-full border border-white/20">
-              <div className="w-1 h-3 bg-white/50 rounded-full animate-pulse"></div>
-            </div>
-            <span className="text-white/80 font-medium">Drag & Scroll</span>
-          </div>
-        </div>
-
-        <button
-          onClick={() => setIsVisible(false)}
-          className="w-full py-4 bg-nu-red-500 hover:bg-nu-red-600 text-white font-black uppercase tracking-widest text-sm rounded-xl shadow-lg hover:shadow-nu-red-500/30 transition-all transform hover:-translate-y-1 active:scale-95"
-        >
-          Got it, Let's Go!
-        </button>
-      </div>
-    </div>
-  );
-}
 
 

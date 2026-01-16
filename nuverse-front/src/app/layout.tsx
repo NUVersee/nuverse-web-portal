@@ -1,6 +1,16 @@
 import "./globals.css";
 import { Providers } from "./providers";
 
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "NUverse - Virtual Reality University Tour",
+  description: "Experience Nile University in immersive 360° VR. Explore campus, labs, and student life from anywhere.",
+  icons: {
+    icon: "/Images/NUverse Logo.ico",
+  },
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{

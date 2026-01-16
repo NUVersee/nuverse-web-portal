@@ -111,36 +111,29 @@ export function Hero({ onStart360Tour }: HeroProps) {
               variants={itemVariants}
               className="inline-flex items-center gap-3 bg-white/10 dark:bg-nu-dark/80 backdrop-blur-md border border-white/10 px-5 py-2.5 rounded-full shadow-2xl"
             >
-              <div className="flex -space-x-2">
-                {[
-                  { bg: "bg-nu-red-500" },
-                  { bg: "bg-nu-blue-400" },
-                  { bg: "bg-nu-peach-300" }
-                ].map((avatar, i) => (
-                  <div
-                    key={i}
-                    className={`w-7 h-7 rounded-full border-2 border-nu-dark ${avatar.bg} shadow-lg`}
-                  ></div>
-                ))}
+              <div className="flex items-center justify-center">
+                <img
+                  src="/Images/NUverse Logo.ico"
+                  alt="VR Icon"
+                  className="w-8 h-8 object-contain drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]"
+                />
               </div>
               <span className="text-sm font-black text-white/90 uppercase tracking-[0.1em] transition-colors">
-                JOIN <span className="text-nu-red-500">500+</span> STUDENTS ALREADY EXPLORING
+                JOIN <span className="text-nu-red-500">500+</span> STUDENTS EXPLORING
               </span>
             </motion.div>
 
             <div className="space-y-4">
               <motion.h1
                 variants={itemVariants}
-                className="section-h1 text-white"
+                className="text-4xl md:text-4xl font-black uppercase tracking-tighter text-white leading-tight"
               >
                 Step Into <br />the Future of <br />
-                <span className="gradient-text bg-gradient-to-r from-[#121521] via-[#38476b] via-[#b6192e] to-[#ffc1ac] bg-clip-text text-transparent">
-                  Digital Reality
-                </span>
+                Digital Reality
               </motion.h1>
               <motion.p
                 variants={itemVariants}
-                className="text-gray-400 text-xl leading-relaxed max-w-xl"
+                className="text-gray-400 text-lg leading-relaxed max-w-xl"
               >
                 Experience Nile University through a cutting-edge 360° virtual
                 lens. Explore labs, meet AI professors, and find your future
@@ -208,7 +201,7 @@ export function Hero({ onStart360Tour }: HeroProps) {
             variants={imageVariants}
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
-            className="relative group perspective-1000 lg:-mt-20"
+            className="relative group perspective-1000 -mt-12 lg:-mt-85"
           >
             <motion.div
               animate={{ y: [0, -10, 0] }}
