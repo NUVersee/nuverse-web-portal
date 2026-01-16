@@ -83,10 +83,10 @@ export function About({ onStart360Tour, onOpenLabs, onOpenAIProfessor }: AboutPr
             </div>
 
             {/* Mission Section */}
-            <section className="mission-section relative z-10 min-h-screen flex flex-col justify-center py-20">
-                <div className="container mx-auto px-6">
+            <section className="mission-section relative z-10 min-h-screen flex flex-col justify-center py-24 px-4 sm:px-6 lg:px-8">
+                <div className="max-w-7xl mx-auto">
                     <div className="section-header text-center mb-20 opacity-0 translate-y-10">
-                        <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-white">
+                        <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-white" style={{fontFamily: 'system-ui, -apple-system, sans-serif'}}>
                             Driven by Innovation
                         </h1>
                     </div>
@@ -97,9 +97,9 @@ export function About({ onStart360Tour, onOpenLabs, onOpenAIProfessor }: AboutPr
                                 <Rocket className="w-8 h-8 text-white relative z-10" />
                                 <div className="absolute inset-0 bg-nu-red-500/40 rounded-full blur-xl group-hover:blur-2xl transition-all"></div>
                             </div>
-                            <h2 className="section-h3 mb-4 text-nu-red-500">Our Mission</h2>
+                            <h2 className="section-h3 mb-4 text-nu-red-500" style={{fontFamily: 'system-ui, -apple-system, sans-serif'}}>Our Mission</h2>
                             <div className="w-16 h-1 bg-gradient-to-r from-nu-red-500 to-transparent mb-6"></div>
-                            <p className="text-gray-600 dark:text-gray-300 text-lg leading-relaxed max-w-lg">
+                            <p className="text-gray-600 dark:text-gray-300 text-lg leading-relaxed max-w-lg" style={{fontFamily: 'system-ui, -apple-system, sans-serif'}}>
                                 To revolutionize the university exploration experience by bridging the gap between
                                 physical and digital reality. We aim to provide an immersive, accessible, and
                                 interactive platform that empowers students to discover their future campus from anywhere in the world.
@@ -111,9 +111,9 @@ export function About({ onStart360Tour, onOpenLabs, onOpenAIProfessor }: AboutPr
                                 <Eye className="w-8 h-8 text-white relative z-10" />
                                 <div className="absolute inset-0 bg-nu-blue-500/40 rounded-full blur-xl group-hover:blur-2xl transition-all"></div>
                             </div>
-                            <h2 className="section-h3 mb-4 text-nu-blue-600 dark:text-nu-blue-300">Our Vision</h2>
+                            <h2 className="section-h3 mb-4 text-nu-blue-600 dark:text-nu-blue-300" style={{fontFamily: 'system-ui, -apple-system, sans-serif'}}>Our Vision</h2>
                             <div className="w-16 h-1 bg-gradient-to-r from-nu-blue-500 to-transparent mb-6"></div>
-                            <p className="text-gray-600 dark:text-gray-300 text-lg leading-relaxed max-w-lg">
+                            <p className="text-gray-600 dark:text-gray-300 text-lg leading-relaxed max-w-lg" style={{fontFamily: 'system-ui, -apple-system, sans-serif'}}>
                                 To become the leading standard for virtual academic tours, creating a global
                                 educational metaverse where every student can experience, interact with, and belong
                                 to their dream university environment without boundaries.
