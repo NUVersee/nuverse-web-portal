@@ -208,7 +208,7 @@ export function Hero({ onStart360Tour }: HeroProps) {
             variants={imageVariants}
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
-            className="relative group perspective-1000"
+            className="relative group perspective-1000 lg:-mt-20"
           >
             <motion.div
               animate={{ y: [0, -10, 0] }}
@@ -217,35 +217,31 @@ export function Hero({ onStart360Tour }: HeroProps) {
             >
               <div className="absolute -inset-4 bg-gradient-to-r from-nu-red-500 to-nu-blue-500 rounded-[2.5rem] blur-2xl opacity-20 group-hover:opacity-40 transition duration-500"></div>
 
+              {/* Image Card */}
               <div className="relative rounded-[2rem] overflow-hidden shadow-[0_40px_100px_-20px_rgba(0,0,0,0.3)] border border-white/20 dark:border-gray-700/50">
                 <ImageWithFallback
-                  src="/Images/VR-removebg-preview.png"
+                  src="/Images/VR.png"
                   alt="VR Education Experience"
                   className="w-full h-auto object-cover aspect-[4/3] scale-110"
                 />
-
-                {/* Overlay card */}
-                <motion.div
-                  initial={{ y: 20, opacity: 0 }}
-                  animate={isInView ? { y: 0, opacity: 1 } : {}}
-                  transition={{ delay: 1, duration: 0.6 }}
-                  className="absolute bottom-6 left-6 right-6 glass dark:dark-glass p-6 rounded-2xl border border-white/20 dark:border-gray-700/30 transform transition-all duration-500 group-hover:translate-y-[-10px]"
-                >
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <p className="text-xs font-black text-nu-red-500 tracking-widest uppercase mb-1">
-                        Live Beta
-                      </p>
-                      <h3 className="text-lg font-black text-white">
-                        Smart Admission Assistant
-                      </h3>
-                    </div>
-                    <div className="w-12 h-12 rounded-full bg-nu-red-500 flex items-center justify-center text-white shadow-lg">
-                      <Sparkles size={20} />
-                    </div>
-                  </div>
-                </motion.div>
               </div>
+            </motion.div>
+
+            {/* NUVersee Title - Below Image, Smaller, Static Navy Blue */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ delay: 0.8, duration: 0.8 }}
+              className="relative mt-6 z-20 text-center"
+            >
+              <h2
+                className="text-2xl md:text-3xl font-black uppercase tracking-[0.2em] text-[#38476b]"
+                style={{
+                  fontFamily: 'var(--font-display)',
+                }}
+              >
+                NUVersee
+              </h2>
             </motion.div>
 
             {/* Floating bits */}

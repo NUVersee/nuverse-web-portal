@@ -10,33 +10,15 @@ type ThemeContextType = {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(true);
 
+  // Always enforce dark mode class
   useEffect(() => {
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "dark") {
-      setIsDarkMode(true);
-    } else if (savedTheme === "light") {
-      setIsDarkMode(false);
-    } else {
-      setIsDarkMode(window.matchMedia("(prefers-color-scheme: dark)").matches);
-    }
+    document.documentElement.classList.add("dark");
   }, []);
 
-  useEffect(() => {
-    if (isDarkMode) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }, [isDarkMode]);
-
   const toggleTheme = () => {
-    setIsDarkMode((prev) => {
-      const next = !prev;
-      localStorage.setItem("theme", next ? "dark" : "light");
-      return next;
-    });
+    // Theme toggling disabled
   };
 
   return (

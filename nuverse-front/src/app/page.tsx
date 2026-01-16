@@ -97,7 +97,7 @@ export default function Home() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
-          className="min-h-screen bg-nu-deep transition-colors"
+          className="min-h-screen bg-nu-deep transition-colors pt-24"
         >
           <Header />
           <Hero onStart360Tour={() => startTour(0)} />

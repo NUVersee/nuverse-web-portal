@@ -24,7 +24,7 @@ export default function AboutPage() {
       ) : showAIProfessor ? (
         <AIProfessorViewer onClose={() => setShowAIProfessor(false)} />
       ) : (
-        <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors">
+        <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors pt-20">
           <Header />
           <About
             onStart360Tour={(index?: number | string) => {

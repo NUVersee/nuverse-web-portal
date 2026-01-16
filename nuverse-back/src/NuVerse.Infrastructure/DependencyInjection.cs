@@ -70,6 +70,12 @@ public static class DependencyInjection
         // Register Chatbot service with HttpClient
         services.AddHttpClient<Application.Interfaces.IChatbotService, ChatbotService>();
 
+        // Register HttpClient for keep-alive service
+        services.AddHttpClient("ChatbotKeepAlive");
+        
+        // Register background keep-alive service (pings chatbot every 5 minutes)
+        services.AddHostedService<ChatbotKeepAliveService>();
+
         return services;
     }
 }
