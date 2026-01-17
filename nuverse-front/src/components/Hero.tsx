@@ -114,7 +114,7 @@ export function Hero({ onStart360Tour }: HeroProps) {
             >
               <div className="flex items-center justify-center relative w-8 h-8">
                 <Image
-                  src="/Images/NUverse Logo.ico"
+                  src="/Images/NUverse Logo.webp"
                   alt="VR Icon"
                   fill
                   className="object-contain drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]"
@@ -204,7 +204,7 @@ export function Hero({ onStart360Tour }: HeroProps) {
             variants={imageVariants}
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
-            className="relative group perspective-1000 mt-20 lg:mt-[-80px]"
+            className="relative group perspective-1000 mt-20 lg:mt-6"
           >
             <motion.div
               animate={{ y: [0, -10, 0] }}
@@ -225,21 +225,25 @@ export function Hero({ onStart360Tour }: HeroProps) {
               </div>
             </motion.div>
 
-            {/* NUVersee Title - Below Image, Smaller, Static Navy Blue */}
+            {/* NUVerse Title - Below Image, Enhanced Design */}
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.8, duration: 0.8 }}
-              className="relative mt-6 z-20 text-center"
+              className="relative mt-8 z-20 text-center"
             >
-              <h2
-                className="text-2xl md:text-3xl font-black uppercase tracking-[0.2em] text-[#38476b]"
-                style={{
-                  fontFamily: 'system-ui, -apple-system, sans-serif',
-                }}
-              >
-                NUVersee
-              </h2>
+              <div className="inline-block">
+                <div className="absolute -inset-3 bg-gradient-to-r from-nu-red-500 via-nu-blue-500 to-nu-red-500 rounded-lg opacity-20 blur-lg group-hover:opacity-40 transition duration-500"></div>
+                <h2
+                  className="relative text-4xl md:text-5xl font-black uppercase tracking-[0.15em]"
+                  style={{
+                    fontFamily: 'RostexDisplay, sans-serif',
+                    textShadow: '0 0 30px rgba(182, 25, 46, 0.3), 0 0 60px rgba(99, 102, 241, 0.2)',
+                  }}
+                >
+                  <span className="text-white">N</span><span className="text-nu-blue-400">U</span><span className="text-white">V</span><span className="text-nu-red-500">ER</span><span className="text-white">S</span><span className="text-nu-red-500">E</span>
+                </h2>
+              </div>
             </motion.div>
 
             {/* Floating bits */}
