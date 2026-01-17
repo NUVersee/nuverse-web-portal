@@ -45,14 +45,16 @@ export function Header() {
             <div className="flex items-center space-x-1">
               {[
                 { name: "Home", href: "/" },
-                { name: "About", href: isHome ? "#about" : "/#about" },
-                { name: "Services", href: isHome ? "#services" : "/#services" },
-                { name: "Contact", href: isHome ? "#contact" : "/#contact" }
+                { name: "360 Tour", href: isHome ? "#360-tour" : "/#360-tour" },
+                { name: "VR Services", href: isHome ? "#services" : "/#services" },
+                { name: "Request Tour", href: isHome ? "#contact" : "/#contact" },
+                { name: "About Us", href: isHome ? "#about" : "/#about" }
               ].map((item) => (
                 <Link
                   key={item.name}
                   href={item.href}
                   className="relative text-white font-bold hover:text-nu-peach-300 transition-colors px-4 py-2 rounded-full hover:bg-white/10 uppercase tracking-widest text-sm"
+                  style={{fontFamily: 'system-ui, -apple-system, sans-serif'}}
                 >
                   {item.name}
                 </Link>
@@ -78,15 +80,17 @@ export function Header() {
             <div className="flex flex-col space-y-2">
               {[
                 { name: "Home", href: "/" },
-                { name: "About", href: isHome ? "#about" : "/#about" },
-                { name: "Services", href: isHome ? "#services" : "/#services" },
-                { name: "Contact", href: isHome ? "#contact" : "/#contact" }
+                { name: "360 Tour", href: isHome ? "#360-tour" : "/#360-tour" },
+                { name: "VR Services", href: isHome ? "#services" : "/#services" },
+                { name: "Request Tour", href: isHome ? "#contact" : "/#contact" },
+                { name: "About Us", href: isHome ? "#about" : "/#about" }
               ].map((item) => (
                 <Link
                   key={item.name}
                   href={item.href}
                   onClick={() => setIsMenuOpen(false)}
                   className="text-white font-semibold hover:text-nu-red-500 px-4 py-3 rounded-2xl hover:bg-white/5 transition-colors"
+                  style={{fontFamily: 'system-ui, -apple-system, sans-serif'}}
                 >
                   {item.name}
                 </Link>

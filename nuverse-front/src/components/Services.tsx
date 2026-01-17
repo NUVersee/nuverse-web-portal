@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import { useRouter } from "next/navigation";
 import { Brain, FlaskConical, Sparkles } from "lucide-react";
 import { motion, useInView } from "framer-motion";
 import { ServiceCard } from "./ServiceCard";
@@ -27,6 +28,7 @@ export function Services({ onOpenLabs, onOpenAIProfessor, onStartTour }: Service
   const headerRef = useRef(null);
   const cardsRef = useRef(null);
   const statsRef = useRef(null);
+  const router = useRouter();
 
   const headerInView = useInView(headerRef, { once: true, margin: "-100px" });
   const cardsInView = useInView(cardsRef, { once: true, margin: "-50px" });
@@ -35,32 +37,29 @@ export function Services({ onOpenLabs, onOpenAIProfessor, onStartTour }: Service
   const services = [
     {
       icon: FlaskConical,
-      title: "Lab Experiments",
+      title: "Virtual Labs",
       description:
-        "Explore our state-of-the-art virtual laboratories including circuits and chemistry labs. Conduct experiments safely, learn with interactive equipment, and master laboratory techniques in an immersive VR environment.",
-      image:
-        "https://images.unsplash.com/photo-1631106321638-d94d9a8f3e1f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjaGVtaXN0cnklMjBsYWJvcmF0b3J5fGVufDF8fHx8MTc2NTIwODgyOHww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+        "Step into our state-of-the-art virtual laboratories. Conduct physics and chemistry experiments safely in an interactive way.",
+      detailDesc: "Explore our state-of-the-art virtual laboratories including circuits and chemistry labs. Conduct experiments safely, learn with interactive equipment, and master laboratory techniques in an immersive VR environment.",
+      rightText: "You can do your experiment safely and in an interactive way.",
+      image: "/Images/VRSerivces images/virtual lab.png",
+      gallery: ["/Images/VRSerivces images/virtual lab2.png", "/Images/VRSerivces images/virtual lab3.png"],
       features: ["Circuits Lab", "Chemistry Lab", "Interactive Simulations", "Safe Virtual Environment"],
-      onClick: onOpenLabs,
+      onClick: () => router.push("/labs"),
+      hasDetailView: false,
     },
     {
       icon: Brain,
       title: "AI Professor",
       description:
-        "Meet our AI-powered virtual professors across different faculties. Get personalized guidance, ask questions in real-time, and receive expert advice tailored to your academic journey and learning style.",
-      image:
-        "https://images.unsplash.com/photo-1625314887424-9f190599bd56?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhcnRpZmljaWFsJTIwaW50ZWxsaWdlbmNlJTIwcm9ib3R8ZW58MXx8fHwxNzY1MTY4MzI0fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+        "Get instant answers and guidance from our AI professor, available 24/7 to support your academic path.",
+      detailDesc: "Our AI Professor is available 24/7 to answer your questions and guide your academic path. Get personalized guidance, ask questions in real-time, and receive expert advice tailored to your academic journey.",
+      rightText: "Receive answers and explanations from an expert AI.",
+      image: "/Images/VRSerivces images/AI Professor.png",
+      gallery: ["/Images/VRSerivces images/AI Professor2.png", "/Images/VRSerivces images/AI Professor3.png", "/Images/VRSerivces images/labs.jpg"],
       features: ["4 Faculty Experts", "Personalized Learning", "24/7 Availability", "Interactive Q&A"],
-      onClick: onOpenAIProfessor,
-    },
-    {
-      icon: Sparkles,
-      title: "360 Campus Tour",
-      description:
-        "Embark on a high-definition 360-degree virtual journey through Nile University. Visit our modern campus, state-of-the-art facilities, and vibrant student spaces from the comfort of your home.",
-      image: "/Images/immersive vr.png",
-      features: ["360° Panorama", "Guided Navigation", "Mobile Friendly", "Virtual Reality Ready"],
-      onClick: onStartTour,
+      onClick: () => router.push("/ai-professor"),
+      hasDetailView: false,
     },
   ];
 
@@ -129,6 +128,7 @@ export function Services({ onOpenLabs, onOpenAIProfessor, onStartTour }: Service
             animate={headerInView ? { opacity: 1, scale: 1 } : {}}
             transition={{ delay: 0.2 }}
             className="badge mb-6"
+            style={{fontFamily: 'system-ui, -apple-system, sans-serif'}}
           >
             <Sparkles className="text-nu-peach-300" size={20} />
             <span className="ml-2">IMMERSIVE EXPERIENCES</span>
@@ -138,9 +138,10 @@ export function Services({ onOpenLabs, onOpenAIProfessor, onStartTour }: Service
             initial={{ opacity: 0, y: 20 }}
             animate={headerInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.3 }}
-            className="text-5xl md:text-8xl font-black uppercase tracking-tighter text-gray-900 dark:text-white mb-6 leading-tight"
+            className="text-5xl md:text-8xl font-bold uppercase tracking-tighter text-gray-900 dark:text-white mb-6 leading-tight"
+            style={{fontFamily: 'RostexDisplay, sans-serif'}}
           >
-            Our VR <span className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-gray-900 dark:text-white mb-6 leading-tight">Services</span>
+            VR <span className="text-4xl md:text-6xl font-bold uppercase tracking-tighter text-gray-900 dark:text-white mb-6 leading-tight">SERVICES</span>
           </motion.h2>
 
           <motion.p
@@ -148,6 +149,7 @@ export function Services({ onOpenLabs, onOpenAIProfessor, onStartTour }: Service
             animate={headerInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.4 }}
             className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed"
+            style={{fontFamily: 'system-ui, -apple-system, sans-serif'}}
           >
             Discover how our virtual reality platform brings Nile University closer to you with immersive, interactive experiences that redefine learning.
           </motion.p>

@@ -167,10 +167,10 @@ export function ChatbotButton() {
     <>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 z-50 bg-gradient-to-r from-[#b6192e] to-[#ff4b2b] hover:from-[#ff4b2b] hover:to-[#b6192e] text-white rounded-full p-4 shadow-2xl transition-all duration-300 hover:scale-110 animate-bounce-slow border border-white/20"
+        className="fixed bottom-6 right-6 z-50 bg-gradient-to-r from-[#9e1b36] to-[#c73852] hover:from-[#c73852] hover:to-[#9e1b36] text-white rounded-full p-6 shadow-2xl transition-all duration-300 hover:scale-110 animate-bounce-slow border border-white/20"
         aria-label="Open chat"
       >
-        {isOpen ? <X size={24} /> : <MessageCircle size={24} />}
+        {isOpen ? <X size={32} /> : <MessageCircle size={32} />}
       </button>
 
       {isOpen && (
@@ -183,7 +183,7 @@ export function ChatbotButton() {
             {/* Header */}
             <div
               className="text-white p-5 border-b border-white/20 flex items-center justify-between"
-              style={{ background: 'linear-gradient(135deg, #b6192e 0%, #ff4b2b 100%)' }}
+              style={{ background: 'linear-gradient(135deg, #9e1b36 0%, #c73852 100%)' }}
             >
               <div className="flex-1">
                 <h3
@@ -227,7 +227,7 @@ export function ChatbotButton() {
                           color: 'white'
                         }
                         : {
-                          background: 'linear-gradient(135deg, #b6192e 0%, #ff4b2b 100%)',
+                          background: 'linear-gradient(135deg, #9e1b36 0%, #c73852 100%)',
                           borderRadius: '16px 16px 16px 4px',
                           border: '1px solid rgba(255, 75, 43, 0.3)',
                           color: 'white'
@@ -271,7 +271,7 @@ export function ChatbotButton() {
                 <div className="space-y-3">
                   <p
                     className="text-sm font-semibold uppercase tracking-wide"
-                    style={{ fontFamily: "'Inter', sans-serif", color: '#ff4b2b' }}
+                    style={{ fontFamily: "'Inter', sans-serif", color: '#8B0000' }}
                   >
                     Quick Questions:
                   </p>

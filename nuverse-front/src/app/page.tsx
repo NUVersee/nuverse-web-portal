@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import dynamic from "next/dynamic";
 import { AIProfessorViewer } from "@/components/AIProfessorViewer";
 import { ChatbotButton } from "@/components/ChatbotButton";
-import { Contact } from "@/components/Contact";
+import { Contact } from "@/components/RequestTour";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
@@ -35,7 +35,6 @@ export default function Home() {
   const [showLabs, setShowLabs] = useState(false);
   const [showAIProfessor, setShowAIProfessor] = useState(false);
 
-  // Check if user has seen landing before (optional - remove for always show)
   useEffect(() => {
     const hasSeenLanding = sessionStorage.getItem("nuverse-landing-seen");
     if (!hasSeenLanding) {
@@ -101,18 +100,18 @@ export default function Home() {
         >
           <Header />
           <Hero onStart360Tour={() => startTour(0)} />
-          <About
-            onStart360Tour={() => startTour(0)}
-            onOpenLabs={() => setShowLabs(true)}
-            onOpenAIProfessor={() => setShowAIProfessor(true)}
-          />
+          <Tour360 onStart360Tour={(indexOrUrl) => startTour(typeof indexOrUrl === 'number' ? indexOrUrl : 0)} />
           <Services
             onOpenLabs={() => setShowLabs(true)}
             onOpenAIProfessor={() => setShowAIProfessor(true)}
             onStartTour={() => startTour(0)}
           />
-          <Tour360 onStart360Tour={(indexOrUrl) => startTour(typeof indexOrUrl === 'number' ? indexOrUrl : 0)} />
           <Contact />
+          <About
+            onStart360Tour={() => startTour(0)}
+            onOpenLabs={() => setShowLabs(true)}
+            onOpenAIProfessor={() => setShowAIProfessor(true)}
+          />
           <Footer />
           <ChatbotButton />
         </motion.div>
