@@ -18,6 +18,7 @@ import { NAVIGATION_ITEMS, BRAND } from "@/constants";
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState("home");
   const pathname = usePathname();
   const isHome = pathname === "/";
 
@@ -28,6 +29,55 @@ export function Header() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Track which section is in view to highlight the corresponding nav item
+  useEffect(() => {
+    if (!isHome) return;
+
+    const updateActiveSection = () => {
+      const scrollPosition = window.scrollY + 200;
+      
+      const sections = [
+        { id: "360-tour", element: document.getElementById("360-tour") },
+        { id: "services", element: document.getElementById("services") },
+        { id: "contact", element: document.getElementById("contact") },
+        { id: "about", element: document.getElementById("about") }
+      ];
+      
+      // Find the current section (iterate backwards to get the last matching one)
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const section = sections[i];
+        if (section.element) {
+          const sectionTop = section.element.offsetTop;
+          
+          if (scrollPosition >= sectionTop) {
+            console.log("Setting active section to:", section.id);
+            setActiveSection(section.id);
+            return;
+          }
+        }
+      }
+      
+      // Default to home if above all sections
+      console.log("Setting active section to: home");
+      setActiveSection("home");
+    };
+
+    // Initialize from URL hash
+    if (window.location.hash) {
+      const hashId = window.location.hash.replace("#", "");
+      setActiveSection(hashId || "home");
+    }
+
+    // Update on scroll with more frequent checking
+    updateActiveSection();
+    const scrollListener = () => updateActiveSection();
+    window.addEventListener("scroll", scrollListener, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", scrollListener);
+    };
+  }, [isHome]);
 
   /**
    * Get the appropriate href based on current page
@@ -59,15 +109,29 @@ export function Header() {
 
           <div className="hidden md:flex items-center gap-8">
             <div className="flex items-center space-x-1">
-              {NAVIGATION_ITEMS.map((item) => (
-                <Link
-                  key={item.name}
-                  href={getNavHref(item)}
-                  className="relative text-white font-bold hover:text-nu-peach-300 transition-colors px-4 py-2 rounded-full hover:bg-white/10 uppercase tracking-widest text-sm"
-                >
-                  {item.name}
-                </Link>
-              ))}
+              {NAVIGATION_ITEMS.map((item) => {
+                const isActive = isHome
+                  ? item.homeHref
+                    ? activeSection === item.homeHref.replace('#', '')
+                    : item.name === "Home" && activeSection === "home"
+                  : pathname === item.href;
+                
+                return (
+                  <Link
+                    key={item.name}
+                    href={getNavHref(item)}
+                    className={`relative font-bold transition-colors px-4 py-2 rounded-full uppercase tracking-widest text-sm
+                      ${
+                        isActive
+                          ? "text-nu-peach-300 bg-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.25)]"
+                          : "text-white hover:text-nu-peach-300 hover:bg-white/10"
+                      }
+                    `}
+                  >
+                    {item.name}
+                  </Link>
+                );
+              })}
             </div>
           </div>
 
@@ -84,16 +148,30 @@ export function Header() {
         {isMenuOpen && (
           <div className="md:hidden absolute top-20 left-4 right-4 p-4 glass dark:dark-glass rounded-3xl border border-gray-200/50 dark:border-gray-700/50 shadow-2xl animate-fade-in">
             <div className="flex flex-col space-y-2">
-              {NAVIGATION_ITEMS.map((item) => (
-                <Link
-                  key={item.name}
-                  href={getNavHref(item)}
-                  onClick={() => setIsMenuOpen(false)}
-                  className="text-white font-semibold hover:text-nu-red-500 px-4 py-3 rounded-2xl hover:bg-white/5 transition-colors"
-                >
-                  {item.name}
-                </Link>
-              ))}
+              {NAVIGATION_ITEMS.map((item) => {
+                const isActive = isHome
+                  ? item.homeHref
+                    ? activeSection === item.homeHref.replace('#', '')
+                    : item.name === "Home" && activeSection === "home"
+                  : pathname === item.href;
+                
+                return (
+                  <Link
+                    key={item.name}
+                    href={getNavHref(item)}
+                    onClick={() => setIsMenuOpen(false)}
+                    className={`font-semibold px-4 py-3 rounded-2xl transition-colors
+                      ${
+                        isActive
+                          ? "text-nu-peach-300 bg-white/10"
+                          : "text-white hover:text-nu-red-500 hover:bg-white/5"
+                      }
+                    `}
+                  >
+                    {item.name}
+                  </Link>
+                );
+              })}
             </div>
           </div>
         )}
