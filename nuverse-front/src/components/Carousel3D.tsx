@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import gsap from "gsap";
 import { Draggable } from "gsap/all";
 import { Rotate3D } from "lucide-react";
@@ -16,7 +17,7 @@ type Carousel3DProps = {
 const CARDS = [
     { title: "Main Campus", desc: "Experience the heart of our university", img: "/Images/Campus.jpeg", tourImage: "/Images/360 images/image1.jpg" },
     { title: "Library", desc: "Discover our knowledge center", img: "/Images/360 images/library.webp", tourImage: "/Images/360 images/library.webp" },
-    { title: "Labs", desc: "Explore cutting-edge facilities", img: "/Images/virtual lab.png", tourImage: "/Images/360 images/image2.jpg" },
+    { title: "Labs", desc: "Explore cutting-edge facilities", img: "/Images/virtual lab.webp", tourImage: "/Images/360 images/image2.jpg" },
     { title: "Sports Complex", desc: "Tour world-class athletic facilities", img: "/Images/360 images/image3.jpg", tourImage: "/Images/360 images/image3.jpg" },
     { title: "Study Halls", desc: "Quiet zones for focus", img: "/Images/360 images/image5.jpg", tourImage: "/Images/360 images/image5.jpg" },
     { title: "Innovation Hub", desc: "Where ideas come to life", img: "/Images/360 images/image4.jpg", tourImage: "/Images/360 images/image4.jpg" },
@@ -110,9 +111,16 @@ export function Carousel3D({ onStartTour }: Carousel3DProps) {
                         key={i}
                         className="carousel-card absolute top-1/2 left-1/2 w-[450px] h-[550px] -ml-[225px] -mt-[275px] bg-nu-dark/80 backdrop-blur-md border border-white/10 rounded-3xl overflow-hidden shadow-[0_30px_60px_rgba(0,0,0,0.8)] select-none"
                     >
+
+
                         <div className="relative h-2/3 w-full">
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img src={card.img} alt={card.title} className="w-full h-full object-cover pointer-events-none" />
+                            <Image
+                                src={card.img}
+                                alt={card.title}
+                                fill
+                                className="object-cover pointer-events-none"
+                                sizes="(max-width: 768px) 100vw, 450px"
+                            />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
                         </div>
 

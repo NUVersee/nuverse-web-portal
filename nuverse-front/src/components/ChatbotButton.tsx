@@ -3,14 +3,13 @@
 import { MessageCircle, Send, X } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { API_BASE_URL } from "@/constants";
 
 type Message = {
   type: "bot" | "user";
   text: string;
   sources?: string[];
 };
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5297";
 
 /**
  * ChatbotButton Component
@@ -158,9 +157,9 @@ export function ChatbotButton() {
    */
   const getCharacterImage = () => {
     const basePath = "/Images/Chat-Bot Character";
-    if (isLoading) return `${basePath}/Think.png`;
-    if (messages.length <= 1) return `${basePath}/Hello.png`;
-    return `${basePath}/Ready.png`;
+    if (isLoading) return `${basePath}/Think.webp`;
+    if (messages.length <= 1) return `${basePath}/Hello.webp`;
+    return `${basePath}/Ready.webp`;
   };
 
   return (

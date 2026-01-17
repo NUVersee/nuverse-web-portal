@@ -1,18 +1,31 @@
 "use client";
 
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
+import Image from "next/image";
 
 type LabsViewerProps = {
   onClose: () => void;
 };
 
 export function LabsViewer({ onClose }: LabsViewerProps) {
+  // Close on ESC key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
+
   const title = "Virtual Labs";
   const detailDesc = "Step inside our VIrtual Circuit and Chemistry Labs and experience hands-on learning like never before. Through immersive VR exploration, you can discover lab environments, examine equipment up close, and interact with key components used in real experiments. This interactive experience helps you understand how experiments are conducted, how instruments are used, and how theoretical concepts are applied in practice—giving you a realistic preview of laboratory learning before stepping on campus.";
   const gallery = [
-    "/Images/VRSerivces images/virtual lab2.png",
-    "/Images/VRSerivces images/virtual lab3.png",
+    "/Images/virtual lab2.webp",
+    "/Images/virtual lab3.webp",
   ];
 
   return (
@@ -75,10 +88,12 @@ export function LabsViewer({ onClose }: LabsViewerProps) {
           transition={{ delay: 0.2 }}
           className="flex-1 min-h-[70vh] overflow-y-auto py-4 px-1 scrollbar-hide"
         >
-          
+
 
           <div className="space-y-12">
             {gallery.map((img, idx) => (
+
+
               <motion.div
                 key={idx}
                 initial={{ opacity: 0, y: 50 }}
@@ -86,10 +101,13 @@ export function LabsViewer({ onClose }: LabsViewerProps) {
                 transition={{ delay: 0.3 + idx * 0.08 }}
                 className="w-full"
               >
-                <img
+                <Image
                   src={img}
                   alt={`Gallery ${idx + 1}`}
-                  className="w-full rounded-2xl shadow-2xl hover:scale-102 transition-transform duration-300"
+                  width={0}
+                  height={0}
+                  sizes="100vw"
+                  className="w-full h-auto rounded-2xl shadow-2xl hover:scale-102 transition-transform duration-300"
                 />
               </motion.div>
             ))}

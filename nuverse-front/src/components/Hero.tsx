@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Image from "next/image";
 import { Mail, Rotate3D, Sparkles, ArrowRight } from "lucide-react";
 import { motion, useInView } from "framer-motion";
 import { ImageWithFallback } from "./ImageWithFallback";
@@ -111,14 +112,15 @@ export function Hero({ onStart360Tour }: HeroProps) {
               variants={itemVariants}
               className="inline-flex items-center gap-3 bg-white/10 dark:bg-nu-dark/80 backdrop-blur-md border border-white/10 px-5 py-2.5 rounded-full shadow-2xl"
             >
-              <div className="flex items-center justify-center">
-                <img
+              <div className="flex items-center justify-center relative w-8 h-8">
+                <Image
                   src="/Images/NUverse Logo.ico"
                   alt="VR Icon"
-                  className="w-8 h-8 object-contain drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]"
+                  fill
+                  className="object-contain drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]"
                 />
               </div>
-              <span className="text-sm font-black text-white/90 uppercase tracking-[0.1em] transition-colors" style={{fontFamily: 'system-ui, -apple-system, sans-serif'}}>
+              <span className="text-sm font-black text-white/90 uppercase tracking-[0.1em] transition-colors" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
                 JOIN <span className="text-nu-red-500">500+</span> STUDENTS EXPLORING
               </span>
             </motion.div>
@@ -127,7 +129,7 @@ export function Hero({ onStart360Tour }: HeroProps) {
               <motion.h1
                 variants={itemVariants}
                 className="text-4xl md:text-4xl font-black uppercase tracking-tighter text-white leading-tight"
-                style={{fontFamily: 'RostexDisplay, sans-serif'}}
+                style={{ fontFamily: 'RostexDisplay, sans-serif' }}
               >
                 Step Into <br />the Future of <br />
                 Digital Reality
@@ -149,7 +151,7 @@ export function Hero({ onStart360Tour }: HeroProps) {
                 whileTap={{ scale: 0.95 }}
                 className="group btn-primary flex items-center gap-3 overflow-hidden"
               >
-                <span className="relative flex items-center gap-2" style={{fontFamily: 'system-ui, -apple-system, sans-serif'}}>
+                <span className="relative flex items-center gap-2" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
                   Launch 360° Tour
                   <Rotate3D
                     size={22}
@@ -164,7 +166,7 @@ export function Hero({ onStart360Tour }: HeroProps) {
                 whileTap={{ scale: 0.95 }}
                 className="group btn-outline flex items-center gap-3 shadow-sm"
               >
-                <span style={{fontFamily: 'system-ui, -apple-system, sans-serif'}}>Request VR Tour</span>
+                <span style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>Request VR Tour</span>
                 <ArrowRight
                   size={20}
                   className="group-hover:translate-x-1 transition-transform"
@@ -187,10 +189,10 @@ export function Hero({ onStart360Tour }: HeroProps) {
                   animate={isInView ? { opacity: 1, y: 0 } : {}}
                   transition={{ delay: 0.8 + index * 0.1 }}
                 >
-                  <div className="text-3xl font-black text-gray-900 dark:text-white" style={{fontFamily: 'system-ui, -apple-system, sans-serif'}}>
+                  <div className="text-3xl font-black text-gray-900 dark:text-white" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
                     {stat.value}
                   </div>
-                  <div className="text-sm font-medium text-nu-blue-200" style={{fontFamily: 'system-ui, -apple-system, sans-serif'}}>
+                  <div className="text-sm font-medium text-nu-blue-200" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
                     {stat.label}
                   </div>
                 </motion.div>
@@ -202,7 +204,7 @@ export function Hero({ onStart360Tour }: HeroProps) {
             variants={imageVariants}
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
-            className="relative group perspective-1000 -mt-12 lg:-mt-85"
+            className="relative group perspective-1000 mt-20 lg:mt-[-80px]"
           >
             <motion.div
               animate={{ y: [0, -10, 0] }}
@@ -212,11 +214,13 @@ export function Hero({ onStart360Tour }: HeroProps) {
               <div className="absolute -inset-4 bg-gradient-to-r from-nu-red-500 to-nu-blue-500 rounded-[2.5rem] blur-2xl opacity-20 group-hover:opacity-40 transition duration-500"></div>
 
               {/* Image Card */}
-              <div className="relative rounded-[2rem] overflow-hidden shadow-[0_40px_100px_-20px_rgba(0,0,0,0.3)] border border-white/20 dark:border-gray-700/50">
+              <div className="relative rounded-[2rem] overflow-hidden shadow-[0_40px_100px_-20px_rgba(0,0,0,0.3)] border border-white/20 dark:border-gray-700/50 aspect-[4/3]">
                 <ImageWithFallback
-                  src="/Images/VR.png"
+                  src="/Images/VR.webp"
                   alt="VR Education Experience"
-                  className="w-full h-auto object-cover aspect-[4/3] scale-110"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover scale-110"
                 />
               </div>
             </motion.div>

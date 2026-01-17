@@ -42,8 +42,8 @@ export function Services({ onOpenLabs, onOpenAIProfessor, onStartTour }: Service
         "Step into our state-of-the-art virtual laboratories. Conduct physics and chemistry experiments safely in an interactive way.",
       detailDesc: "Explore our state-of-the-art virtual laboratories including circuits and chemistry labs. Conduct experiments safely, learn with interactive equipment, and master laboratory techniques in an immersive VR environment.",
       rightText: "You can do your experiment safely and in an interactive way.",
-      image: "/Images/VRSerivces images/virtual lab.png",
-      gallery: ["/Images/VRSerivces images/virtual lab2.png", "/Images/VRSerivces images/virtual lab3.png"],
+      image: "/Images/virtual lab.webp",
+      gallery: ["/Images/virtual lab2.webp", "/Images/virtual lab3.webp"],
       features: ["Circuits Lab", "Chemistry Lab", "Interactive Simulations", "Safe Virtual Environment"],
       onClick: () => router.push("/labs"),
       hasDetailView: false,
@@ -55,8 +55,8 @@ export function Services({ onOpenLabs, onOpenAIProfessor, onStartTour }: Service
         "Get instant answers and guidance from our AI professor, available 24/7 to support your academic path.",
       detailDesc: "Our AI Professor is available 24/7 to answer your questions and guide your academic path. Get personalized guidance, ask questions in real-time, and receive expert advice tailored to your academic journey.",
       rightText: "Receive answers and explanations from an expert AI.",
-      image: "/Images/VRSerivces images/AI Professor.png",
-      gallery: ["/Images/VRSerivces images/AI Professor2.png", "/Images/VRSerivces images/AI Professor3.png", "/Images/VRSerivces images/labs.jpg"],
+      image: "/Images/AI Professor.webp",
+      gallery: ["/Images/AI Professor2.webp", "/Images/AI Professor3.webp"],
       features: ["4 Faculty Experts", "Personalized Learning", "24/7 Availability", "Interactive Q&A"],
       onClick: () => router.push("/ai-professor"),
       hasDetailView: false,
@@ -128,7 +128,7 @@ export function Services({ onOpenLabs, onOpenAIProfessor, onStartTour }: Service
             animate={headerInView ? { opacity: 1, scale: 1 } : {}}
             transition={{ delay: 0.2 }}
             className="badge mb-6"
-            style={{fontFamily: 'system-ui, -apple-system, sans-serif'}}
+            style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}
           >
             <Sparkles className="text-nu-peach-300" size={20} />
             <span className="ml-2">IMMERSIVE EXPERIENCES</span>
@@ -139,7 +139,7 @@ export function Services({ onOpenLabs, onOpenAIProfessor, onStartTour }: Service
             animate={headerInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.3 }}
             className="text-5xl md:text-8xl font-bold uppercase tracking-tighter text-gray-900 dark:text-white mb-6 leading-tight"
-            style={{fontFamily: 'RostexDisplay, sans-serif'}}
+            style={{ fontFamily: 'RostexDisplay, sans-serif' }}
           >
             VR <span className="text-4xl md:text-6xl font-bold uppercase tracking-tighter text-gray-900 dark:text-white mb-6 leading-tight">SERVICES</span>
           </motion.h2>
@@ -149,7 +149,7 @@ export function Services({ onOpenLabs, onOpenAIProfessor, onStartTour }: Service
             animate={headerInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.4 }}
             className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed"
-            style={{fontFamily: 'system-ui, -apple-system, sans-serif'}}
+            style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}
           >
             Discover how our virtual reality platform brings Nile University closer to you with immersive, interactive experiences that redefine learning.
           </motion.p>

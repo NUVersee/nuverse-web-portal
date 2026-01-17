@@ -2,6 +2,8 @@
 
 import { Facebook, Instagram, Linkedin, Mail, MapPin, Phone, Send, Twitter, Sparkles } from "lucide-react";
 import { useState } from "react";
+import { API_BASE_URL, CONTACT_INFO, SOCIAL_LINKS } from "@/constants";
+import { toast } from "sonner";
 
 /**
  * Contact Component
@@ -20,10 +22,6 @@ export function Contact() {
   });
 
   const [submitting, setSubmitting] = useState(false);
-  const [status, setStatus] = useState<{ type: "success" | "error" | null; message: string }>({
-    type: null,
-    message: "",
-  });
 
   /**
    * Handles the submission of the contact form.
@@ -34,12 +32,9 @@ export function Contact() {
    */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    setStatus({ type: null, message: "" });
     setSubmitting(true);
 
-    const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:5297";
-    const url = `${apiBase}/api/contact`;
+    const url = `${API_BASE_URL}/api/contact`;
 
     try {
       const resp = await fetch(url, {
@@ -58,14 +53,14 @@ export function Contact() {
 
       if (!resp.ok) {
         const text = await resp.text();
-        throw new Error(text || "Failed to send Reason_for_Request");
+        throw new Error(text || "Failed to send message");
       }
 
-      setStatus({ type: "success", message: "Message sent successfully. We'll get back to you soon." });
+      toast.success("Message sent successfully! We'll get back to you soon.");
       setFormData({ name: "", email: "", phone: "", reason: "" });
     } catch (err) {
       const message = err instanceof Error ? err.message : "Something went wrong.";
-      setStatus({ type: "error", message });
+      toast.error(message);
     } finally {
       setSubmitting(false);
     }
@@ -114,7 +109,7 @@ export function Contact() {
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   required
-                  className="w-full px-5 py-3.5 border-2 border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-nu-red-500 focus:border-transparent bg-nu-dark/80 text-white transition-all"
+                  className="w-full px-5 py-3.5 border-2 border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-nu-red-500 focus:border-transparent bg-nu-dark/80 text-white transition-all placeholder:text-gray-500 autofill:bg-nu-dark autofill:text-white [&:-webkit-autofill]:bg-nu-dark [&:-webkit-autofill]:[-webkit-text-fill-color:white] [&:-webkit-autofill]:[box-shadow:0_0_0px_1000px_rgba(4,9,16,0.8)_inset]"
                   placeholder="John Doe"
                 />
               </div>
@@ -129,7 +124,7 @@ export function Contact() {
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   required
-                  className="w-full px-5 py-3.5 border-2 border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-nu-red-500 focus:border-transparent bg-nu-dark/80 text-white transition-all"
+                  className="w-full px-5 py-3.5 border-2 border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-nu-red-500 focus:border-transparent bg-nu-dark/80 text-white transition-all placeholder:text-gray-500 [&:-webkit-autofill]:[-webkit-text-fill-color:white] [&:-webkit-autofill]:[box-shadow:0_0_0px_1000px_rgba(4,9,16,0.8)_inset]"
                   placeholder="john@example.com"
                 />
               </div>
@@ -143,7 +138,7 @@ export function Contact() {
                   id="phone"
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="w-full px-5 py-3.5 border-2 border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-nu-red-500 focus:border-transparent bg-nu-dark/80 text-white transition-all"
+                  className="w-full px-5 py-3.5 border-2 border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-nu-red-500 focus:border-transparent bg-nu-dark/80 text-white transition-all placeholder:text-gray-500 [&:-webkit-autofill]:[-webkit-text-fill-color:white] [&:-webkit-autofill]:[box-shadow:0_0_0px_1000px_rgba(4,9,16,0.8)_inset]"
                   placeholder="+20 123 456 7890"
                 />
               </div>
@@ -158,21 +153,10 @@ export function Contact() {
                   onChange={(e) => setFormData({ ...formData, reason: e.target.value })}
                   required
                   rows={5}
-                  className="w-full px-5 py-3.5 border-2 border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-nu-red-500 focus:border-transparent bg-nu-dark/80 text-white resize-none transition-all"
+                  className="w-full px-5 py-3.5 border-2 border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-nu-red-500 focus:border-transparent bg-nu-dark/80 text-white resize-none transition-all placeholder:text-gray-500"
                   placeholder="I would like to request the university VR equipment to take a virtual tour of..."
                 />
               </div>
-
-              {status.type && (
-                <div
-                  className={`text-sm rounded-xl p-4 font-medium ${status.type === "success"
-                    ? "bg-green-50 text-green-800 dark:bg-green-900/40 dark:text-green-100 border border-green-200 dark:border-green-800"
-                    : "bg-red-50 text-red-800 dark:bg-red-900/40 dark:text-red-100 border border-red-200 dark:border-red-800"
-                    }`}
-                >
-                  {status.message}
-                </div>
-              )}
 
               <button
                 type="submit"
