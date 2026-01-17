@@ -1,0 +1,21 @@
+
+# Ignore git files
+.git/
+.gitignore
+
+# Ignore build output
+bin/
+obj/
+
+# Ignore IDE files
+.vs/
+.vscode/
+
+# Ignore sensitive files
+.env
+.env.*
+!.env.example
+
+# Ignore Docker files
+Dockerfile
+.dockerignore
