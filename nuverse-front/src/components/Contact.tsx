@@ -2,6 +2,7 @@
 
 import { Facebook, Instagram, Linkedin, Mail, MapPin, Phone, Send, Twitter, Sparkles } from "lucide-react";
 import { useState } from "react";
+import { API_BASE_URL, CONTACT_INFO, SOCIAL_LINKS } from "@/constants";
 
 /**
  * Contact Component
@@ -38,8 +39,7 @@ export function Contact() {
     setStatus({ type: null, message: "" });
     setSubmitting(true);
 
-    const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:5297";
-    const url = `${apiBase}/api/contact`;
+    const url = `${API_BASE_URL}/api/contact`;
 
     try {
       const resp = await fetch(url, {

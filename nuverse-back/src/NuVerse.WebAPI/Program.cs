@@ -13,12 +13,26 @@ if (File.Exists(envPath))
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
-// Add CORS policy
+// Add CORS policy - use environment variable for production origins
+var corsOrigins = Environment.GetEnvironmentVariable("CORS_ORIGINS");
+string[] allowedOrigins;
+
+if (!string.IsNullOrWhiteSpace(corsOrigins))
+{
+    // Production: use comma-separated origins from environment
+    allowedOrigins = corsOrigins.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+}
+else
+{
+    // Development fallback
+    allowedOrigins = new[] { "http://localhost:3000", "http://localhost:3001", "http://127.0.0.1:3000", "http://127.0.0.1:3001" };
+}
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:3000", "http://localhost:3001", "http://127.0.0.1:3000", "http://127.0.0.1:3001")
+        policy.WithOrigins(allowedOrigins)
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();

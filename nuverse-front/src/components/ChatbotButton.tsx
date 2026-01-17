@@ -3,14 +3,13 @@
 import { MessageCircle, Send, X } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { API_BASE_URL } from "@/constants";
 
 type Message = {
   type: "bot" | "user";
   text: string;
   sources?: string[];
 };
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5297";
 
 /**
  * ChatbotButton Component

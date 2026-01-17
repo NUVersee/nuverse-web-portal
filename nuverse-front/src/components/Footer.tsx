@@ -1,7 +1,9 @@
 "use client";
-/* eslint-disable @next/next/no-img-element */
 
 import { Facebook, Linkedin, Mail, MapPin, Phone, Twitter, Instagram } from "lucide-react";
+import Link from "next/link";
+import Image from "next/image";
+import { NAVIGATION_ITEMS, CONTACT_INFO, SOCIAL_LINKS, BRAND, META } from "@/constants";
 
 /**
  * Footer Component
@@ -18,68 +20,61 @@ export function Footer() {
         <div className="grid md:grid-cols-4 gap-8 mb-8">
           <div>
             <div className="flex items-center gap-3 mb-4">
-              <img src="/Images/NUverse Logo.png" alt="NUverse Logo" className="h-10 w-10 rounded-full" />
-              <h4 className="text-white font-black uppercase tracking-tighter" style={{fontFamily: 'system-ui, -apple-system, sans-serif'}}>NU<span className="text-nu-red-500">verse</span></h4>
+              <Image
+                src={BRAND.logoPath}
+                alt={`${BRAND.name} Logo`}
+                width={40}
+                height={40}
+                className="h-10 w-10 rounded-full"
+              />
+              <h4 className="text-white font-black uppercase tracking-tighter">
+                NU<span className="text-nu-red-500">verse</span>
+              </h4>
             </div>
-            <p className="text-gray-400" style={{fontFamily: 'system-ui, -apple-system, sans-serif'}}>Experience the future of education through immersive virtual reality technology.</p>
+            <p className="text-gray-400">{BRAND.tagline}</p>
           </div>
 
           <div>
-            <h5 className="mb-4" style={{fontFamily: 'system-ui, -apple-system, sans-serif'}}>Quick Links</h5>
+            <h5 className="mb-4 font-semibold">Quick Links</h5>
             <ul className="space-y-2">
-              <li>
-                <a href="#home" className="text-gray-400 hover:text-white transition-colors" style={{fontFamily: 'system-ui, -apple-system, sans-serif'}}>
-                  Home
-                </a>
-              </li>
-              <li>
-                <a href="#360-tour" className="text-gray-400 hover:text-white transition-colors" style={{fontFamily: 'system-ui, -apple-system, sans-serif'}}>
-                  360 Tour
-                </a>
-              </li>
-              <li>
-                <a href="#services" className="text-gray-400 hover:text-white transition-colors" style={{fontFamily: 'system-ui, -apple-system, sans-serif'}}>
-                  VR Services
-                </a>
-              </li>
-              <li>
-                <a href="#contact" className="text-gray-400 hover:text-white transition-colors" style={{fontFamily: 'system-ui, -apple-system, sans-serif'}}>
-                  Request Tour
-                </a>
-              </li>
-              <li>
-                <a href="#about" className="text-gray-400 hover:text-white transition-colors" style={{fontFamily: 'system-ui, -apple-system, sans-serif'}}>
-                  About Us
-                </a>
-              </li>
+              {NAVIGATION_ITEMS.map((item) => (
+                <li key={item.name}>
+                  <Link
+                    href={item.href}
+                    className="text-gray-400 hover:text-white transition-colors"
+                  >
+                    {item.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
           <div>
-            <h5 className="mb-4" style={{fontFamily: 'system-ui, -apple-system, sans-serif'}}>Contact Info</h5>
+            <h5 className="mb-4 font-semibold">Contact Info</h5>
             <ul className="space-y-3">
-              <li className="flex items-center gap-2 text-gray-400" style={{fontFamily: 'system-ui, -apple-system, sans-serif'}}>
+              <li className="flex items-center gap-2 text-gray-400">
                 <MapPin size={16} />
-                <span>Sheikh Zayed, Giza, Egypt</span>
+                <span>{CONTACT_INFO.location}</span>
               </li>
-              <li className="flex items-center gap-2 text-gray-400" style={{fontFamily: 'system-ui, -apple-system, sans-serif'}}>
+              <li className="flex items-center gap-2 text-gray-400">
                 <Phone size={16} />
-                <span>+20 2 3847 6656</span>
+                <span>{CONTACT_INFO.phone}</span>
               </li>
-              <li className="flex items-center gap-2 text-gray-400" style={{fontFamily: 'system-ui, -apple-system, sans-serif'}}>
+              <li className="flex items-center gap-2 text-gray-400">
                 <Mail size={16} />
-                <a href="mailto:nuverse6@gmail.com" className="hover:text-white transition-colors">
-                  nuverse6@gmail.com
+                <a href={`mailto:${CONTACT_INFO.email}`} className="hover:text-white transition-colors">
+                  {CONTACT_INFO.email}
                 </a>
               </li>
             </ul>
           </div>
 
           <div>
-            <h5 className="mb-4" style={{fontFamily: 'system-ui, -apple-system, sans-serif'}}>Follow Us</h5>
+            <h5 className="mb-4 font-semibold">Follow Us</h5>
             <div className="flex gap-4">
               <a
-                href="https://facebook.com"
+                href={SOCIAL_LINKS.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-white/5 border border-white/10 p-2 rounded-lg hover:bg-nu-red-500 transition-colors"
@@ -88,7 +83,7 @@ export function Footer() {
                 <Facebook size={20} />
               </a>
               <a
-                href="https://twitter.com"
+                href={SOCIAL_LINKS.twitter}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-white/5 border border-white/10 p-2 rounded-lg hover:bg-nu-red-500 transition-colors"
@@ -97,7 +92,7 @@ export function Footer() {
                 <Twitter size={20} />
               </a>
               <a
-                href="https://linkedin.com"
+                href={SOCIAL_LINKS.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-white/5 border border-white/10 p-2 rounded-lg hover:bg-nu-red-500 transition-colors"
@@ -106,7 +101,7 @@ export function Footer() {
                 <Linkedin size={20} />
               </a>
               <a
-                href="https://www.instagram.com/nu_versee?igsh=cHRxcDQwNzcxMDN2"
+                href={SOCIAL_LINKS.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-white/5 border border-white/10 p-2 rounded-lg hover:bg-nu-red-500 transition-colors"
@@ -119,10 +114,9 @@ export function Footer() {
         </div>
 
         <div className="border-t border-white/10 pt-8 text-center text-nu-blue-200">
-          <p style={{fontFamily: 'system-ui, -apple-system, sans-serif'}}>&copy; 2025 NUverse - Nile University VR. All rights reserved.</p>
+          <p>{META.copyright}</p>
         </div>
       </div>
     </footer>
   );
 }
-
