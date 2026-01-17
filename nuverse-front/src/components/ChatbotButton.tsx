@@ -157,9 +157,9 @@ export function ChatbotButton() {
    */
   const getCharacterImage = () => {
     const basePath = "/Images/Chat-Bot Character";
-    if (isLoading) return `${basePath}/Think.png`;
-    if (messages.length <= 1) return `${basePath}/Hello.png`;
-    return `${basePath}/Ready.png`;
+    if (isLoading) return `${basePath}/Think.webp`;
+    if (messages.length <= 1) return `${basePath}/Hello.webp`;
+    return `${basePath}/Ready.webp`;
   };
 
   return (

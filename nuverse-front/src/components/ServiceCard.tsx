@@ -33,6 +33,8 @@ export function ServiceCard({ icon: Icon, title, description, image, features, o
         <ImageWithFallback
           src={image}
           alt={title}
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           className={`w-full h-full object-cover transition-transform duration-500 ${isHovered ? "scale-110" : "scale-100"}`}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-nu-dark via-nu-dark/40 to-transparent transition-colors" />
@@ -43,14 +45,14 @@ export function ServiceCard({ icon: Icon, title, description, image, features, o
             <div className="bg-gradient-to-br from-[#b6192e] to-[#ffc1ac] p-3 rounded-xl shadow-lg transform group-hover:rotate-12 transition-transform duration-300">
               <Icon className="text-white" size={24} />
             </div>
-            <h3 className="section-h3 text-white" style={{fontFamily: 'system-ui, -apple-system, sans-serif'}}>{title}</h3>
+            <h3 className="section-h3 text-white" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>{title}</h3>
           </div>
           <ArrowUpRight className="text-white opacity-0 group-hover:opacity-100 transition-opacity" size={24} />
         </div>
       </div>
 
       <div className="p-6">
-        <p className="text-gray-300 mb-6 leading-relaxed font-medium transition-colors" style={{fontFamily: 'system-ui, -apple-system, sans-serif'}}>{description}</p>
+        <p className="text-gray-300 mb-6 leading-relaxed font-medium transition-colors" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>{description}</p>
 
         <div className="space-y-2 mb-4">
           {features.slice(0, isExpanded ? features.length : 3).map((feature, index) => (
@@ -71,7 +73,7 @@ export function ServiceCard({ icon: Icon, title, description, image, features, o
             setIsExpanded(!isExpanded);
           }}
           className="text-nu-peach-300 hover:text-white transition-colors flex items-center gap-1 group font-bold uppercase tracking-widest text-xs"
-          style={{fontFamily: 'system-ui, -apple-system, sans-serif'}}
+          style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}
         >
           {isExpanded ? "Show Less" : "Explore More"}
           <ChevronRight

@@ -3,6 +3,7 @@
 import { Facebook, Instagram, Linkedin, Mail, MapPin, Phone, Send, Twitter, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { API_BASE_URL } from "@/constants";
+import { toast } from "sonner";
 
 /**
  * Contact Component
@@ -21,10 +22,6 @@ export function Contact() {
   });
 
   const [submitting, setSubmitting] = useState(false);
-  const [status, setStatus] = useState<{ type: "success" | "error" | null; message: string }>({
-    type: null,
-    message: "",
-  });
 
   /**
    * Handles the submission of the contact form.
@@ -35,8 +32,6 @@ export function Contact() {
    */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    setStatus({ type: null, message: "" });
     setSubmitting(true);
 
     const url = `${API_BASE_URL}/api/contact`;
@@ -61,11 +56,11 @@ export function Contact() {
         throw new Error(text || "Failed to send Reason_for_Request");
       }
 
-      setStatus({ type: "success", message: "Message sent successfully. We'll get back to you soon." });
+      toast.success("Request sent successfully! We'll contact you soon.");
       setFormData({ name: "", email: "", phone: "", reason: "" });
     } catch (err) {
       const message = err instanceof Error ? err.message : "Something went wrong.";
-      setStatus({ type: "error", message });
+      toast.error(message);
     } finally {
       setSubmitting(false);
     }
@@ -168,17 +163,6 @@ export function Contact() {
                 />
               </div>
 
-              {status.type && (
-                <div
-                  className={`text-sm rounded-xl p-4 font-medium ${status.type === "success"
-                    ? "bg-green-50 text-green-800 dark:bg-green-900/40 dark:text-green-100 border border-green-200 dark:border-green-800"
-                    : "bg-red-50 text-red-800 dark:bg-red-900/40 dark:text-red-100 border border-red-200 dark:border-red-800"
-                    }`}
-                  style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}
-                >
-                  {status.message}
-                </div>
-              )}
 
               <button
                 type="submit"

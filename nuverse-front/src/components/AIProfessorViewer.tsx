@@ -1,19 +1,32 @@
 "use client";
 
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
+import Image from "next/image";
 
 type AIProfessorViewerProps = {
   onClose: () => void;
 };
 
 export function AIProfessorViewer({ onClose }: AIProfessorViewerProps) {
+  // Close on ESC key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
+
   const title = "AI Professor";
   const detailDesc = "Inside the VR experience, you can interact with the AI Professor as if you are engaging with a real academic guide on campus. Through immersive conversation, the AI Professor introduces the fundamentals of each major, explains core subjects and practical components, and demonstrates how theoretical knowledge is applied in real-world scenarios. With unlimited interaction, it helps you explore your interests, understand the skills you will develop, and confidently choose the academic path that best suits your goals—all within a fully immersive virtual environment.";
   const gallery = [
-    "/Images/VRSerivces images/AI Professor2.png",
-    "/Images/VRSerivces images/AI Professor3.png",
-    "/Images/VRSerivces images/labs.jpg",
+    "/Images/AI Professor.webp",
+    "/Images/AI Professor2.webp",
+    "/Images/AI Professor3.webp",
   ];
 
   return (
@@ -79,6 +92,8 @@ export function AIProfessorViewer({ onClose }: AIProfessorViewerProps) {
 
           <div className="space-y-12">
             {gallery.map((img, idx) => (
+
+
               <motion.div
                 key={idx}
                 initial={{ opacity: 0, y: 50 }}
@@ -86,10 +101,13 @@ export function AIProfessorViewer({ onClose }: AIProfessorViewerProps) {
                 transition={{ delay: 0.3 + idx * 0.08 }}
                 className="w-full"
               >
-                <img
+                <Image
                   src={img}
                   alt={`Gallery ${idx + 1}`}
-                  className="w-full rounded-2xl shadow-2xl hover:scale-102 transition-transform duration-300"
+                  width={0}
+                  height={0}
+                  sizes="100vw"
+                  className="w-full h-auto rounded-2xl shadow-2xl hover:scale-102 transition-transform duration-300"
                 />
               </motion.div>
             ))}

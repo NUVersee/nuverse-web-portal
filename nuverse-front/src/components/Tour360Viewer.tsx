@@ -1,10 +1,11 @@
 "use client";
 
 import React, { Suspense, useState, useRef, useEffect, useCallback } from "react";
+import Image from "next/image";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { OrbitControls, useTexture, Html, PerspectiveCamera } from "@react-three/drei";
 import * as THREE from "three";
-import { useTheme } from "./ThemeContext";
+
 import {
   Plus,
   Minus,
@@ -165,7 +166,7 @@ function Controls({ controlsRef, onZoomChange }: { controlsRef: React.RefObject<
  * @returns {JSX.Element} The 360 tour viewer interface.
  */
 export function Tour360Viewer({ onClose, initialIndex = 0 }: { onClose: () => void, initialIndex?: number | string }) {
-  const { isDarkMode } = useTheme();
+
 
   // Resolve initial index
   const resolveIndex = () => {
@@ -184,6 +185,17 @@ export function Tour360Viewer({ onClose, initialIndex = 0 }: { onClose: () => vo
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Close on ESC key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
 
   const currentTour = TOUR_IMAGES[currentIndex];
   const [activeRotation, setActiveRotation] = useState<'up' | 'down' | 'left' | 'right' | null>(null);
@@ -267,7 +279,7 @@ export function Tour360Viewer({ onClose, initialIndex = 0 }: { onClose: () => vo
     }
   };
 
-  const glassClass = isDarkMode ? "dark-glass border-white/10" : "glass border-white/20";
+  const glassClass = "dark-glass border-white/10";
 
   if (!mounted) return null;
 
@@ -440,7 +452,17 @@ export function Tour360Viewer({ onClose, initialIndex = 0 }: { onClose: () => vo
               onClick={() => handleTourChange(idx)}
               className={`relative group flex-shrink-0 overflow-hidden rounded-xl border-2 transition-all w-20 h-12 ${currentIndex === idx ? 'border-nu-red-500 scale-105 shadow-[0_0_15px_rgba(182,25,46,0.4)]' : 'border-transparent opacity-50 hover:opacity-100'}`}
             >
-              <img src={tour.url} alt={tour.title} className="w-full h-full object-cover" />
+              import Image from "next/image"; // Add to imports
+
+              // ...
+
+              <Image
+                src={tour.url}
+                alt={tour.title}
+                fill
+                className="object-cover"
+                sizes="80px"
+              />
               <div className="absolute inset-x-0 bottom-0 h-0.5 bg-nu-red-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
             </button>
           ))}
