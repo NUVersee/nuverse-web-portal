@@ -72,7 +72,7 @@ export function Hero({ onStart360Tour }: HeroProps) {
     <section
       id="home"
       ref={ref}
-      className="relative min-h-[90vh] flex items-center pt-20 pb-32 px-4 sm:px-6 lg:px-8 overflow-hidden transition-colors"
+      className="relative min-h-[90vh] flex items-center py-24 px-4 sm:px-6 lg:px-8 overflow-hidden transition-colors"
     >
       {/* Dynamic Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -118,7 +118,7 @@ export function Hero({ onStart360Tour }: HeroProps) {
                   className="w-8 h-8 object-contain drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]"
                 />
               </div>
-              <span className="text-sm font-black text-white/90 uppercase tracking-[0.1em] transition-colors">
+              <span className="text-sm font-black text-white/90 uppercase tracking-[0.1em] transition-colors" style={{fontFamily: 'system-ui, -apple-system, sans-serif'}}>
                 JOIN <span className="text-nu-red-500">500+</span> STUDENTS EXPLORING
               </span>
             </motion.div>
@@ -127,6 +127,7 @@ export function Hero({ onStart360Tour }: HeroProps) {
               <motion.h1
                 variants={itemVariants}
                 className="text-4xl md:text-4xl font-black uppercase tracking-tighter text-white leading-tight"
+                style={{fontFamily: 'RostexDisplay, sans-serif'}}
               >
                 Step Into <br />the Future of <br />
                 Digital Reality
@@ -148,7 +149,7 @@ export function Hero({ onStart360Tour }: HeroProps) {
                 whileTap={{ scale: 0.95 }}
                 className="group btn-primary flex items-center gap-3 overflow-hidden"
               >
-                <span className="relative flex items-center gap-2">
+                <span className="relative flex items-center gap-2" style={{fontFamily: 'system-ui, -apple-system, sans-serif'}}>
                   Launch 360° Tour
                   <Rotate3D
                     size={22}
@@ -163,7 +164,7 @@ export function Hero({ onStart360Tour }: HeroProps) {
                 whileTap={{ scale: 0.95 }}
                 className="group btn-outline flex items-center gap-3 shadow-sm"
               >
-                Request VR Kit
+                <span style={{fontFamily: 'system-ui, -apple-system, sans-serif'}}>Request VR Tour</span>
                 <ArrowRight
                   size={20}
                   className="group-hover:translate-x-1 transition-transform"
@@ -186,10 +187,10 @@ export function Hero({ onStart360Tour }: HeroProps) {
                   animate={isInView ? { opacity: 1, y: 0 } : {}}
                   transition={{ delay: 0.8 + index * 0.1 }}
                 >
-                  <div className="text-3xl font-black text-gray-900 dark:text-white">
+                  <div className="text-3xl font-black text-gray-900 dark:text-white" style={{fontFamily: 'system-ui, -apple-system, sans-serif'}}>
                     {stat.value}
                   </div>
-                  <div className="text-sm font-medium text-nu-blue-200">
+                  <div className="text-sm font-medium text-nu-blue-200" style={{fontFamily: 'system-ui, -apple-system, sans-serif'}}>
                     {stat.label}
                   </div>
                 </motion.div>
@@ -230,7 +231,7 @@ export function Hero({ onStart360Tour }: HeroProps) {
               <h2
                 className="text-2xl md:text-3xl font-black uppercase tracking-[0.2em] text-[#38476b]"
                 style={{
-                  fontFamily: 'var(--font-display)',
+                  fontFamily: 'system-ui, -apple-system, sans-serif',
                 }}
               >
                 NUVersee

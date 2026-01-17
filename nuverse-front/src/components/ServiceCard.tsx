@@ -43,21 +43,21 @@ export function ServiceCard({ icon: Icon, title, description, image, features, o
             <div className="bg-gradient-to-br from-[#b6192e] to-[#ffc1ac] p-3 rounded-xl shadow-lg transform group-hover:rotate-12 transition-transform duration-300">
               <Icon className="text-white" size={24} />
             </div>
-            <h3 className="section-h3 text-white">{title}</h3>
+            <h3 className="section-h3 text-white" style={{fontFamily: 'system-ui, -apple-system, sans-serif'}}>{title}</h3>
           </div>
           <ArrowUpRight className="text-white opacity-0 group-hover:opacity-100 transition-opacity" size={24} />
         </div>
       </div>
 
       <div className="p-6">
-        <p className="text-gray-300 mb-6 leading-relaxed font-medium transition-colors">{description}</p>
+        <p className="text-gray-300 mb-6 leading-relaxed font-medium transition-colors" style={{fontFamily: 'system-ui, -apple-system, sans-serif'}}>{description}</p>
 
         <div className="space-y-2 mb-4">
           {features.slice(0, isExpanded ? features.length : 3).map((feature, index) => (
             <div
               key={index}
               className="flex items-center gap-2 text-gray-700 dark:text-gray-300 animate-slide-in"
-              style={{ animationDelay: `${index * 100}ms` }}
+              style={{ animationDelay: `${index * 100}ms`, fontFamily: 'system-ui, -apple-system, sans-serif' }}
             >
               <div className="w-2 h-2 rounded-full bg-gradient-to-r from-[#b6192e] to-[#ffc1ac] shadow-[0_0_10px_rgba(182,25,46,0.5)]"></div>
               <span className="text-gray-300">{feature}</span>
@@ -71,6 +71,7 @@ export function ServiceCard({ icon: Icon, title, description, image, features, o
             setIsExpanded(!isExpanded);
           }}
           className="text-nu-peach-300 hover:text-white transition-colors flex items-center gap-1 group font-bold uppercase tracking-widest text-xs"
+          style={{fontFamily: 'system-ui, -apple-system, sans-serif'}}
         >
           {isExpanded ? "Show Less" : "Explore More"}
           <ChevronRight
