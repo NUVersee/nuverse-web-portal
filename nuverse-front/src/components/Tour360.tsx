@@ -20,7 +20,7 @@ type Tour360Props = {
  */
 export function Tour360({ onStart360Tour }: Tour360Props) {
   return (
-    <section id="360-tour" className="relative py-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
+    <section id="360-tour" className="relative py-24 px-4 sm:px-6 lg:px-8 overflow-hidden">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-nu-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-nu-red-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
@@ -31,12 +31,12 @@ export function Tour360({ onStart360Tour }: Tour360Props) {
         <div className="text-center mb-12">
           <div className="badge mb-6">
             <Rotate3D size={20} />
-            <span>360° Virtual Experience</span>
+            <span style={{fontFamily: 'system-ui, -apple-system, sans-serif'}}>360° Virtual Experience</span>
           </div>
-          <h2 className="section-h1 text-gray-900 dark:text-white mb-4 uppercase">
-            Experience in <span className="gradient-text bg-gradient-to-r from-[#121521] via-[#38476b] via-[#b6192e] to-[#ffc1ac] bg-clip-text text-transparent gap-2 flex items-center justify-center">360° Vision</span>
+          <h2 className="section-h1 text-gray-900 dark:text-white mb-4 uppercase" style={{fontFamily: 'RostexDisplay, sans-serif'}}>
+            Experience in <span className="gradient-text bg-gradient-to-r from-[#121521] via-[#38476b] via-[#2d3a5a] to-[#1a2137] bg-clip-text text-transparent gap-2 flex items-center justify-center">360° Vision</span>
           </h2>
-          <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto text-lg">
+          <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto text-lg" style={{fontFamily: 'system-ui, -apple-system, sans-serif'}}>
             Immerse yourself in a complete virtual tour of Nile University. Drag the carousel to explore, and click to enter the 360° view.
           </p>
         </div>
@@ -54,8 +54,8 @@ export function Tour360({ onStart360Tour }: Tour360Props) {
                 <Navigation className="text-white" size={28} />
               </div>
               <div>
-                <h4 className="text-gray-900 dark:text-white mb-2">Navigate Freely</h4>
-                <p className="text-gray-600 dark:text-gray-400">
+                <h4 className="text-gray-900 dark:text-white mb-2" style={{fontFamily: 'system-ui, -apple-system, sans-serif'}}>Navigate Freely</h4>
+                <p className="text-gray-600 dark:text-gray-400" style={{fontFamily: 'system-ui, -apple-system, sans-serif'}}>
                   Move through campus at your own pace. Click and drag to look around, zoom in on details, and explore every corner.
                 </p>
               </div>
@@ -68,8 +68,8 @@ export function Tour360({ onStart360Tour }: Tour360Props) {
                 <Info className="text-white" size={28} />
               </div>
               <div>
-                <h4 className="text-white font-black uppercase tracking-tight mb-2">Interactive Hotspots</h4>
-                <p className="text-white/60 text-sm">
+                <h4 className="text-white font-black uppercase tracking-tight mb-2" style={{fontFamily: 'system-ui, -apple-system, sans-serif'}}>Interactive Hotspots</h4>
+                <p className="text-white/60 text-sm" style={{fontFamily: 'system-ui, -apple-system, sans-serif'}}>
                   Click on hotspots to learn more about facilities, view additional images, and access detailed information.
                 </p>
               </div>
@@ -82,8 +82,8 @@ export function Tour360({ onStart360Tour }: Tour360Props) {
                 <Rotate3D className="text-white" size={28} />
               </div>
               <div>
-                <h4 className="text-white font-black uppercase tracking-tight mb-2">Full 360° View</h4>
-                <p className="text-white/60 text-sm">
+                <h4 className="text-white font-black uppercase tracking-tight mb-2" style={{fontFamily: 'system-ui, -apple-system, sans-serif'}}>Full 360° View</h4>
+                <p className="text-white/60 text-sm" style={{fontFamily: 'system-ui, -apple-system, sans-serif'}}>
                   Experience complete panoramic views of classrooms, labs, libraries, sports facilities, and outdoor spaces.
                 </p>
               </div>
