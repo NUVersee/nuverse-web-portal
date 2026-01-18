@@ -28,7 +28,7 @@ jobs:
         working-directory: ./nuverse-back
 
       - name: dotnet publish
-        run: dotnet publish src/NuVerse.WebAPI/NuVerse.WebAPI.csproj -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        run: dotnet publish src/NuVerse.WebAPI/NuVerse.WebAPI.csproj -c Release -o "${{env.DOTNET_ROOT}}/myapp"
         working-directory: ./nuverse-back
 
       - name: Upload artifact for deployment job
