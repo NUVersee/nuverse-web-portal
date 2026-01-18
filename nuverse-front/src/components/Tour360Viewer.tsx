@@ -39,7 +39,7 @@ const TOUR_IMAGES: TourImage[] = [
   {
     id: 1,
     title: "University Main Plaza",
-    url: "/Images/360 images/image1.jpg",
+    url: "/Images/360 images/Main Campus.jpeg",
     hotspots: [
       { id: "h1", position: [10, 2, -20], title: "Main Building", description: "The heart of the campus, housing central administration and historic halls." },
       { id: "h2", position: [-15, -5, 10], title: "Student Union", description: "A hub for student activities, food courts, and study spaces." },
