@@ -2,6 +2,7 @@
 
 import { MessageCircle, Send, X } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { API_BASE_URL } from "@/constants";
 
@@ -173,17 +174,27 @@ export function ChatbotButton() {
       </button>
 
       {isOpen && (
-        <div className="fixed bottom-24 right-[-14rem] md:right-0 lg:right-[-14rem] z-50 flex items-end gap-0 pointer-events-none">
+        <div className="fixed bottom-24 left-4 right-4 md:left-auto md:right-4 lg:right-[-14rem] z-50 flex items-end gap-0 pointer-events-none transition-all duration-300">
           {/* Chat Window Container */}
           <div
-            className="w-96 max-w-[calc(100vw-3rem)] rounded-2xl shadow-2xl overflow-hidden border border-white/20 pointer-events-auto shrink-0"
+            className="w-[75vw] md:w-96 max-w-[calc(100vw-2rem)] mr-auto md:mr-0 rounded-2xl shadow-2xl overflow-hidden border border-white/20 pointer-events-auto shrink-0 relative z-10"
             style={{ background: 'linear-gradient(180deg, #121521 0%, #38476b 100%)' }}
           >
             {/* Header */}
             <div
-              className="text-white p-5 border-b border-white/20 flex items-center justify-between"
+              className="text-white p-5 border-b border-white/20 flex items-center justify-between gap-4"
               style={{ background: 'linear-gradient(135deg, #9e1b36 0%, #c73852 100%)' }}
             >
+              {/* Avatar */}
+              <div className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-white/20 bg-white/10 shrink-0">
+                <Image
+                  src="/Images/Chat-Bot Character/Hello.webp"
+                  alt="AI Avatar"
+                  fill
+                  className="object-cover object-top"
+                />
+              </div>
+
               <div className="flex-1">
                 <h3
                   className="font-bold text-lg tracking-tight leading-none"
@@ -330,8 +341,13 @@ export function ChatbotButton() {
             </div>
           </div>
 
-          {/* Floating Character - Outside clipping area */}
-          <div className="w-140 h-80 pointer-events-none hidden lg:block overflow-visible relative ml-[-12rem] mb-[-1rem]">
+          {/* Floating Character */}
+          <div className="
+            absolute bottom-24 right-[-7rem] w-80 z-0 opacity-100
+            md:hidden 
+            lg:block lg:static lg:w-140 lg:h-80 lg:ml-[-12rem] lg:mb-[-1rem] lg:opacity-100 lg:z-auto
+            pointer-events-none overflow-visible
+          ">
             <motion.div
               key={getCharacterImage()}
               initial={{ x: 30, opacity: 0 }}

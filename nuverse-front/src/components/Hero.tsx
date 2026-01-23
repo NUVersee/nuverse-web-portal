@@ -73,7 +73,7 @@ export function Hero({ onStart360Tour }: HeroProps) {
     <section
       id="home"
       ref={ref}
-      className="relative min-h-[90vh] flex items-center py-24 px-4 sm:px-6 lg:px-8 overflow-hidden transition-colors"
+      className="relative min-h-[90vh] flex items-center pt-32 pb-24 md:py-24 px-4 sm:px-6 lg:px-8 overflow-hidden transition-colors"
     >
       {/* Dynamic Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">

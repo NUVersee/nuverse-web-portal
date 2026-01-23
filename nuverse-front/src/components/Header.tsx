@@ -36,20 +36,20 @@ export function Header() {
 
     const updateActiveSection = () => {
       const scrollPosition = window.scrollY + 200;
-      
+
       const sections = [
         { id: "360-tour", element: document.getElementById("360-tour") },
         { id: "services", element: document.getElementById("services") },
         { id: "contact", element: document.getElementById("contact") },
         { id: "about", element: document.getElementById("about") }
       ];
-      
+
       // Find the current section (iterate backwards to get the last matching one)
       for (let i = sections.length - 1; i >= 0; i--) {
         const section = sections[i];
         if (section.element) {
           const sectionTop = section.element.offsetTop;
-          
+
           if (scrollPosition >= sectionTop) {
             console.log("Setting active section to:", section.id);
             setActiveSection(section.id);
@@ -57,7 +57,7 @@ export function Header() {
           }
         }
       }
-      
+
       // Default to home if above all sections
       console.log("Setting active section to: home");
       setActiveSection("home");
@@ -94,14 +94,14 @@ export function Header() {
       <nav className="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-24">
           <Link href="/" className="flex items-center gap-3 group transition-transform hover:scale-105">
-            <div className="relative -mt-6 ml-20">
+            <div className="relative mt-2 ml-4 md:-mt-6 md:ml-20">
               <div className="absolute -inset-1 bg-gradient-to-r from-nu-blue-600 to-nu-red-600 rounded-full blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
               <Image
                 src={BRAND.logoPath}
                 alt={`${BRAND.name} Logo`}
                 width={140}
                 height={80}
-                className="relative h-20 w-auto rounded-full border-2 border-white dark:border-gray-800 shadow-2xl"
+                className="relative h-12 w-auto md:h-20 rounded-full border-2 border-white dark:border-gray-800 shadow-2xl transition-all duration-300"
                 priority
               />
             </div>
@@ -115,16 +115,15 @@ export function Header() {
                     ? activeSection === item.homeHref.replace('#', '')
                     : item.name === "Home" && activeSection === "home"
                   : pathname === item.href;
-                
+
                 return (
                   <Link
                     key={item.name}
                     href={getNavHref(item)}
                     className={`relative font-bold transition-colors px-4 py-2 rounded-full uppercase tracking-widest text-sm
-                      ${
-                        isActive
-                          ? "text-nu-peach-300 bg-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.25)]"
-                          : "text-white hover:text-nu-peach-300 hover:bg-white/10"
+                      ${isActive
+                        ? "text-nu-peach-300 bg-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.25)]"
+                        : "text-white hover:text-nu-peach-300 hover:bg-white/10"
                       }
                     `}
                   >
@@ -154,17 +153,16 @@ export function Header() {
                     ? activeSection === item.homeHref.replace('#', '')
                     : item.name === "Home" && activeSection === "home"
                   : pathname === item.href;
-                
+
                 return (
                   <Link
                     key={item.name}
                     href={getNavHref(item)}
                     onClick={() => setIsMenuOpen(false)}
                     className={`font-semibold px-4 py-3 rounded-2xl transition-colors
-                      ${
-                        isActive
-                          ? "text-nu-peach-300 bg-white/10"
-                          : "text-white hover:text-nu-red-500 hover:bg-white/5"
+                      ${isActive
+                        ? "text-nu-peach-300 bg-white/10"
+                        : "text-white hover:text-nu-red-500 hover:bg-white/5"
                       }
                     `}
                   >
