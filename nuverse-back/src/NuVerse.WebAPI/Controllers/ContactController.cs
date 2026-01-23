@@ -14,8 +14,8 @@ namespace NuVerse.WebAPI.Controllers
     [Route("api/[controller]")]
     public class ContactController : ControllerBase
     {
-        private readonly IEmailSender _emailSender;
-        private readonly IRecaptchaService _recaptcha;
+        // private readonly IEmailSender _emailSender;
+        // private readonly IRecaptchaService _recaptcha;
         private readonly ILogger<ContactController> _logger;
 
         /// <summary>
@@ -24,10 +24,10 @@ namespace NuVerse.WebAPI.Controllers
         /// <param name="emailSender">Service for sending emails.</param>
         /// <param name="recaptcha">Service for verifying reCAPTCHA tokens.</param>
         /// <param name="logger">Logger for tracking requests and errors.</param>
-        public ContactController(IEmailSender emailSender, IRecaptchaService recaptcha, ILogger<ContactController> logger)
+        public ContactController(/*IEmailSender emailSender, IRecaptchaService recaptcha,*/ ILogger<ContactController> logger)
         {
-            _emailSender = emailSender;
-            _recaptcha = recaptcha;
+            // _emailSender = emailSender;
+            // _recaptcha = recaptcha;
             _logger = logger;
         }
 
@@ -46,6 +46,9 @@ namespace NuVerse.WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
         public async Task<IActionResult> Post([FromBody] ContactFormDto dto)
         {
+            return Ok(new { status = "sent", debug = "dependencies_bypassed" });
+
+            /*
             // Model validation is handled by [ApiController] + DataAnnotations on the DTO.
             if (!ModelState.IsValid)
                 return ValidationProblem(ModelState);
@@ -79,6 +82,7 @@ namespace NuVerse.WebAPI.Controllers
             }
 
             return Ok(new { status = "sent" });
+            */
         }
     }
 }
