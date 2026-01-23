@@ -72,46 +72,6 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
-// GLOBAL ERROR HANDLER - DEBUGGING ONLY
-// Catches any exception (startup, middleware, controller) and returns it as JSON with CORS headers
-app.Use(async (context, next) =>
-{
-    try
-    {
-        await next();
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"[CRITICAL] Unhandled Exception: {ex}");
-        
-        // Manually add CORS headers to ensure browser allows reading the error
-        if (context.Request.Headers.TryGetValue("Origin", out var origin))
-        {
-            context.Response.Headers["Access-Control-Allow-Origin"] = origin;
-            context.Response.Headers["Access-Control-Allow-Credentials"] = "true";
-            context.Response.Headers["Access-Control-Allow-Headers"] = "*";
-            context.Response.Headers["Access-Control-Allow-Methods"] = "*";
-        }
-        else
-        {
-            context.Response.Headers["Access-Control-Allow-Origin"] = "*";
-        }
-
-        context.Response.ContentType = "application/json";
-        // Return 200 to ensure body is readable by frontend logic
-        context.Response.StatusCode = 200; 
-        
-        var response = new 
-        { 
-            status = "error", 
-            message = $"CRITICAL SERVER ERROR: {ex.Message}",
-            details = ex.ToString()
-        };
-        
-        await context.Response.WriteAsJsonAsync(response);
-    }
-});
-
 // Configure the HTTP request pipeline.
 // Enable Swagger in all environments for testing purposes
 app.UseSwagger();

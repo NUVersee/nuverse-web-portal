@@ -135,8 +135,8 @@ namespace NuVerse.Infrastructure.Repositories
                 }
 
             // SEND TO NUVERSE
-            var adminSubject = Format(_templates.AdminSubject, fullName, email, phone, reason) ?? $"VR Request - {fullName}";
-            var adminBody = Format(_templates.AdminBody, fullName, email, phone, reason) ??
+            var adminSubject = Format(_templates.AdminSubject, fullName, email ?? "", phone, reason ?? "") ?? $"VR Request - {fullName}";
+            var adminBody = Format(_templates.AdminBody, fullName, email ?? "", phone, reason ?? "") ??
                 $"VR Request From: {fullName}\nEmail: {email}\nPhone: {phone}\n\nReason:\n{reason}";
 
             // admin message will be created as a MimeMessage below and sent via MailKit
@@ -183,8 +183,8 @@ namespace NuVerse.Infrastructure.Repositories
                 {
                     try
                     {
-                        var userSubject = Format(_templates.UserSubject, fullName, email, phone, reason) ?? "NuVerse - We Received Your VR Request";
-                        var userBody = Format(_templates.UserBody, fullName, email, phone, reason) ??
+                        var userSubject = Format(_templates.UserSubject, fullName, email, phone, reason ?? "") ?? "NuVerse - We Received Your VR Request";
+                        var userBody = Format(_templates.UserBody, fullName, email, phone, reason ?? "") ??
                             $"Hello {fullName},\n\nWe received your VR request:\n\n{reason}\n\nWe will contact you soon.\n\nRegards,\nNuVerse Team";
 
                         var userMime = BuildMimeMessage(_settings.From, email, userSubject, userBody, null);

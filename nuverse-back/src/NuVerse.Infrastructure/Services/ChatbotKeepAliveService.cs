@@ -110,7 +110,7 @@ namespace NuVerse.Infrastructure.Services
                     "⚠️ Chatbot service unreachable: {Message}. The service may be sleeping.",
                     ex.Message);
             }
-            catch (TaskCanceledException ex) when (!cancellationToken.IsCancellationRequested)
+            catch (TaskCanceledException) when (!cancellationToken.IsCancellationRequested)
             {
                 _logger.LogWarning("⚠️ Chatbot keep-alive ping timed out after 30 seconds.");
             }
