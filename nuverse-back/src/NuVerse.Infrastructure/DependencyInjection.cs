@@ -35,13 +35,13 @@ public static class DependencyInjection
         // Override sensitive or environment-specific settings from environment variables if present.
         services.PostConfigure<EmailSettings>(opts =>
         {
-            var host = Environment.GetEnvironmentVariable("SMTP_HOST");
-            var port = Environment.GetEnvironmentVariable("SMTP_PORT");
-            var user = Environment.GetEnvironmentVariable("SMTP_USER");
-            var pass = Environment.GetEnvironmentVariable("SMTP_PASS");
-            var from = Environment.GetEnvironmentVariable("EMAIL_FROM");
-            var to = Environment.GetEnvironmentVariable("EMAIL_TO");
-            var useSsl = Environment.GetEnvironmentVariable("SMTP_USESSL");
+            var host = Environment.GetEnvironmentVariable("SMTP_HOST")?.Trim();
+            var port = Environment.GetEnvironmentVariable("SMTP_PORT")?.Trim();
+            var user = Environment.GetEnvironmentVariable("SMTP_USER")?.Trim();
+            var pass = Environment.GetEnvironmentVariable("SMTP_PASS")?.Trim().Replace(" ", "");
+            var from = Environment.GetEnvironmentVariable("EMAIL_FROM")?.Trim();
+            var to = Environment.GetEnvironmentVariable("EMAIL_TO")?.Trim();
+            var useSsl = Environment.GetEnvironmentVariable("SMTP_USESSL")?.Trim();
 
             if (!string.IsNullOrWhiteSpace(host)) opts.Host = host;
             if (!string.IsNullOrWhiteSpace(port) && int.TryParse(port, out var p)) opts.Port = p;

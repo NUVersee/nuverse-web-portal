@@ -44,8 +44,8 @@ namespace NuVerse.Infrastructure.Repositories
 
             if (string.IsNullOrWhiteSpace(_settings.To))
             {
-                _logger.LogError("EmailSettings.To is not configured.");
-                throw new InvalidOperationException("EmailSettings:To is not configured.");
+                _logger.LogWarning("EmailSettings.To is not configured. Emails might fail.");
+                // Do not throw here to allow controller instantiation
             }
         }
 
