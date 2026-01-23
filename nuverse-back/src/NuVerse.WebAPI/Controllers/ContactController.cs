@@ -40,7 +40,7 @@ namespace NuVerse.WebAPI.Controllers
         /// <response code="400">Validation failed or captcha verification failed.</response>
         /// <response code="503">Email service temporarily unavailable.</response>
         [HttpPost]
-        [EnableRateLimiting("ContactPolicy")]
+        // [EnableRateLimiting("ContactPolicy")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]

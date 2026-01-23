@@ -52,8 +52,18 @@ export function Contact() {
       });
 
       if (!resp.ok) {
+        console.error("Contact form error status:", resp.status, resp.statusText);
         const text = await resp.text();
-        throw new Error(text || "Failed to send message");
+        console.error("Contact form error body:", text);
+
+        if (resp.status === 429) {
+          throw new Error("Too many requests. Please try again in minute.");
+        }
+        if (resp.status === 524) {
+          throw new Error("Connection timeout. The server took too long to respond.");
+        }
+
+        throw new Error(text || `Request failed with status ${resp.status}`);
       }
 
       toast.success("Message sent successfully! We'll get back to you soon.");
