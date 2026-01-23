@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
-using NuVerse.Application.Interfaces.Repositories;
 using Microsoft.Extensions.Logging;
+using NuVerse.Application.Interfaces.Services;
 using NuVerse.Domain.DTOs;
 
 namespace NuVerse.WebAPI.Controllers
@@ -14,20 +14,17 @@ namespace NuVerse.WebAPI.Controllers
     [Route("api/[controller]")]
     public class ContactController : ControllerBase
     {
-        private readonly IEmailSender _emailSender;
-        private readonly IRecaptchaService _recaptcha;
+        private readonly IContactService _contactService;
         private readonly ILogger<ContactController> _logger;
 
         /// <summary>
         /// Initializes a new instance of the ContactController.
         /// </summary>
-        /// <param name="emailSender">Service for sending emails.</param>
-        /// <param name="recaptcha">Service for verifying reCAPTCHA tokens.</param>
+        /// <param name="contactService">Service for handling contact submissions.</param>
         /// <param name="logger">Logger for tracking requests and errors.</param>
-        public ContactController(IEmailSender emailSender, IRecaptchaService recaptcha, ILogger<ContactController> logger)
+        public ContactController(IContactService contactService, ILogger<ContactController> logger)
         {
-            _emailSender = emailSender;
-            _recaptcha = recaptcha;
+            _contactService = contactService;
             _logger = logger;
         }
 
@@ -40,7 +37,7 @@ namespace NuVerse.WebAPI.Controllers
         /// <response code="400">Validation failed or captcha verification failed.</response>
         /// <response code="503">Email service temporarily unavailable.</response>
         [HttpPost]
-        // [EnableRateLimiting("ContactPolicy")]
+        [EnableRateLimiting("ContactPolicy")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
@@ -48,51 +45,27 @@ namespace NuVerse.WebAPI.Controllers
         {
             try
             {
-                // Model validation
+                // Model validation handled by FluentValidation filter automatically, 
+                // but we keep this check if filter is not stripping invalid requests.
                 if (!ModelState.IsValid)
                     return Ok(new { status = "error", message = "Validation failed", errors = ModelState });
 
-                var fullName = string.IsNullOrWhiteSpace(dto.FullName) ? "Anonymous" : dto.FullName;
-                var phone = dto.PhoneNumber ?? string.Empty;
-
-                // Verify captcha
                 var remoteIp = HttpContext.Connection.RemoteIpAddress?.ToString();
-                try 
-                {
-                    var captchaOk = await _recaptcha.VerifyAsync(dto.CaptchaToken, remoteIp);
-                    if (!captchaOk)
-                    {
-                        _logger.LogWarning("Captcha verification failed for request from {IP}", remoteIp);
-                        return Ok(new { status = "error", message = "Captcha verification failed" });
-                    }
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "Captcha service crash");
-                    return Ok(new { status = "error", message = $"Captcha service crash: {ex.Message}" });
-                }
 
-                if (string.IsNullOrWhiteSpace(dto.Email) || string.IsNullOrWhiteSpace(dto.Reason))
-                {
-                    return Ok(new { status = "error", message = "Required fields are missing" });
-                }
-
-                try
-                {
-                    await _emailSender.SendEmailAsync(fullName, dto.Email, phone, dto.Reason);
-                }
-                catch (System.Exception ex)
-                {
-                    _logger.LogError(ex, "Failed to process contact form for {Email}", dto.Email);
-                    return Ok(new { status = "error", message = $"Email service error: {ex.Message}" });
-                }
+                await _contactService.SubmitContactFormAsync(dto, remoteIp);
 
                 return Ok(new { status = "sent" });
+            }
+            catch (InvalidOperationException ex)
+            {
+                // Domain/Service exceptions (e.g. Captcha failed, Email failed)
+                _logger.LogWarning(ex, "Contact submission failed: {Message}", ex.Message);
+                return Ok(new { status = "error", message = ex.Message });
             }
             catch (Exception criticalEx)
             {
                 _logger.LogCritical(criticalEx, "Critical error in ContactController");
-                return Ok(new { status = "error", message = $"Critical Server Error: {criticalEx.Message}" });
+                return Ok(new { status = "error", message = "An internal server error occurred." });
             }
         }
     }

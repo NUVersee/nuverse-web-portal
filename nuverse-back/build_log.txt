@@ -1,0 +1,16 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  NuVerse.Domain -> E:\STUDY\UNI\Grad\nuverse-web-portal\nuverse-back\src\NuVerse.Domain\bin\Debug\net9.0\NuVerse.Domain.dll
+  NuVerse.Application -> E:\STUDY\UNI\Grad\nuverse-web-portal\nuverse-back\src\NuVerse.Application\bin\Debug\net9.0\NuVerse.Application.dll
+  NuVerse.Infrastructure -> E:\STUDY\UNI\Grad\nuverse-web-portal\nuverse-back\src\NuVerse.Infrastructure\bin\Debug\net9.0\NuVerse.Infrastructure.dll
+E:\STUDY\UNI\Grad\nuverse-web-portal\nuverse-back\src\NuVerse.WebAPI\Controllers\ChatbotController.cs(39,10): error CS0246: The type or namespace name 'EnableRateLimitingAttribute' could not be found (are you missing a using directive or an assembly reference?) [E:\STUDY\UNI\Grad\nuverse-web-portal\nuverse-back\src\NuVerse.WebAPI\NuVerse.WebAPI.csproj]
+E:\STUDY\UNI\Grad\nuverse-web-portal\nuverse-back\src\NuVerse.WebAPI\Controllers\ChatbotController.cs(39,10): error CS0246: The type or namespace name 'EnableRateLimiting' could not be found (are you missing a using directive or an assembly reference?) [E:\STUDY\UNI\Grad\nuverse-web-portal\nuverse-back\src\NuVerse.WebAPI\NuVerse.WebAPI.csproj]
+
+Build FAILED.
+
+E:\STUDY\UNI\Grad\nuverse-web-portal\nuverse-back\src\NuVerse.WebAPI\Controllers\ChatbotController.cs(39,10): error CS0246: The type or namespace name 'EnableRateLimitingAttribute' could not be found (are you missing a using directive or an assembly reference?) [E:\STUDY\UNI\Grad\nuverse-web-portal\nuverse-back\src\NuVerse.WebAPI\NuVerse.WebAPI.csproj]
+E:\STUDY\UNI\Grad\nuverse-web-portal\nuverse-back\src\NuVerse.WebAPI\Controllers\ChatbotController.cs(39,10): error CS0246: The type or namespace name 'EnableRateLimiting' could not be found (are you missing a using directive or an assembly reference?) [E:\STUDY\UNI\Grad\nuverse-web-portal\nuverse-back\src\NuVerse.WebAPI\NuVerse.WebAPI.csproj]
+    0 Warning(s)
+    2 Error(s)
+
+Time Elapsed 00:00:11.32
