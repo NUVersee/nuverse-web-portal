@@ -93,7 +93,11 @@ const KEYFRAMES = [
     { t: 1.0, camPos: [0, 0, 0.0], modelRot: [0, Math.PI, 0], scale: 14 },
 ];
 
-function interpolateKeyframes(progress: number) {
+const scratchVecA = new THREE.Vector3();
+const scratchVecB = new THREE.Vector3();
+const scratchEuler = new THREE.Euler();
+
+function interpolateKeyframes(progress: number, outPos: THREE.Vector3, outRot: THREE.Euler) {
     const t = Math.max(0, Math.min(1, progress));
 
     let prevFrame = KEYFRAMES[0];
@@ -112,42 +116,57 @@ function interpolateKeyframes(progress: number) {
 
     const ease = (t: number) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
     const smoothT = ease(localT);
-    const camPos = new THREE.Vector3().fromArray(prevFrame.camPos).lerp(new THREE.Vector3().fromArray(nextFrame.camPos), smoothT);
-    const modelRot = new THREE.Euler(
+
+    // Reuse vectors to avoid allocation
+    scratchVecA.fromArray(prevFrame.camPos);
+    scratchVecB.fromArray(nextFrame.camPos);
+    outPos.copy(scratchVecA).lerp(scratchVecB, smoothT);
+
+    outRot.set(
         THREE.MathUtils.lerp(prevFrame.modelRot[0], nextFrame.modelRot[0], smoothT),
         THREE.MathUtils.lerp(prevFrame.modelRot[1], nextFrame.modelRot[1], smoothT),
         THREE.MathUtils.lerp(prevFrame.modelRot[2], nextFrame.modelRot[2], smoothT)
     );
+
     const scale = THREE.MathUtils.lerp(prevFrame.scale, nextFrame.scale, smoothT);
 
-    return { camPos, modelRot, scale };
+    return scale;
 }
 
 function VRModel({ scrollProgress }: { scrollProgress: MotionValue<number> }) {
     const modelRef = useRef<THREE.Group>(null);
     const { camera } = useThree();
-    const { scene } = useGLTF("/models/oculus_quest_2.glb");
+    const { scene } = useGLTF("/models/oculus_quest_2.glb") as any;
+    const targetPos = useMemo(() => new THREE.Vector3(), []);
+    const targetRot = useMemo(() => new THREE.Euler(), []);
+
     useFrame((state) => {
         if (modelRef.current) {
             const progress = scrollProgress.get();
-            const { camPos, modelRot, scale } = interpolateKeyframes(progress);
+            // Mutates targetPos and targetRot in place
+            const scale = interpolateKeyframes(progress, targetPos, targetRot);
+
             const time = state.clock.getElapsedTime();
             const floatY = Math.sin(time * 0.5) * 0.05;
             const floatRot = Math.cos(time * 0.3) * 0.02;
+
             modelRef.current.rotation.set(
-                modelRot.x + floatRot,
-                modelRot.y,
-                modelRot.z
+                targetRot.x + floatRot,
+                targetRot.y,
+                targetRot.z
             );
+
             modelRef.current.position.y = floatY;
             modelRef.current.scale.setScalar(scale);
-            camera.position.lerp(camPos, 0.08);
+
+            camera.position.lerp(targetPos, 0.08);
             camera.lookAt(0, 0, 0);
         }
     });
 
     return (
         <group ref={modelRef}>
+            {/* @ts-ignore */}
             <primitive object={scene} />
         </group>
     );

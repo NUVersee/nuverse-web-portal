@@ -30,52 +30,45 @@ export function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Track which section is in view to highlight the corresponding nav item
+  // Track which section is in view to highlight the corresponding nav item using IntersectionObserver
   useEffect(() => {
     if (!isHome) return;
 
-    const updateActiveSection = () => {
-      const scrollPosition = window.scrollY + 200;
+    const navIds = ["360-tour", "services", "contact", "about"];
+    const sections = navIds.map(id => document.getElementById(id)).filter(Boolean) as HTMLElement[];
 
-      const sections = [
-        { id: "360-tour", element: document.getElementById("360-tour") },
-        { id: "services", element: document.getElementById("services") },
-        { id: "contact", element: document.getElementById("contact") },
-        { id: "about", element: document.getElementById("about") }
-      ];
+    // Add hero/home section implicitly if possible, or handle "home" logic
+    // Usually "home" is when scrollY is near 0 or Hero is in view. 
+    // Let's assume there's a Hero section or we check scrollY for home fallback.
 
-      // Find the current section (iterate backwards to get the last matching one)
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const section = sections[i];
-        if (section.element) {
-          const sectionTop = section.element.offsetTop;
-
-          if (scrollPosition >= sectionTop) {
-            console.log("Setting active section to:", section.id);
-            setActiveSection(section.id);
-            return;
-          }
-        }
-      }
-
-      // Default to home if above all sections
-      console.log("Setting active section to: home");
-      setActiveSection("home");
+    const observerOptions = {
+      root: null,
+      rootMargin: "-20% 0px -60% 0px", // Trigger when section is near top
+      threshold: 0
     };
 
-    // Initialize from URL hash
-    if (window.location.hash) {
-      const hashId = window.location.hash.replace("#", "");
-      setActiveSection(hashId || "home");
-    }
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    }, observerOptions);
 
-    // Update on scroll with more frequent checking
-    updateActiveSection();
-    const scrollListener = () => updateActiveSection();
-    window.addEventListener("scroll", scrollListener, { passive: true });
+    sections.forEach((section) => observer.observe(section));
+
+    // Handle "Home" separately or add an observer for a hero element if it exists
+    const handleScrollForHome = () => {
+      if (window.scrollY < 100) {
+        setActiveSection("home");
+      }
+    };
+
+    window.addEventListener("scroll", handleScrollForHome, { passive: true });
 
     return () => {
-      window.removeEventListener("scroll", scrollListener);
+      observer.disconnect();
+      window.removeEventListener("scroll", handleScrollForHome);
     };
   }, [isHome]);
 

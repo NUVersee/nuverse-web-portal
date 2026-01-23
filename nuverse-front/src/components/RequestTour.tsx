@@ -4,6 +4,7 @@ import { Facebook, Instagram, Linkedin, Mail, MapPin, Phone, Send, Twitter, Spar
 import { useState } from "react";
 import { API_BASE_URL } from "@/constants";
 import { toast } from "sonner";
+import ReCAPTCHA from "react-google-recaptcha";
 
 /**
  * Contact Component
@@ -21,6 +22,8 @@ export function Contact() {
     reason: "",
   });
 
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+
   const [submitting, setSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -36,6 +39,12 @@ export function Contact() {
     setSubmitting(true);
     setErrors({});
 
+    if (!captchaToken) {
+      toast.error("Please complete the captcha verification.");
+      setSubmitting(false);
+      return;
+    }
+
     const url = `${API_BASE_URL}/api/contact`;
 
     try {
@@ -49,7 +58,7 @@ export function Contact() {
           email: formData.email,
           phoneNumber: formData.phone,
           reason: formData.reason,
-          captchaToken: null,
+          captchaToken: captchaToken,
         }),
       });
 
@@ -211,6 +220,20 @@ export function Contact() {
                 />
                 {errors.reason && (
                   <p className="mt-1 text-sm text-red-400 font-medium animate-pulse">{errors.reason}</p>
+                )}
+              </div>
+
+              <div className="flex justify-center">
+                {process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ? (
+                  <ReCAPTCHA
+                    sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+                    onChange={(token) => setCaptchaToken(token)}
+                    theme="dark"
+                  />
+                ) : (
+                  <p className="text-red-400 text-sm bg-red-900/10 p-2 rounded">
+                    Error: NEXT_PUBLIC_RECAPTCHA_SITE_KEY is missing in .env.local
+                  </p>
                 )}
               </div>
 

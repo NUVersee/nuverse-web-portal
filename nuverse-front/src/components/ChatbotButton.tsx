@@ -10,6 +10,7 @@ type Message = {
   type: "bot" | "user";
   text: string;
   sources?: string[];
+  isError?: boolean;
 };
 
 /**
@@ -85,7 +86,6 @@ export function ChatbotButton() {
       console.error("Error calling chatbot API:", error);
       let errorText = "I'm having trouble connecting to the server. Please try again later or contact us at nuverse6@gmail.com.";
 
-      // Provide more specific error messages
       if (error instanceof TypeError && error.message === "Failed to fetch") {
         errorText = "Cannot connect to the chatbot server. Please ensure the backend is running on port 5297 and try again.";
       }
@@ -93,6 +93,7 @@ export function ChatbotButton() {
       const errorResponse: Message = {
         type: "bot",
         text: errorText,
+        isError: true,
       };
       setMessages((prev) => [...prev, errorResponse]);
     } finally {
@@ -146,6 +147,7 @@ export function ChatbotButton() {
       const errorResponse: Message = {
         type: "bot",
         text: errorText,
+        isError: true,
       };
       setMessages((prev) => [...prev, errorResponse]);
     } finally {
@@ -248,12 +250,48 @@ export function ChatbotButton() {
                     <div className="whitespace-pre-wrap break-words overflow-wrap-anywhere leading-relaxed">
                       {message.text}
                     </div>
+
+                    {message.isError && (
+                      <button
+                        onClick={() => {
+                          const lastUserMsg = [...messages].reverse().find(m => m.type === 'user');
+                          if (lastUserMsg) {
+                            setInputValue(lastUserMsg.text);
+                            // Optionally auto-send: handleSendMessage();
+                          }
+                        }}
+                        className="mt-3 px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-lg text-xs font-medium transition-colors border border-white/20 flex items-center gap-2"
+                      >
+                        <span className="w-2 h-2 rounded-full bg-red-400 animate-pulse" />
+                        Retry
+                      </button>
+                    )}
+
                     {message.sources && message.sources.length > 0 && (
-                      <div className="mt-2 pt-2 border-t border-white/30">
-                        <p className="text-xs opacity-80 mb-1">Sources:</p>
-                        {message.sources.map((source, idx) => (
-                          <p key={idx} className="text-xs opacity-80">• {source}</p>
-                        ))}
+                      <div className="mt-3 pt-3 border-t border-white/20 flex flex-wrap gap-2">
+                        <p className="w-full text-xs opacity-70 mb-1 font-medium tracking-wide uppercase">Sources</p>
+                        {message.sources.map((source, idx) => {
+                          const isUrl = source.startsWith('http');
+                          return isUrl ? (
+                            <a
+                              key={idx}
+                              href={source}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-xs bg-white/10 hover:bg-white/20 px-2 py-1 rounded-md transition-colors border border-white/10 truncate max-w-full flex items-center gap-1 group"
+                            >
+                              <span className="w-1 h-1 rounded-full bg-blue-400 group-hover:bg-blue-300" />
+                              Link {idx + 1}
+                            </a>
+                          ) : (
+                            <span
+                              key={idx}
+                              className="text-xs bg-white/5 px-2 py-1 rounded-md border border-white/5 opacity-80"
+                            >
+                              {source}
+                            </span>
+                          );
+                        })}
                       </div>
                     )}
                   </div>
@@ -375,7 +413,7 @@ export function ChatbotButton() {
                     initial={{ scale: 0, opacity: 0, y: 10 }}
                     animate={{ scale: 1, opacity: 1, y: 0 }}
                     exit={{ scale: 0, opacity: 0, y: 10 }}
-                    className="absolute -top-10 left-1/2 -translate-x-1/2 flex gap-1.5 bg-white/10 backdrop-blur-xl px-4 py-2.5 rounded-2xl border border-white/20 shadow-2xl"
+                    className="absolute -top-[-13rem] left-[63%] -translate-x-1/2 flex gap-1.5 bg-white/10 backdrop-blur-xl px-4 py-2.5 rounded-2xl border border-white/20 shadow-2xl"
                   >
                     {[0, 0.2, 0.4].map((delay) => (
                       <motion.div

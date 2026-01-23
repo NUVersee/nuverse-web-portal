@@ -6,6 +6,26 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { OrbitControls, useTexture, Html, PerspectiveCamera } from "@react-three/drei";
 import * as THREE from "three";
 
+// Helper component to handle imperative camera updates
+const CameraManager = ({ activeZoomDelta }: { activeZoomDelta: React.MutableRefObject<number> }) => {
+  const { camera } = useThree();
+
+  useFrame(() => {
+    if (activeZoomDelta.current !== 0 && camera instanceof THREE.PerspectiveCamera) {
+      // Apply zoom
+      const newFov = Math.max(30, Math.min(100, camera.fov + activeZoomDelta.current * 0.1));
+      camera.fov = THREE.MathUtils.lerp(camera.fov, newFov, 0.1);
+      camera.updateProjectionMatrix();
+
+      // Decay delta
+      activeZoomDelta.current *= 0.9;
+      if (Math.abs(activeZoomDelta.current) < 0.01) activeZoomDelta.current = 0;
+    }
+  });
+
+  return null;
+}
+
 import {
   Plus,
   Minus,
@@ -131,14 +151,10 @@ function Scene({ url, hotspots, onHotspotClick }: { url: string, hotspots: Hotsp
  * @param {(z: number) => void} props.onZoomChange - Callback when the camera FOV changes.
  * @returns {JSX.Element} The OrbitControls component.
  */
-function Controls({ controlsRef, onZoomChange }: { controlsRef: React.RefObject<any>, onZoomChange: (z: number) => void }) {
+function Controls({ controlsRef }: { controlsRef: React.RefObject<any> }) {
   const { camera } = useThree();
 
-  useFrame(() => {
-    if (camera instanceof THREE.PerspectiveCamera) {
-      onZoomChange(camera.fov);
-    }
-  });
+  /* Removed useFrame for zoom reporting to avoid re-renders */
 
   return (
     <OrbitControls
@@ -177,7 +193,8 @@ export function Tour360Viewer({ onClose, initialIndex = 0 }: { onClose: () => vo
 
   const [currentIndex, setCurrentIndex] = useState(resolveIndex());
   const [selectedHotspot, setSelectedHotspot] = useState<Hotspot | null>(null);
-  const [fov, setFov] = useState(75);
+  /* State for FOV removed to prevent re-renders */
+  const activeZoomDelta = useRef(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [mounted, setMounted] = useState(false);
   const controlsRef = useRef<any>(null);
@@ -244,15 +261,14 @@ export function Tour360Viewer({ onClose, initialIndex = 0 }: { onClose: () => vo
   }, [activeRotation, performRotation]);
 
   /**
-   * Adjusts the camera field of view (zoom).
+   * Adjusts the camera field of view (zoom) imperatively.
    * 
    * @param {number} delta - The amount to change the zoom level.
    */
   const handleZoom = (delta: number) => {
-    setFov(prev => {
-      const next = Math.max(30, Math.min(100, prev + delta));
-      return next;
-    });
+    if (controlsRef.current) {
+      activeZoomDelta.current = delta;
+    }
   };
 
   /**
@@ -275,7 +291,15 @@ export function Tour360Viewer({ onClose, initialIndex = 0 }: { onClose: () => vo
   const resetView = () => {
     if (controlsRef.current) {
       controlsRef.current.reset();
-      setFov(75);
+      controlsRef.current.reset();
+      // Reset FOV manually if needed, but OrbitControls reset handles position. 
+      // If we want to reset FOV:
+      /*
+      if (controlsRef.current.object instanceof THREE.PerspectiveCamera) {
+          controlsRef.current.object.fov = 75;
+          controlsRef.current.object.updateProjectionMatrix();
+      }
+      */
     }
   };
 
@@ -310,7 +334,9 @@ export function Tour360Viewer({ onClose, initialIndex = 0 }: { onClose: () => vo
       {/* Main 360 Canvas */}
       <div className="w-full h-full cursor-grab active:cursor-grabbing relative">
         <Canvas>
-          <PerspectiveCamera makeDefault position={[0, 0, 0.1]} fov={fov} />
+          <PerspectiveCamera makeDefault position={[0, 0, 0.1]} fov={75}>
+            <CameraManager activeZoomDelta={activeZoomDelta} />
+          </PerspectiveCamera>
           <Suspense fallback={null}>
             <Scene
               key={currentTour.id}
@@ -319,14 +345,9 @@ export function Tour360Viewer({ onClose, initialIndex = 0 }: { onClose: () => vo
               onHotspotClick={setSelectedHotspot}
             />
           </Suspense>
+          {/* @ts-ignore */}
           <Controls
             controlsRef={controlsRef}
-            onZoomChange={(newFov) => {
-              // Only sync if the difference is significant to avoid state loops
-              if (Math.abs(newFov - fov) > 0.1) {
-                setFov(newFov);
-              }
-            }}
           />
         </Canvas>
 
