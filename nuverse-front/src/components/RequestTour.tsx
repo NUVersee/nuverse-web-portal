@@ -22,6 +22,7 @@ export function Contact() {
   });
 
   const [submitting, setSubmitting] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   /**
    * Handles the submission of the contact form.
@@ -33,6 +34,7 @@ export function Contact() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
+    setErrors({});
 
     const url = `${API_BASE_URL}/api/contact`;
 
@@ -52,6 +54,22 @@ export function Contact() {
       });
 
       if (!resp.ok) {
+        if (resp.status === 400) {
+          const problemDetails = await resp.json();
+          if (problemDetails.errors) {
+            const newErrors: Record<string, string> = {};
+            // Map backend DTO names to frontend state names
+            if (problemDetails.errors.FullName) newErrors.name = problemDetails.errors.FullName[0];
+            if (problemDetails.errors.Email) newErrors.email = problemDetails.errors.Email[0];
+            if (problemDetails.errors.PhoneNumber) newErrors.phone = problemDetails.errors.PhoneNumber[0];
+            if (problemDetails.errors.Reason) newErrors.reason = problemDetails.errors.Reason[0];
+
+            setErrors(newErrors);
+            toast.error("Please check the form for errors.");
+            return; // Stop execution here, don't throw generic error
+          }
+        }
+
         console.error("Tour Request error status:", resp.status, resp.statusText);
         const text = await resp.text();
         console.error("Tour Request error body:", text);
@@ -127,10 +145,14 @@ export function Contact() {
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   required
-                  className="w-full px-5 py-3.5 border-2 border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-nu-red-500 focus:border-transparent bg-nu-dark/80 text-white transition-all"
+                  className={`w-full px-5 py-3.5 border-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-nu-red-500 focus:border-transparent bg-nu-dark/80 text-white transition-all ${errors.name ? 'border-red-500 bg-red-900/10' : 'border-white/10'
+                    }`}
                   placeholder="John Doe"
                   style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}
                 />
+                {errors.name && (
+                  <p className="mt-1 text-sm text-red-400 font-medium animate-pulse">{errors.name}</p>
+                )}
               </div>
 
               <div>
@@ -143,10 +165,14 @@ export function Contact() {
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   required
-                  className="w-full px-5 py-3.5 border-2 border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-nu-red-500 focus:border-transparent bg-nu-dark/80 text-white transition-all"
+                  className={`w-full px-5 py-3.5 border-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-nu-red-500 focus:border-transparent bg-nu-dark/80 text-white transition-all ${errors.email ? 'border-red-500 bg-red-900/10' : 'border-white/10'
+                    }`}
                   placeholder="john@gmail.com"
                   style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}
                 />
+                {errors.email && (
+                  <p className="mt-1 text-sm text-red-400 font-medium animate-pulse">{errors.email}</p>
+                )}
               </div>
 
               <div>
@@ -158,10 +184,14 @@ export function Contact() {
                   id="phone"
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="w-full px-5 py-3.5 border-2 border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-nu-red-500 focus:border-transparent bg-nu-dark/80 text-white transition-all"
+                  className={`w-full px-5 py-3.5 border-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-nu-red-500 focus:border-transparent bg-nu-dark/80 text-white transition-all ${errors.phone ? 'border-red-500 bg-red-900/10' : 'border-white/10'
+                    }`}
                   placeholder="+20 123 456 7890"
                   style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}
                 />
+                {errors.phone && (
+                  <p className="mt-1 text-sm text-red-400 font-medium animate-pulse">{errors.phone}</p>
+                )}
               </div>
 
               <div>
@@ -174,10 +204,14 @@ export function Contact() {
                   onChange={(e) => setFormData({ ...formData, reason: e.target.value })}
                   required
                   rows={5}
-                  className="w-full px-5 py-3.5 border-2 border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-nu-red-500 focus:border-transparent bg-nu-dark/80 text-white resize-none transition-all"
+                  className={`w-full px-5 py-3.5 border-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-nu-red-500 focus:border-transparent bg-nu-dark/80 text-white resize-none transition-all ${errors.reason ? 'border-red-500 bg-red-900/10' : 'border-white/10'
+                    }`}
                   placeholder="I would like to request the university VR equipment to take a virtual tour of..."
                   style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}
                 />
+                {errors.reason && (
+                  <p className="mt-1 text-sm text-red-400 font-medium animate-pulse">{errors.reason}</p>
+                )}
               </div>
 
 
