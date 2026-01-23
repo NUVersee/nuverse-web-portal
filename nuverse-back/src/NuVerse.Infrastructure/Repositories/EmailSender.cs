@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
 using NuVerse.Application.Interfaces.Repositories;
 using NuVerse.Domain.Entities;
 using MailKit.Net.Smtp;
@@ -17,7 +18,6 @@ namespace NuVerse.Infrastructure.Repositories
         private readonly EmailSettings _settings;
         private readonly Domain.Configurations.EmailTemplates _templates;
         private readonly ILogger<EmailSender> _logger;
-        private readonly IContactSubmissionRepository _contactSubmissionRepository;
         private readonly SmtpClient _client;
         private readonly SemaphoreSlim _clientLock = new SemaphoreSlim(1, 1);
         // 0 = not disposed, 1 = disposed
@@ -34,12 +34,12 @@ namespace NuVerse.Infrastructure.Repositories
             IOptions<EmailSettings> settings, 
             IOptions<NuVerse.Domain.Configurations.EmailTemplates> templates, 
             ILogger<EmailSender> logger,
-            IContactSubmissionRepository contactSubmissionRepository)
+            IServiceProvider serviceProvider)
         {
             _settings = settings.Value;
             _templates = templates?.Value ?? new NuVerse.Domain.Configurations.EmailTemplates();
             _logger = logger;
-            _contactSubmissionRepository = contactSubmissionRepository;
+            _serviceProvider = serviceProvider;
             _client = new SmtpClient();
 
             if (string.IsNullOrWhiteSpace(_settings.To))
@@ -48,6 +48,8 @@ namespace NuVerse.Infrastructure.Repositories
                 // Do not throw here to allow controller instantiation
             }
         }
+
+        private readonly IServiceProvider _serviceProvider;
 
         /// <summary>
         /// Sends a contact form submission email and an auto-reply to the user.
@@ -64,7 +66,7 @@ namespace NuVerse.Infrastructure.Repositories
             if (System.Threading.Interlocked.CompareExchange(ref _disposed, 0, 0) == 1)
                 throw new ObjectDisposedException(nameof(EmailSender));
 
-            // Save contact submission to database
+            // Save contact submission to database (lazy resolution to prevent DI crashes)
             try
             {
                 var submission = new ContactSubmission
@@ -76,12 +78,24 @@ namespace NuVerse.Infrastructure.Repositories
                     IsSubmitted = true,
                     SubmittedAt = DateTime.UtcNow
                 };
-                await _contactSubmissionRepository.AddAsync(submission);
-                _logger.LogInformation("Contact submission saved to database for {Email}", email);
+
+                using (var scope = _serviceProvider.CreateScope())
+                {
+                    var repo = scope.ServiceProvider.GetService<IContactSubmissionRepository>();
+                    if (repo != null)
+                    {
+                        await repo.AddAsync(submission);
+                        _logger.LogInformation("Contact submission saved to database for {Email}", email);
+                    }
+                    else
+                    {
+                        _logger.LogWarning("Could not resolve IContactSubmissionRepository, skipping DB save.");
+                    }
+                }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to save contact submission to database for {Email}", email);
+                _logger.LogError(ex, "Failed to resolve repository or save contact submission for {Email}", email);
                 // Continue with email sending even if database save fails
             }
 
