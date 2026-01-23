@@ -4,10 +4,23 @@ using NuVerse.Infrastructure;
 using Microsoft.AspNetCore.RateLimiting;
 
 // Load .env file from solution root (two directories up from WebAPI)
-var envPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", ".env");
-if (File.Exists(envPath))
+// Load .env file
+// Check if running from repo root, or inside nuverse-back
+var pathsToCheck = new[] 
 {
-    DotNetEnv.Env.Load(envPath);
+    Path.Combine(Directory.GetCurrentDirectory(), "nuverse-back", ".env"), // From repo root
+    Path.Combine(Directory.GetCurrentDirectory(), ".env"),                 // From nuverse-back
+    Path.Combine(Directory.GetCurrentDirectory(), "..", ".env")            // From src/WebAPI
+};
+
+foreach (var path in pathsToCheck)
+{
+    if (File.Exists(path))
+    {
+        DotNetEnv.Env.Load(path);
+        Console.WriteLine($"[Program] Loaded .env from: {path}");
+        break;
+    }
 }
 
 var builder = WebApplication.CreateBuilder(args);
