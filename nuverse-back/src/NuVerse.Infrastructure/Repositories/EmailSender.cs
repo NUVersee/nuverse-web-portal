@@ -33,13 +33,11 @@ namespace NuVerse.Infrastructure.Repositories
         public EmailSender(
             IOptions<EmailSettings> settings, 
             IOptions<NuVerse.Domain.Configurations.EmailTemplates> templates, 
-            ILogger<EmailSender> logger,
-            IServiceProvider serviceProvider)
+            ILogger<EmailSender> logger)
         {
             _settings = settings.Value;
             _templates = templates?.Value ?? new NuVerse.Domain.Configurations.EmailTemplates();
             _logger = logger;
-            _serviceProvider = serviceProvider;
             _client = new SmtpClient();
 
             if (string.IsNullOrWhiteSpace(_settings.To))
@@ -48,8 +46,6 @@ namespace NuVerse.Infrastructure.Repositories
                 // Do not throw here to allow controller instantiation
             }
         }
-
-        private readonly IServiceProvider _serviceProvider;
 
         /// <summary>
         /// Sends a contact form submission email and an auto-reply to the user.
@@ -65,39 +61,6 @@ namespace NuVerse.Infrastructure.Repositories
             // Prevent operations after DisposeAsync has started
             if (System.Threading.Interlocked.CompareExchange(ref _disposed, 0, 0) == 1)
                 throw new ObjectDisposedException(nameof(EmailSender));
-
-            // Save contact submission to database (lazy resolution to prevent DI crashes)
-            try
-            {
-                var submission = new ContactSubmission
-                {
-                    Email = email ?? string.Empty,
-                    Reason = reason ?? string.Empty,
-                    FullName = fullName,
-                    PhoneNumber = phone,
-                    IsSubmitted = true,
-                    SubmittedAt = DateTime.UtcNow
-                };
-
-                using (var scope = _serviceProvider.CreateScope())
-                {
-                    var repo = scope.ServiceProvider.GetService<IContactSubmissionRepository>();
-                    if (repo != null)
-                    {
-                        await repo.AddAsync(submission);
-                        _logger.LogInformation("Contact submission saved to database for {Email}", email);
-                    }
-                    else
-                    {
-                        _logger.LogWarning("Could not resolve IContactSubmissionRepository, skipping DB save.");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Failed to resolve repository or save contact submission for {Email}", email);
-                // Continue with email sending even if database save fails
-            }
 
             var username = _settings.Username ?? Environment.GetEnvironmentVariable("SMTP_USER");
             var password = _settings.Password ?? Environment.GetEnvironmentVariable("SMTP_PASS");

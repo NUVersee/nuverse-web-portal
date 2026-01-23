@@ -2,6 +2,9 @@ using System.Threading.RateLimiting;
 using NuVerse.Application;
 using NuVerse.Infrastructure;
 using Microsoft.AspNetCore.RateLimiting;
+using FluentValidation.AspNetCore;
+using Serilog;
+using NuVerse.WebAPI.Infrastructure;
 
 // Load .env file from solution root (two directories up from WebAPI)
 // Load .env file
@@ -24,7 +27,22 @@ foreach (var path in pathsToCheck)
 }
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configure Serilog
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .CreateLogger();
+builder.Host.UseSerilog();
+
+// Add global exception handler
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
+
+// Add System Health Checks
+builder.Services.AddHealthChecks();
+
 builder.Services.AddControllers();
+builder.Services.AddFluentValidationAutoValidation();
 
 // Add CORS policy - use environment variable for production origins
 var corsOrigins = Environment.GetEnvironmentVariable("CORS_ORIGINS");
@@ -68,9 +86,22 @@ builder.Services.AddRateLimiter(options =>
         });
     });
 
+    // Chatbot policy: 20 requests per minute per IP (allow conversation flow but prevent abuse)
+    options.AddPolicy("ChatbotPolicy", context =>
+    {
+        var ip = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+        return RateLimitPartition.GetFixedWindowLimiter(ip, _ => new FixedWindowRateLimiterOptions
+        {
+            PermitLimit = 20,
+            Window = TimeSpan.FromMinutes(1),
+            QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+            QueueLimit = 0
+        });
+    });
+
     options.OnRejected = async (context, token) =>
     {
-        var logger = context.HttpContext.RequestServices.GetService(typeof(ILogger<Program>)) as ILogger;
+        var logger = context.HttpContext.RequestServices.GetService(typeof(Microsoft.Extensions.Logging.ILogger<Program>)) as Microsoft.Extensions.Logging.ILogger;
         logger?.LogWarning("Rate limit rejected request from {IP}", context.HttpContext.Connection.RemoteIpAddress);
         context.HttpContext.Response.StatusCode = 429;
         await context.HttpContext.Response.WriteAsync("Too Many Requests", token);
@@ -101,6 +132,9 @@ app.UseRateLimiter();
 
 app.UseAuthorization();
 
+app.UseExceptionHandler();
+
 app.MapControllers();
+app.MapHealthChecks("/health");
 
 app.Run();

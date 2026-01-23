@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using NuVerse.Domain.DTOs;
 using NuVerse.Application.Interfaces;
+using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace NuVerse.WebAPI.Controllers
 {
@@ -35,6 +37,7 @@ namespace NuVerse.WebAPI.Controllers
         /// <param name="cancellationToken">Cancellation token for the async operation.</param>
         /// <returns>The chatbot response with answer, category, and sources.</returns>
         [HttpPost("ask")]
+        [EnableRateLimiting("ChatbotPolicy")]
         [ProducesResponseType(typeof(ChatbotResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -42,24 +45,16 @@ namespace NuVerse.WebAPI.Controllers
             [FromBody] ChatbotRequest request,
             CancellationToken cancellationToken)
         {
-            try
+            if (string.IsNullOrWhiteSpace(request.Question))
             {
-                if (string.IsNullOrWhiteSpace(request.Question))
-                {
-                    return BadRequest(new { error = "Question cannot be empty" });
-                }
-
-                _logger.LogInformation("Processing chatbot question: {Question}", request.Question);
-
-                var response = await _chatbotService.AskQuestionAsync(request, cancellationToken);
-                
-                return Ok(response);
+                return BadRequest(new { error = "Question cannot be empty" });
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error processing chatbot question");
-                return StatusCode(500, new { error = "An error occurred while processing your question" });
-            }
+
+            _logger.LogInformation("Processing chatbot question: {Question}", request.Question);
+
+            var response = await _chatbotService.AskQuestionAsync(request, cancellationToken);
+            
+            return Ok(response);
         }
 
         /// <summary>
@@ -75,22 +70,14 @@ namespace NuVerse.WebAPI.Controllers
             [FromBody] ChatbotRequest request,
             CancellationToken cancellationToken)
         {
-            try
+            if (string.IsNullOrWhiteSpace(request.Question))
             {
-                if (string.IsNullOrWhiteSpace(request.Question))
-                {
-                    return BadRequest(new { error = "Question cannot be empty" });
-                }
+                return BadRequest(new { error = "Question cannot be empty" });
+            }
 
-                var category = await _chatbotService.DetectCategoryAsync(request.Question, cancellationToken);
-                
-                return Ok(new { category });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error detecting category");
-                return StatusCode(500, new { error = "Failed to detect category" });
-            }
+            var category = await _chatbotService.DetectCategoryAsync(request.Question, cancellationToken);
+            
+            return Ok(new { category });
         }
 
         /// <summary>
@@ -105,22 +92,14 @@ namespace NuVerse.WebAPI.Controllers
             [FromBody] ClearMemoryRequest request,
             CancellationToken cancellationToken)
         {
-            try
+            var success = await _chatbotService.ClearMemoryAsync(request.SessionId, cancellationToken);
+            
+            if (success)
             {
-                var success = await _chatbotService.ClearMemoryAsync(request.SessionId, cancellationToken);
-                
-                if (success)
-                {
-                    return Ok(new { message = $"Memory cleared for session: {request.SessionId}" });
-                }
+                return Ok(new { message = $"Memory cleared for session: {request.SessionId}" });
+            }
 
-                return StatusCode(500, new { error = "Failed to clear memory" });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error clearing memory");
-                return StatusCode(500, new { error = "Failed to clear memory" });
-            }
+            return StatusCode(500, new { error = "Failed to clear memory" });
         }
 
         /// <summary>
@@ -132,16 +111,8 @@ namespace NuVerse.WebAPI.Controllers
         [ProducesResponseType(typeof(HealthCheckResponse), StatusCodes.Status200OK)]
         public async Task<ActionResult<HealthCheckResponse>> HealthCheck(CancellationToken cancellationToken)
         {
-            try
-            {
-                var health = await _chatbotService.HealthCheckAsync(cancellationToken);
-                return Ok(health);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error checking chatbot health");
-                return StatusCode(500, new { error = "Chatbot service unavailable" });
-            }
+            var health = await _chatbotService.HealthCheckAsync(cancellationToken);
+            return Ok(health);
         }
     }
 }

@@ -7,6 +7,7 @@ using NuVerse.Infrastructure.Data;
 using NuVerse.Infrastructure.Repositories;
 using NuVerse.Infrastructure.Services;
 using NuVerse.Domain.Entities;
+using NuVerse.Application.Interfaces.Services;
 
 namespace NuVerse.Infrastructure;
 
@@ -63,6 +64,7 @@ public static class DependencyInjection
         // Register infrastructure services
         // EmailSender uses MailKit and holds a reusable SMTP client — register as singleton so the client can be reused.
         services.AddTransient<IEmailSender, Repositories.EmailSender>();
+        services.AddScoped<IContactService, Services.ContactService>();
         services.AddHttpClient<IRecaptchaService, RecaptchaService>();
         
 
