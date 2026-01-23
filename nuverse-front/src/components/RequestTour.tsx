@@ -52,8 +52,25 @@ export function Contact() {
       });
 
       if (!resp.ok) {
+        console.error("Tour Request error status:", resp.status, resp.statusText);
         const text = await resp.text();
-        throw new Error(text || "Failed to send Reason_for_Request");
+        console.error("Tour Request error body:", text);
+
+        if (resp.status === 429) {
+          throw new Error("Too many requests. Please try again in minute.");
+        }
+        if (resp.status === 524) {
+          throw new Error("Connection timeout. The server took too long to respond.");
+        }
+        throw new Error(text || "Failed to send request");
+      }
+
+      const data = await resp.json();
+      if (data.status === 'error') {
+        console.error("Backend returned error:", data.message);
+        throw new Error(data.message || "An error occurred while sending the message.");
+      } else if (data.status === 'captcha_failed') {
+        throw new Error("Captcha verification failed.");
       }
 
       toast.success("Request sent successfully! We'll contact you soon.");
