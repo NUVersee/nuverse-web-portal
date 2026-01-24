@@ -47,7 +47,7 @@ export function Tour360({ onStart360Tour }: Tour360Props) {
 
         {/* Info Grid */}
         <div className="grid md:grid-cols-3 gap-8 items-start">
-          <div className="group bg-nu-dark/60 backdrop-blur-md border border-white/5 rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+          <div className="group bg-nu-dark/50 backdrop-blur-sm border border-white/5 rounded-2xl p-6 shadow-lg hover:shadow-nu-red-500/10 transition-all duration-300 transform hover:-translate-y-1">
             <div className="flex items-start gap-4">
               <div className="bg-gradient-to-br from-[#b6192e] to-[#ffc1ac] p-4 rounded-xl shadow-lg group-hover:scale-110 transition-transform">
                 <Navigation className="text-white" size={28} />

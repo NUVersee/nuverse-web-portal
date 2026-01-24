@@ -35,14 +35,14 @@ export function Carousel3D({ onStartTour }: Carousel3DProps) {
         const cards = gsap.utils.toArray(".carousel-card") as HTMLElement[];
 
         const numCards = cards.length;
-        const cardWidth = 350;
-        const gap = 80;
+        const cardWidth = 500;
+        const gap = 120;
         const circumference = numCards * (cardWidth + gap);
         const radius = (circumference / (2 * Math.PI)) * 1.2;
         const angleStep = 360 / numCards;
 
         gsap.set(carousel, {
-            z: -radius * 1.4,
+            z: -radius * 2,
             rotationX: 0
         });
 
