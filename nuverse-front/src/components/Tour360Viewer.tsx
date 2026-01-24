@@ -61,44 +61,37 @@ const TOUR_IMAGES: TourImage[] = [
     title: "University Main Plaza",
     url: "/Images/360 images/Main Campus.jpeg",
     hotspots: [
-      { id: "h1", position: [10, 2, -20], title: "Main Building", description: "The heart of the campus, housing central administration and historic halls." },
-      { id: "h2", position: [-15, -5, 10], title: "Student Union", description: "A hub for student activities, food courts, and study spaces." },
-      { id: "h3", position: [20, -2, 15], title: "Green Space", description: "Ideal for outdoor studying and campus events." }
+      { id: "h1", position: [10, 2, -20], title: "Main Entrance", description: "Welcome to the primary gateway of our university campus." },
+      { id: "h2", position: [-15, -5, 10], title: "Central Fountain", description: "A serene spot for students to gather and relax between classes." },
+      { id: "h3", position: [20, -2, 15], title: "Academic Building", description: "Housing our state-of-the-art classrooms and faculty offices." }
     ]
   },
   {
     id: 2,
     title: "Campus Library",
-    url: "/Images/360 images/library.webp",
+    url: "/Images/360 images/Library.jpeg",
     hotspots: [
-      { id: "c1", position: [0, -5, -10], title: "Observation Deck", description: "Panoramic view of the entire campus from the highest point." }
+      { id: "c1", position: [0, -5, -10], title: "Quiet Study Zone", description: "Dedicated spaces for deep focus and individual research." },
+      { id: "c2", position: [-10, 2, 15], title: "Digital Archive", description: "Access terminals for our extensive collection of digital journals and books." }
     ]
   },
   {
     id: 3,
-    title: "Research Laboratory",
-    url: "/Images/360 images/image2.jpg", // Using image2 as placeholder for Labs if needed
+    title: "Chemistry Research Lab",
+    url: "/Images/360 images/Chemistry Lab.jpeg",
     hotspots: [
-      { id: "l1", position: [5, 0, -10], title: "Advanced Equipment", description: "State-of-the-art research tools for molecular analysis." }
+      { id: "l1", position: [5, 0, -10], title: "Analytical Station", description: "Equipped with advanced tools for chemical analysis and synthesis." },
+      { id: "l2", position: [-15, -2, -5], title: "Safety Protocol Station", description: "Ensuring all research is conducted following the highest safety standards." }
     ]
   },
   {
     id: 4,
-    title: "Sports Complex",
-    url: "/Images/360 images/image3.jpg",
-    hotspots: []
-  },
-  {
-    id: 5,
-    title: "Innovation Hub",
-    url: "/Images/360 images/image4.jpg",
-    hotspots: []
-  },
-  {
-    id: 6,
-    title: "Study Halls",
-    url: "/Images/360 images/image5.jpg",
-    hotspots: []
+    title: "Circuits & Electronics Lab",
+    url: "/Images/360 images/Circuits Lab.jpeg",
+    hotspots: [
+      { id: "e1", position: [12, -3, -8], title: "Prototyping Bench", description: "Where students build and test electronic circuits and embedded systems." },
+      { id: "e2", position: [-8, 1, 12], title: "Testing Equipment", description: "Featuring high-precision oscilloscopes and signal generators." }
+    ]
   }
 ];
 
@@ -473,10 +466,6 @@ export function Tour360Viewer({ onClose, initialIndex = 0 }: { onClose: () => vo
               onClick={() => handleTourChange(idx)}
               className={`relative group flex-shrink-0 overflow-hidden rounded-xl border-2 transition-all w-20 h-12 ${currentIndex === idx ? 'border-nu-red-500 scale-105 shadow-[0_0_15px_rgba(182,25,46,0.4)]' : 'border-transparent opacity-50 hover:opacity-100'}`}
             >
-              import Image from "next/image"; // Add to imports
-
-              // ...
-
               <Image
                 src={tour.url}
                 alt={tour.title}

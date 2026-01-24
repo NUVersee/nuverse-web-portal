@@ -63,7 +63,7 @@ export function Tour360({ onStart360Tour }: Tour360Props) {
 
           <div className="group bg-nu-dark/50 backdrop-blur-sm border border-white/5 rounded-2xl p-6 shadow-lg hover:shadow-nu-red-500/10 transition-all duration-300 transform hover:-translate-y-1">
             <div className="flex items-start gap-4">
-              <div className="bg-gradient-to-br from-nu-red-500 to-nu-red-700 p-4 rounded-xl shadow-lg group-hover:scale-110 transition-transform">
+              <div className="bg-gradient-to-br from-[#b6192e] to-[#ffc1ac] p-4 rounded-xl shadow-lg group-hover:scale-110 transition-transform">
                 <Info className="text-white" size={28} />
               </div>
               <div>
@@ -77,7 +77,7 @@ export function Tour360({ onStart360Tour }: Tour360Props) {
 
           <div className="group bg-nu-dark/50 backdrop-blur-sm border border-white/5 rounded-2xl p-6 shadow-lg hover:shadow-nu-blue-500/10 transition-all duration-300 transform hover:-translate-y-1">
             <div className="flex items-start gap-4">
-              <div className="bg-gradient-to-br from-nu-blue-500 to-nu-blue-700 p-4 rounded-xl shadow-lg group-hover:scale-110 transition-transform">
+              <div className="bg-gradient-to-br from-[#b6192e] to-[#ffc1ac] p-4 rounded-xl shadow-lg group-hover:scale-110 transition-transform">
                 <Rotate3D className="text-white" size={28} />
               </div>
               <div>

@@ -15,12 +15,10 @@ type Carousel3DProps = {
 };
 
 const CARDS = [
-    { title: "Main Campus", desc: "Experience the heart of our university", img: "/Images/Campus.jpeg", tourImage: "/Images/360 images/image1.jpg" },
-    { title: "Library", desc: "Discover our knowledge center", img: "/Images/360 images/library.webp", tourImage: "/Images/360 images/library.webp" },
-    { title: "Labs", desc: "Explore cutting-edge facilities", img: "/Images/virtual lab.webp", tourImage: "/Images/360 images/image2.jpg" },
-    { title: "Sports Complex", desc: "Tour world-class athletic facilities", img: "/Images/360 images/image3.jpg", tourImage: "/Images/360 images/image3.jpg" },
-    { title: "Study Halls", desc: "Quiet zones for focus", img: "/Images/360 images/image5.jpg", tourImage: "/Images/360 images/image5.jpg" },
-    { title: "Innovation Hub", desc: "Where ideas come to life", img: "/Images/360 images/image4.jpg", tourImage: "/Images/360 images/image4.jpg" },
+    { title: "Main Campus", desc: "Experience the heart of our university", img: "/Images/360 images/Main Campus.jpeg", tourImage: "/Images/360 images/Main Campus.jpeg" },
+    { title: "Library", desc: "Discover our knowledge center", img: "/Images/360 images/Library.jpeg", tourImage: "/Images/360 images/Library.jpeg" },
+    { title: "Chemistry Lab", desc: "Explore cutting-edge research facilities", img: "/Images/360 images/Chemistry Lab.jpeg", tourImage: "/Images/360 images/Chemistry Lab.jpeg" },
+    { title: "Circuits Lab", desc: "Analyze and build advanced electronics", img: "/Images/360 images/Circuits Lab.jpeg", tourImage: "/Images/360 images/Circuits Lab.jpeg" },
 ];
 
 export function Carousel3D({ onStartTour }: Carousel3DProps) {
@@ -37,16 +35,15 @@ export function Carousel3D({ onStartTour }: Carousel3DProps) {
         const cards = gsap.utils.toArray(".carousel-card") as HTMLElement[];
 
         const numCards = cards.length;
-        const cardWidth = 450; // Increased from 300
-        const gap = 40;
+        const cardWidth = 500;
+        const gap = 120;
         const circumference = numCards * (cardWidth + gap);
-        const radius = (circumference / (2 * Math.PI)) * 1.2; // Adjusted radius
+        const radius = (circumference / (2 * Math.PI)) * 1.2;
         const angleStep = 360 / numCards;
 
-        // Initial positioning
         gsap.set(carousel, {
-            z: -radius * 1.5, // Push back
-            rotationX: 0
+            z: -radius * 1.2,
+            rotationX: -5
         });
 
         cards.forEach((card, index) => {
@@ -109,7 +106,7 @@ export function Carousel3D({ onStartTour }: Carousel3DProps) {
                 {CARDS.map((card, i) => (
                     <div
                         key={i}
-                        className="carousel-card absolute top-1/2 left-1/2 w-[450px] h-[550px] -ml-[225px] -mt-[275px] bg-nu-dark/80 backdrop-blur-md border border-white/10 rounded-3xl overflow-hidden shadow-[0_30px_60px_rgba(0,0,0,0.8)] select-none"
+                        className="carousel-card absolute top-1/2 left-1/2 w-[500px] h-[650px] -ml-[250px] -mt-[325px] bg-nu-dark/80 backdrop-blur-md border border-white/10 rounded-[3rem] overflow-hidden shadow-[0_50px_100px_rgba(0,0,0,0.9)] select-none"
                     >
 
 
