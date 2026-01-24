@@ -45,7 +45,7 @@ export function Services({ onOpenLabs, onOpenAIProfessor, onStartTour }: Service
       image: "/Images/virtual lab.webp",
       gallery: ["/Images/virtual lab2.webp", "/Images/virtual lab3.webp"],
       features: ["Circuits Lab", "Chemistry Lab", "Interactive Simulations", "Safe Virtual Environment"],
-      onClick: () => router.push("/labs"),
+      onClick: onOpenLabs,
       hasDetailView: false,
     },
     {
@@ -58,7 +58,7 @@ export function Services({ onOpenLabs, onOpenAIProfessor, onStartTour }: Service
       image: "/Images/AI Professor.webp",
       gallery: ["/Images/AI Professor2.webp", "/Images/AI Professor3.webp"],
       features: ["4 Faculty Experts", "Personalized Learning", "24/7 Availability", "Interactive Q&A"],
-      onClick: () => router.push("/ai-professor"),
+      onClick: onOpenAIProfessor,
       hasDetailView: false,
     },
   ];

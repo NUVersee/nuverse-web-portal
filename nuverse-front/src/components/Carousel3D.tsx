@@ -11,16 +11,14 @@ if (typeof window !== "undefined") {
 }
 
 type Carousel3DProps = {
-    onStartTour: (image: string) => void;
+    onStartTour: (indexOrUrl: number | string) => void;
 };
 
 const CARDS = [
-    { title: "Main Campus", desc: "Experience the heart of our university", img: "/Images/Campus.jpeg", tourImage: "/Images/360 images/image1.jpg" },
-    { title: "Library", desc: "Discover our knowledge center", img: "/Images/360 images/library.webp", tourImage: "/Images/360 images/library.webp" },
-    { title: "Labs", desc: "Explore cutting-edge facilities", img: "/Images/virtual lab.webp", tourImage: "/Images/360 images/image2.jpg" },
-    { title: "Sports Complex", desc: "Tour world-class athletic facilities", img: "/Images/360 images/image3.jpg", tourImage: "/Images/360 images/image3.jpg" },
-    { title: "Study Halls", desc: "Quiet zones for focus", img: "/Images/360 images/image5.jpg", tourImage: "/Images/360 images/image5.jpg" },
-    { title: "Innovation Hub", desc: "Where ideas come to life", img: "/Images/360 images/image4.jpg", tourImage: "/Images/360 images/image4.jpg" },
+    { title: "Main Campus", desc: "Experience the heart of our university", img: "/Images/360 images/Main Campus.jpeg", tourIndex: 0 },
+    { title: "Library", desc: "Discover our knowledge center", img: "/Images/360 images/Library.jpeg", tourIndex: 1 },
+    { title: "Chemistry Lab", desc: "Explore cutting-edge research facilities", img: "/Images/360 images/Chemistry Lab.jpeg", tourIndex: 2 },
+    { title: "Circuits Lab", desc: "Analyze and build advanced electronics", img: "/Images/360 images/Circuits Lab.jpeg", tourIndex: 3 },
 ];
 
 export function Carousel3D({ onStartTour }: Carousel3DProps) {
@@ -37,15 +35,14 @@ export function Carousel3D({ onStartTour }: Carousel3DProps) {
         const cards = gsap.utils.toArray(".carousel-card") as HTMLElement[];
 
         const numCards = cards.length;
-        const cardWidth = 450; // Increased from 300
-        const gap = 40;
+        const cardWidth = 350;
+        const gap = 80;
         const circumference = numCards * (cardWidth + gap);
-        const radius = (circumference / (2 * Math.PI)) * 1.2; // Adjusted radius
+        const radius = (circumference / (2 * Math.PI)) * 1.2;
         const angleStep = 360 / numCards;
 
-        // Initial positioning
         gsap.set(carousel, {
-            z: -radius * 1.5, // Push back
+            z: -radius * 1.4,
             rotationX: 0
         });
 
@@ -61,7 +58,7 @@ export function Carousel3D({ onStartTour }: Carousel3DProps) {
 
         const updateRotation = () => {
             const xValue = gsap.getProperty(proxy, "x") as number;
-            const rotationAmount = xValue * 0.2; // Sensitivity
+            const rotationAmount = xValue * 0.2;
             gsap.set(carousel, { rotationY: rotationAmount });
         };
 
@@ -78,8 +75,7 @@ export function Carousel3D({ onStartTour }: Carousel3DProps) {
             onThrowUpdate: updateRotation,
         })[0];
 
-        // Auto-rotation
-        const autoSpeed = -0.5;
+        const autoSpeed = 1;
         const ticker = gsap.ticker.add(() => {
             if (draggable.isPressed || draggable.isThrowing) return;
 
@@ -98,10 +94,8 @@ export function Carousel3D({ onStartTour }: Carousel3DProps) {
     return (
         <div className="relative w-full h-[80vh] min-h-[600px] overflow-hidden flex items-center justify-center perspective-[1000px]" ref={viewportRef}>
 
-            {/* Proxy for Draggable */}
             <div ref={proxyRef} className="absolute top-0 left-0 w-full h-full opacity-0 z-10" />
 
-            {/* Carousel Container */}
             <div
                 ref={carouselRef}
                 className="transform-style-3d relative w-full h-full flex items-center justify-center"
@@ -109,7 +103,7 @@ export function Carousel3D({ onStartTour }: Carousel3DProps) {
                 {CARDS.map((card, i) => (
                     <div
                         key={i}
-                        className="carousel-card absolute top-1/2 left-1/2 w-[450px] h-[550px] -ml-[225px] -mt-[275px] bg-nu-dark/80 backdrop-blur-md border border-white/10 rounded-3xl overflow-hidden shadow-[0_30px_60px_rgba(0,0,0,0.8)] select-none"
+                        className="carousel-card absolute top-1/2 left-1/2 w-[500px] h-[650px] -ml-[250px] -mt-[325px] bg-nu-dark/80 backdrop-blur-md border border-white/10 rounded-[3rem] overflow-hidden shadow-[0_50px_100px_rgba(0,0,0,0.9)] select-none"
                     >
 
 
@@ -131,7 +125,7 @@ export function Carousel3D({ onStartTour }: Carousel3DProps) {
                                 onClick={(e) => {
                                     if (!isDragging) {
                                         e.stopPropagation();
-                                        onStartTour(card.tourImage);
+                                        onStartTour(card.tourIndex);
                                     }
                                 }}
                                 className="btn-primary group flex items-center gap-2 mx-auto pointer-events-auto z-20 relative px-8 py-3 rounded-full text-base"

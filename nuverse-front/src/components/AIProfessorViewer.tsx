@@ -73,13 +73,19 @@ export function AIProfessorViewer({ onClose }: AIProfessorViewerProps) {
           >
             {detailDesc}
           </p>
-          <a
-            href="/#contact"
-            className="inline-block px-10 py-4 bg-gradient-to-r from-[#b6192e] to-[#ff4b2b] text-white rounded-full font-bold text-lg shadow-lg hover:shadow-xl transition-all"
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              onClose();
+              setTimeout(() => {
+                document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+              }, 300);
+            }}
+            className="inline-block px-10 py-4 bg-gradient-to-r from-[#b6192e] to-[#ff4b2b] text-white rounded-full font-bold text-lg shadow-lg hover:shadow-xl transition-all text-center"
             style={{ fontFamily: "system-ui, -apple-system, sans-serif" }}
           >
             Request a Virtual Reality Tour
-          </a>
+          </button>
         </motion.div>
 
         {/* Right - Scrollable gallery */}

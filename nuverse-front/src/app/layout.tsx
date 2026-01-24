@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: "NUverse - Virtual Reality University Tour",
   description: "Experience Nile University in immersive 360° VR. Explore campus, labs, and student life from anywhere.",
   icons: {
-    icon: "/Images/NUverse Logo.ico",
+    icon: "/Images/NUverse Logo.webp",
   },
 };
 
