@@ -11,14 +11,14 @@ if (typeof window !== "undefined") {
 }
 
 type Carousel3DProps = {
-    onStartTour: (image: string) => void;
+    onStartTour: (indexOrUrl: number | string) => void;
 };
 
 const CARDS = [
-    { title: "Main Campus", desc: "Experience the heart of our university", img: "/Images/360 images/Main Campus.jpeg", tourImage: "/Images/360 images/Main Campus.jpeg" },
-    { title: "Library", desc: "Discover our knowledge center", img: "/Images/360 images/Library.jpeg", tourImage: "/Images/360 images/Library.jpeg" },
-    { title: "Chemistry Lab", desc: "Explore cutting-edge research facilities", img: "/Images/360 images/Chemistry Lab.jpeg", tourImage: "/Images/360 images/Chemistry Lab.jpeg" },
-    { title: "Circuits Lab", desc: "Analyze and build advanced electronics", img: "/Images/360 images/Circuits Lab.jpeg", tourImage: "/Images/360 images/Circuits Lab.jpeg" },
+    { title: "Main Campus", desc: "Experience the heart of our university", img: "/Images/360 images/Main Campus.jpeg", tourIndex: 0 },
+    { title: "Library", desc: "Discover our knowledge center", img: "/Images/360 images/Library.jpeg", tourIndex: 1 },
+    { title: "Chemistry Lab", desc: "Explore cutting-edge research facilities", img: "/Images/360 images/Chemistry Lab.jpeg", tourIndex: 2 },
+    { title: "Circuits Lab", desc: "Analyze and build advanced electronics", img: "/Images/360 images/Circuits Lab.jpeg", tourIndex: 3 },
 ];
 
 export function Carousel3D({ onStartTour }: Carousel3DProps) {
@@ -35,15 +35,15 @@ export function Carousel3D({ onStartTour }: Carousel3DProps) {
         const cards = gsap.utils.toArray(".carousel-card") as HTMLElement[];
 
         const numCards = cards.length;
-        const cardWidth = 500;
-        const gap = 120;
+        const cardWidth = 350;
+        const gap = 80;
         const circumference = numCards * (cardWidth + gap);
         const radius = (circumference / (2 * Math.PI)) * 1.2;
         const angleStep = 360 / numCards;
 
         gsap.set(carousel, {
-            z: -radius * 1.2,
-            rotationX: -5
+            z: -radius * 1.4,
+            rotationX: 0
         });
 
         cards.forEach((card, index) => {
@@ -58,7 +58,7 @@ export function Carousel3D({ onStartTour }: Carousel3DProps) {
 
         const updateRotation = () => {
             const xValue = gsap.getProperty(proxy, "x") as number;
-            const rotationAmount = xValue * 0.2; // Sensitivity
+            const rotationAmount = xValue * 0.2;
             gsap.set(carousel, { rotationY: rotationAmount });
         };
 
@@ -75,8 +75,7 @@ export function Carousel3D({ onStartTour }: Carousel3DProps) {
             onThrowUpdate: updateRotation,
         })[0];
 
-        // Auto-rotation
-        const autoSpeed = -0.5;
+        const autoSpeed = 1;
         const ticker = gsap.ticker.add(() => {
             if (draggable.isPressed || draggable.isThrowing) return;
 
@@ -95,10 +94,8 @@ export function Carousel3D({ onStartTour }: Carousel3DProps) {
     return (
         <div className="relative w-full h-[80vh] min-h-[600px] overflow-hidden flex items-center justify-center perspective-[1000px]" ref={viewportRef}>
 
-            {/* Proxy for Draggable */}
             <div ref={proxyRef} className="absolute top-0 left-0 w-full h-full opacity-0 z-10" />
 
-            {/* Carousel Container */}
             <div
                 ref={carouselRef}
                 className="transform-style-3d relative w-full h-full flex items-center justify-center"
@@ -128,7 +125,7 @@ export function Carousel3D({ onStartTour }: Carousel3DProps) {
                                 onClick={(e) => {
                                     if (!isDragging) {
                                         e.stopPropagation();
-                                        onStartTour(card.tourImage);
+                                        onStartTour(card.tourIndex);
                                     }
                                 }}
                                 className="btn-primary group flex items-center gap-2 mx-auto pointer-events-auto z-20 relative px-8 py-3 rounded-full text-base"

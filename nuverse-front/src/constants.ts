@@ -1,27 +1,4 @@
-/**
- * Application Constants
- * 
- * Centralized configuration for the NUverse frontend application.
- * All hardcoded values should be defined here for consistency.
- */
-
-// =============================================================================
-// API Configuration
-// =============================================================================
-
-/**
- * Base URL for the backend API.
- * Uses environment variable in production, falls back to development URL.
- */
 export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:5297";
-
-// =============================================================================
-// Navigation
-// =============================================================================
-
-/**
- * Navigation item type definition
- */
 export interface NavItem {
     name: string;
     href: string;
@@ -29,10 +6,6 @@ export interface NavItem {
     homeHref?: string;
 }
 
-/**
- * Main navigation items used in Header and Footer.
- * Single source of truth for all navigation links.
- */
 export const NAVIGATION_ITEMS: NavItem[] = [
     { name: "Home", href: "/" },
     { name: "360 Tour", href: "/#360-tour", homeHref: "#360-tour" },
@@ -40,10 +13,6 @@ export const NAVIGATION_ITEMS: NavItem[] = [
     { name: "Request Tour", href: "/#contact", homeHref: "#contact" },
     { name: "About Us", href: "/#about", homeHref: "#about" },
 ];
-
-// =============================================================================
-// Contact Information
-// =============================================================================
 
 export const CONTACT_INFO = {
     email: "nuverse6@gmail.com",
@@ -62,10 +31,6 @@ export const SOCIAL_LINKS = {
     instagram: "https://www.instagram.com/nu_versee?igsh=cHRxcDQwNzcxMDN2",
 } as const;
 
-// =============================================================================
-// Brand Assets
-// =============================================================================
-
 export const BRAND = {
     name: "NUverse",
     logoPath: "/Images/NUverse Logo.webp",
@@ -73,10 +38,6 @@ export const BRAND = {
     vrIconPath: "/Images/VR.webp",
     tagline: "Experience the future of education through immersive virtual reality technology.",
 } as const;
-
-// =============================================================================
-// Meta Information
-// =============================================================================
 
 export const META = {
     title: "NUverse - Virtual Reality University Tour",

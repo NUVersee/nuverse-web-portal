@@ -61,39 +61,116 @@ const TOUR_IMAGES: TourImage[] = [
     title: "University Main Plaza",
     url: "/Images/360 images/Main Campus.jpeg",
     hotspots: [
-      { id: "h1", position: [10, 2, -20], title: "Main Entrance", description: "Welcome to the primary gateway of our university campus." },
-      { id: "h2", position: [-15, -5, 10], title: "Central Fountain", description: "A serene spot for students to gather and relax between classes." },
-      { id: "h3", position: [20, -2, 15], title: "Academic Building", description: "Housing our state-of-the-art classrooms and faculty offices." }
+      {
+        id: "campus-center",
+        position: [0, 6, -12],
+        title: "Main Academic Building",
+        description: "The university’s main academic hub, hosting lecture halls, labs, and faculty offices."
+      },
+      {
+        id: "campus-left",
+        position: [-14, 1.5, -14],
+        title: "Campus Walkway & Pergola",
+        description: "A shaded pedestrian route that connects key facilities and is used heavily by students between classes."
+      },
+      {
+        id: "campus-right",
+        position: [14, 1.6, -13],
+        title: "Student Gathering Area",
+        description: "Outdoor seating and shaded spaces where students meet, relax, and socialize across the day."
+      }
     ]
   },
+
   {
     id: 2,
     title: "Campus Library",
     url: "/Images/360 images/Library.jpeg",
     hotspots: [
-      { id: "c1", position: [0, -5, -10], title: "Quiet Study Zone", description: "Dedicated spaces for deep focus and individual research." },
-      { id: "c2", position: [-10, 2, 15], title: "Digital Archive", description: "Access terminals for our extensive collection of digital journals and books." }
+      {
+        id: "lib-center",
+        position: [0, -1.2, -15],
+        title: "Quiet Study Zone",
+        description: "A calm study area designed for deep focus, reading, and exam preparation."
+      },
+      {
+        id: "lib-left",
+        position: [-14, -2, -11],
+        title: "Study Tables",
+        description: "Comfortable workspaces for individual studying, laptops, and group assignments."
+      },
+      {
+        id: "lib-right",
+        position: [14, -1.5, -12],
+        title: "Book Collections",
+        description: "Library shelves containing textbooks, references, and academic resources for multiple disciplines."
+      }
     ]
   },
+
   {
     id: 3,
     title: "Chemistry Research Lab",
     url: "/Images/360 images/Chemistry Lab.jpeg",
     hotspots: [
-      { id: "l1", position: [5, 0, -10], title: "Analytical Station", description: "Equipped with advanced tools for chemical analysis and synthesis." },
-      { id: "l2", position: [-15, -2, -5], title: "Safety Protocol Station", description: "Ensuring all research is conducted following the highest safety standards." }
+      {
+        id: "chem-center",
+        position: [0, -2, -15],
+        title: "Central Experiment Bench",
+        description: "The main lab island where students perform hands-on experiments using professional chemistry tools."
+      },
+      {
+        id: "chem-left",
+        position: [-14, -1, -10],
+        title: "Fume Hood & Storage",
+        description: "Ventilated fume hood and storage cabinets used for safe handling of chemicals and vapors."
+      },
+      {
+        id: "chem-right",
+        position: [14, 0.8, -9],
+        title: "Whiteboard & Lab Notes",
+        description: "Instruction area used to explain procedures, reactions, and lab safety steps during sessions."
+      }
     ]
   },
+
   {
     id: 4,
     title: "Circuits & Electronics Lab",
     url: "/Images/360 images/Circuits Lab.jpeg",
     hotspots: [
-      { id: "e1", position: [12, -3, -8], title: "Prototyping Bench", description: "Where students build and test electronic circuits and embedded systems." },
-      { id: "e2", position: [-8, 1, 12], title: "Testing Equipment", description: "Featuring high-precision oscilloscopes and signal generators." }
+      {
+        id: "elec-center",
+        position: [-2, 1.6, -15],
+        title: "Teaching Whiteboard",
+        description: "The explanation zone where circuit concepts, calculations, and lab tasks are taught during sessions."
+      },
+      {
+        id: "elec-left",
+        position: [-14, -2, -10],
+        title: "Electronics Workbenches",
+        description: "Hands-on benches for circuit building, soldering, prototyping, and embedded systems testing."
+      },
+      {
+        id: "elec-right",
+        position: [14, -1.5, -8],
+        title: "Instructor & Demo Desk",
+        description: "Supervisor station used for live demos, debugging guidance, and monitoring lab progress."
+      }
     ]
   }
 ];
+
+/**
+ * Helper to force hotspots onto a fixed radius around the camera.
+ * This ensures they all render at a consistent size regardless of input coordinates.
+ */
+function clampToRadius(pos: [number, number, number], radius = 15): [number, number, number] {
+  const v = new THREE.Vector3(pos[0], pos[1], pos[2]);
+  if (v.lengthSq() === 0) return [0, 0, -radius];
+  v.normalize().multiplyScalar(radius);
+  return [v.x, v.y, v.z];
+}
 
 /**
  * Scene Component
@@ -106,26 +183,38 @@ const TOUR_IMAGES: TourImage[] = [
  * @param {(h: Hotspot) => void} props.onHotspotClick - Callback when a hotspot is clicked.
  * @returns {JSX.Element} The Three.js mesh and HTML hotspots.
  */
-function Scene({ url, hotspots, onHotspotClick }: { url: string, hotspots: Hotspot[], onHotspotClick: (h: Hotspot) => void }) {
+function Scene({ url, hotspots, onHotspotClick, onDebugClick }: { url: string, hotspots: Hotspot[], onHotspotClick: (h: Hotspot) => void, onDebugClick?: (pos: [number, number, number]) => void }) {
   const texture = useTexture(url);
+
+  const handleClick = (e: any) => {
+    if (onDebugClick && e.point) {
+      // Normalize to radius 15 for consistency
+      const v = e.point.clone().normalize().multiplyScalar(15);
+      onDebugClick([
+        parseFloat(v.x.toFixed(2)),
+        parseFloat(v.y.toFixed(2)),
+        parseFloat(v.z.toFixed(2))
+      ]);
+    }
+  };
 
   return (
     <>
       <ambientLight intensity={0.5} />
-      <mesh scale={[-1, 1, 1]}>
+      <mesh scale={[-1, 1, 1]} onClick={handleClick}>
         <sphereGeometry args={[500, 64, 32]} />
         <meshBasicMaterial map={texture} side={THREE.BackSide} />
       </mesh>
 
       {hotspots.map((hotspot) => (
-        <Html key={hotspot.id} position={hotspot.position} distanceFactor={15}>
+        <Html key={hotspot.id} position={clampToRadius(hotspot.position, 15)} distanceFactor={15}>
           <button
             onClick={() => onHotspotClick(hotspot)}
-            className="group relative w-10 h-10 flex items-center justify-center transition-all hover:scale-125"
+            className="group relative w-16 h-16 flex items-center justify-center transition-all hover:scale-125"
           >
-            <div className="absolute inset-0 bg-brand-500 rounded-full animate-ping opacity-25"></div>
-            <div className="relative w-8 h-8 bg-brand-600/80 backdrop-blur-md rounded-full border-2 border-white/50 shadow-xl flex items-center justify-center text-white">
-              <Info size={16} />
+            <div className="absolute inset-0 bg-nu-red-500 rounded-full animate-ping opacity-25"></div>
+            <div className="relative w-14 h-14 bg-black/90 backdrop-blur-md rounded-full border-2 border-white/40 shadow-2xl flex items-center justify-center text-white">
+              <Info size={24} />
             </div>
           </button>
         </Html>
@@ -186,6 +275,8 @@ export function Tour360Viewer({ onClose, initialIndex = 0 }: { onClose: () => vo
 
   const [currentIndex, setCurrentIndex] = useState(resolveIndex());
   const [selectedHotspot, setSelectedHotspot] = useState<Hotspot | null>(null);
+  const [debugPoint, setDebugPoint] = useState<[number, number, number] | null>(null);
+  const [showDebug, setShowDebug] = useState(false);
   /* State for FOV removed to prevent re-renders */
   const activeZoomDelta = useRef(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -195,6 +286,11 @@ export function Tour360Viewer({ onClose, initialIndex = 0 }: { onClose: () => vo
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Sync index if prop changes
+  useEffect(() => {
+    setCurrentIndex(resolveIndex());
+  }, [initialIndex]);
 
   // Close on ESC key
   useEffect(() => {
@@ -285,14 +381,6 @@ export function Tour360Viewer({ onClose, initialIndex = 0 }: { onClose: () => vo
     if (controlsRef.current) {
       controlsRef.current.reset();
       controlsRef.current.reset();
-      // Reset FOV manually if needed, but OrbitControls reset handles position. 
-      // If we want to reset FOV:
-      /*
-      if (controlsRef.current.object instanceof THREE.PerspectiveCamera) {
-          controlsRef.current.object.fov = 75;
-          controlsRef.current.object.updateProjectionMatrix();
-      }
-      */
     }
   };
 
@@ -336,6 +424,7 @@ export function Tour360Viewer({ onClose, initialIndex = 0 }: { onClose: () => vo
               url={currentTour.url}
               hotspots={currentTour.hotspots}
               onHotspotClick={setSelectedHotspot}
+              onDebugClick={showDebug ? setDebugPoint : undefined}
             />
           </Suspense>
           {/* @ts-ignore */}
@@ -518,16 +607,45 @@ export function Tour360Viewer({ onClose, initialIndex = 0 }: { onClose: () => vo
       )}
 
       {/* Instructions Overlay */}
-      <div className="absolute bottom-6 left-6 flex items-center gap-3 text-white/30 text-[10px] uppercase tracking-widest font-bold z-10 hidden lg:flex">
-        <div className="w-8 h-[1px] bg-white/20"></div>
-        <span>Drag to explore</span>
-        <div className="w-2 h-2 rounded-full bg-white/20"></div>
-        <span>Scroll to zoom</span>
-        <div className="w-2 h-2 rounded-full bg-white/20"></div>
-        <span>Click hotspots</span>
+      <div className="absolute bottom-6 left-6 flex items-center gap-6 text-white/30 text-[10px] uppercase tracking-widest font-bold z-10 hidden lg:flex">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-[1px] bg-white/20"></div>
+          <span>Drag to explore</span>
+          <div className="w-2 h-2 rounded-full bg-white/20"></div>
+          <span>Scroll to zoom</span>
+          <div className="w-2 h-2 rounded-full bg-white/20"></div>
+          <span>Click hotspots</span>
+        </div>
+
+        {/* Debug Toggle */}
+        <button
+          onClick={() => setShowDebug(!showDebug)}
+          className={`px-3 py-1 rounded-full border transition-all ${showDebug ? 'bg-nu-red-500 text-white border-nu-red-500' : 'bg-white/5 border-white/10 hover:bg-white/10'}`}
+        >
+          {showDebug ? 'Debug Mode ON' : 'Debug Mode'}
+        </button>
       </div>
 
-
+      {/* Debug HUD */}
+      {showDebug && debugPoint && (
+        <div className="absolute top-24 left-1/2 -translate-x-1/2 z-[110] bg-nu-dark/90 backdrop-blur-xl p-6 rounded-3xl border border-nu-red-500/30 shadow-2xl flex flex-col items-center gap-4 animate-fade-in">
+          <div className="text-nu-red-500 font-bold uppercase tracking-widest text-xs">New Hotspot Coordinates</div>
+          <div className="flex gap-3">
+            <div className="bg-white/5 px-4 py-2 rounded-xl border border-white/10 font-mono text-white text-lg">
+              [{debugPoint[0]}, {debugPoint[1]}, {debugPoint[2]}]
+            </div>
+            <button
+              onClick={() => {
+                navigator.clipboard.writeText(`position: [${debugPoint[0]}, ${debugPoint[1]}, ${debugPoint[2]}]`);
+              }}
+              className="bg-nu-red-500 px-4 py-2 rounded-xl text-white text-xs font-bold hover:bg-nu-red-600 transition-all uppercase"
+            >
+              Copy
+            </button>
+          </div>
+          <p className="text-white/40 text-[10px] text-center max-w-[200px]">Click anywhere in the scene to get new coordinates at fixed radius 15.</p>
+        </div>
+      )}
     </div>
   );
 }

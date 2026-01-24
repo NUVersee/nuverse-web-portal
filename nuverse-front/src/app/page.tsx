@@ -31,7 +31,7 @@ const CinematicLanding = dynamic(
 export default function Home() {
   const [showLanding, setShowLanding] = useState(false);
   const [showTour360, setShowTour360] = useState(false);
-  const [tourIndex, setTourIndex] = useState(0);
+  const [tourIndex, setTourIndex] = useState<number | string>(0);
   const [showLabs, setShowLabs] = useState(false);
   const [showAIProfessor, setShowAIProfessor] = useState(false);
 
@@ -47,7 +47,7 @@ export default function Home() {
     setShowLanding(false);
   };
 
-  const startTour = (index: number = 0) => {
+  const startTour = (index: number | string = 0) => {
     setTourIndex(index);
     setShowTour360(true);
   };
@@ -100,7 +100,7 @@ export default function Home() {
         >
           <Header />
           <Hero onStart360Tour={() => startTour(0)} />
-          <Tour360 onStart360Tour={(indexOrUrl) => startTour(typeof indexOrUrl === 'number' ? indexOrUrl : 0)} />
+          <Tour360 onStart360Tour={(indexOrUrl) => startTour(indexOrUrl)} />
           <Services
             onOpenLabs={() => setShowLabs(true)}
             onOpenAIProfessor={() => setShowAIProfessor(true)}

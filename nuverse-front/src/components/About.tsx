@@ -120,6 +120,30 @@ export function About({ onStart360Tour, onOpenLabs, onOpenAIProfessor }: AboutPr
                             </p>
                         </div>
                     </div>
+
+                    <div className="mv-item opacity-0 translate-y-10 mt-20 flex flex-wrap gap-6 justify-center w-full">
+                        <button
+                            onClick={() => onStart360Tour(0)}
+                            className="bg-white/10 backdrop-blur-md border border-white/20 hover:border-nu-red-500 text-white hover:bg-nu-red-500/20 px-10 py-4 rounded-full font-bold transition-all shadow-xl hover:shadow-nu-red-500/20 uppercase tracking-widest text-xs"
+                            style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}
+                        >
+                            Launch 360° Tour
+                        </button>
+                        <button
+                            onClick={onOpenLabs}
+                            className="bg-white/10 backdrop-blur-md border border-white/20 hover:border-nu-red-500 text-white hover:bg-nu-red-500/20 px-10 py-4 rounded-full font-bold transition-all shadow-xl hover:shadow-nu-red-500/20 uppercase tracking-widest text-xs"
+                            style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}
+                        >
+                            Explore Virtual Labs
+                        </button>
+                        <button
+                            onClick={onOpenAIProfessor}
+                            className="bg-white/10 backdrop-blur-md border border-white/20 hover:border-nu-red-500 text-white hover:bg-nu-red-500/20 px-10 py-4 rounded-full font-bold transition-all shadow-xl hover:shadow-nu-red-500/20 uppercase tracking-widest text-xs"
+                            style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}
+                        >
+                            Meet AI Professors
+                        </button>
+                    </div>
                 </div>
             </section>
         </section>
