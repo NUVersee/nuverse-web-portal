@@ -131,16 +131,13 @@ export function Hero({ onStart360Tour }: HeroProps) {
                 className="text-4xl md:text-4xl font-black uppercase tracking-tighter text-white leading-tight"
                 style={{ fontFamily: 'RostexDisplay, sans-serif' }}
               >
-                Step Into <br />the Future of <br />
-                Digital Reality
+                DISCOVER NILE UNIVERSITY LIKE NEVER BEFORE
               </motion.h1>
               <motion.p
                 variants={itemVariants}
                 className="text-gray-400 text-lg leading-relaxed max-w-xl"
               >
-                Experience Nile University through a cutting-edge 360° virtual
-                lens. Explore labs, meet AI professors, and find your future
-                home in VR.
+                Dive into interactive labs, talk to an AI-powered Admission Officer, and connect seamlessly with a virtual AI-professor — from anywhere in the world.
               </motion.p>
             </div>
 
@@ -180,7 +177,7 @@ export function Hero({ onStart360Tour }: HeroProps) {
             >
               {[
                 { label: "High-Res", value: "4K" },
-                { label: "Interactive Labs", value: "12+" },
+                { label: "Interactive Labs", value: "3+" },
                 { label: "AI Support", value: "24/7" },
               ].map((stat, index) => (
                 <motion.div

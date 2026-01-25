@@ -15,10 +15,10 @@ type Carousel3DProps = {
 };
 
 const CARDS = [
-    { title: "Main Campus", desc: "Experience the heart of our university", img: "/Images/360 images/Main Campus.jpeg", tourIndex: 0 },
-    { title: "Library", desc: "Discover our knowledge center", img: "/Images/360 images/Library.jpeg", tourIndex: 1 },
-    { title: "Chemistry Lab", desc: "Explore cutting-edge research facilities", img: "/Images/360 images/Chemistry Lab.jpeg", tourIndex: 2 },
-    { title: "Circuits Lab", desc: "Analyze and build advanced electronics", img: "/Images/360 images/Circuits Lab.jpeg", tourIndex: 3 },
+    { title: "Main Campus", desc: "Explore the university’s main campus through an immersive 360° view.", img: "/Images/360 images/Main Campus.jpeg", tourIndex: 0 },
+    { title: "Library", desc: "Step inside the library with a 360° virtual view and discover study spaces, resources, and the academic atmosphere up close.", img: "/Images/360 images/Library.jpeg", tourIndex: 1 },
+    { title: "Chemistry Lab", desc: "Enter the chemistry lab in a 360° experience, and explore lab equipment", img: "/Images/360 images/Chemistry Lab.jpeg", tourIndex: 2 },
+    { title: "Circuits Lab", desc: "Navigate the circuits lab in 360°, and examine electronic components,", img: "/Images/360 images/Circuits Lab.jpeg", tourIndex: 3 },
 ];
 
 export function Carousel3D({ onStartTour }: Carousel3DProps) {
