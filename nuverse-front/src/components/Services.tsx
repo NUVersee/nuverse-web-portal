@@ -39,7 +39,7 @@ export function Services({ onOpenLabs, onOpenAIProfessor, onStartTour }: Service
       icon: FlaskConical,
       title: "Virtual Labs",
       description:
-        "Step into our state-of-the-art virtual laboratories. Conduct physics and chemistry experiments safely in an interactive way.",
+        "Step into our state-of-the-art virtual laboratories. Conduct circuits and chemistry experiments safely in an interactive way.",
       detailDesc: "Explore our state-of-the-art virtual laboratories including circuits and chemistry labs. Conduct experiments safely, learn with interactive equipment, and master laboratory techniques in an immersive VR environment.",
       rightText: "You can do your experiment safely and in an interactive way.",
       image: "/Images/virtual lab.webp",
@@ -57,7 +57,7 @@ export function Services({ onOpenLabs, onOpenAIProfessor, onStartTour }: Service
       rightText: "Receive answers and explanations from an expert AI.",
       image: "/Images/AI Professor.webp",
       gallery: ["/Images/AI Professor2.webp", "/Images/AI Professor3.webp"],
-      features: ["4 Faculty Experts", "Personalized Learning", "24/7 Availability", "Interactive Q&A"],
+      features: ["Personalized Learning", "Interactive Q&A" , "24/7 Availability"],
       onClick: onOpenAIProfessor,
       hasDetailView: false,
     },
