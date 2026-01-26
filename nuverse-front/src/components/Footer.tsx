@@ -15,7 +15,7 @@ import { NAVIGATION_ITEMS, CONTACT_INFO, SOCIAL_LINKS, BRAND, META } from "@/con
  */
 export function Footer() {
   return (
-    <footer className="bg-white/5 backdrop-blur-xl text-white py-24 px-4 sm:px-6 lg:px-8 transition-colors border-t border-white/5">
+    <footer className="bg-white/5 backdrop-blur-xl text-white py-16 px-4 sm:px-6 lg:px-8 transition-colors border-t border-white/5" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
       <div className="max-w-7xl mx-auto">
         <div className="grid md:grid-cols-4 gap-8 mb-8">
           <div>

@@ -53,8 +53,8 @@ export function Tour360({ onStart360Tour }: Tour360Props) {
                 <Navigation className="text-white" size={28} />
               </div>
               <div>
-                <h4 className="text-gray-900 dark:text-white mb-2" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>Navigate Freely</h4>
-                <p className="text-gray-600 dark:text-gray-400" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+                <h4 className="text-white font-black uppercase tracking-tight mb-2" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>Navigate Freely</h4>
+                <p className="text-white/60 text-sm" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
                   Move through campus at your own pace. Click and drag to look around, zoom in on details, and explore every corner.
                 </p>
               </div>

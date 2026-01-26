@@ -67,7 +67,12 @@ export default function Home() {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
         >
-          <Tour360Viewer onClose={() => setShowTour360(false)} initialIndex={tourIndex} />
+          <Tour360Viewer onClose={() => {
+            setShowTour360(false);
+            setTimeout(() => {
+              document.getElementById("360-tour")?.scrollIntoView({ behavior: "smooth" });
+            }, 500);
+          }} initialIndex={tourIndex} />
         </motion.div>
       ) : showLabs ? (
         <motion.div
@@ -77,7 +82,17 @@ export default function Home() {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
         >
-          <LabsViewer onClose={() => setShowLabs(false)} />
+          <LabsViewer onClose={() => {
+            setShowLabs(false);
+            setTimeout(() => {
+              document.getElementById("services")?.scrollIntoView({ behavior: "smooth" });
+            }, 500);
+          }} onRequestVRTour={() => {
+            setShowLabs(false);
+            setTimeout(() => {
+              document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+            }, 500);
+          }} />
         </motion.div>
       ) : showAIProfessor ? (
         <motion.div
@@ -87,7 +102,17 @@ export default function Home() {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
         >
-          <AIProfessorViewer onClose={() => setShowAIProfessor(false)} />
+          <AIProfessorViewer onClose={() => {
+            setShowAIProfessor(false);
+            setTimeout(() => {
+              document.getElementById("services")?.scrollIntoView({ behavior: "smooth" });
+            }, 500);
+          }} onRequestVRTour={() => {
+            setShowAIProfessor(false);
+            setTimeout(() => {
+              document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+            }, 500);
+          }} />
         </motion.div>
       ) : (
         <motion.div

@@ -7,9 +7,10 @@ import Image from "next/image";
 
 type AIProfessorViewerProps = {
   onClose: () => void;
+  onRequestVRTour?: () => void;
 };
 
-export function AIProfessorViewer({ onClose }: AIProfessorViewerProps) {
+export function AIProfessorViewer({ onClose, onRequestVRTour }: AIProfessorViewerProps) {
   // Close on ESC key
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -76,10 +77,14 @@ export function AIProfessorViewer({ onClose }: AIProfessorViewerProps) {
           <button
             onClick={(e) => {
               e.preventDefault();
-              onClose();
-              setTimeout(() => {
-                document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
-              }, 300);
+              if (onRequestVRTour) {
+                onRequestVRTour();
+              } else {
+                onClose();
+                setTimeout(() => {
+                  document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+                }, 300);
+              }
             }}
             className="inline-block px-10 py-4 bg-gradient-to-r from-[#b6192e] to-[#ff4b2b] text-white rounded-full font-bold text-lg shadow-lg hover:shadow-xl transition-all text-center"
             style={{ fontFamily: "system-ui, -apple-system, sans-serif" }}

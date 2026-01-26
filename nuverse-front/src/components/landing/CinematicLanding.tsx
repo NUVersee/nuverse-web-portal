@@ -96,7 +96,7 @@ export function CinematicLanding({ onComplete }: CinematicLandingProps) {
                 const target = PAUSE_POINTS[nextPauseIndex.current];
                 if (currentProgress < target && nextProgress >= target) {
                     isPausedRef.current = true;
-                    pauseResumeTimeRef.current = currentTime + 5000;
+                    pauseResumeTimeRef.current = currentTime + 2000;
                     nextPauseIndex.current++;
 
                     scrollProgress.set(target);
