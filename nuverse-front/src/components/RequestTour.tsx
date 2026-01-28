@@ -118,10 +118,10 @@ export function Contact() {
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           {/* Left Side: Text Content */}
           <div className="space-y-6 lg:pt-12">
-            <h1 className="text-5xl sm:text-6xl font-bold text-white leading-tight uppercase tracking-wider" style={{ fontFamily: 'RostexDisplay, sans-serif' }}>
-              REQUEST A
+            <h1 className="text-5xl sm:text-5xl font-bold text-white leading-tight uppercase tracking-wider" style={{ fontFamily: 'RostexDisplay, sans-serif' }}>
+              REQUEST A VIRTUAL
               <br />
-              VIRTUAL REALITY
+              REALITY
               <br />
               CAMPUS TOUR
             </h1>

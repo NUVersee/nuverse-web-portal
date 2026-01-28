@@ -16,7 +16,7 @@ type Carousel3DProps = {
 
 const CARDS = [
     { title: "Main Campus", desc: "Explore the university’s main campus through an immersive 360° view.", img: "/Images/360 images/Main Campus.jpeg", tourIndex: 0 },
-    { title: "Library", desc: "Step inside the library with a 360° virtual view and discover study spaces, resources, and the academic atmosphere up close.", img: "/Images/360 images/Library.jpeg", tourIndex: 1 },
+    { title: "Library", desc: "Step inside the library with a 360° virtual view and discover the academic atmosphere up close.", img: "/Images/360 images/Library.jpeg", tourIndex: 1 },
     { title: "Chemistry Lab", desc: "Enter the chemistry lab in a 360° experience, and explore lab equipment", img: "/Images/360 images/Chemistry Lab.jpeg", tourIndex: 2 },
     { title: "Circuits Lab", desc: "Navigate the circuits lab in 360°, and examine electronic components,", img: "/Images/360 images/Circuits Lab.jpeg", tourIndex: 3 },
 ];
@@ -119,8 +119,8 @@ export function Carousel3D({ onStartTour }: Carousel3DProps) {
                         </div>
 
                         <div className="p-8 text-center absolute bottom-0 w-full bg-gradient-to-t from-nu-dark via-nu-dark/95 to-transparent">
-                            <h3 className="section-h3 text-white mb-2">{card.title}</h3>
-                            <p className="text-sm text-gray-400 mb-6">{card.desc}</p>
+                            <h3 className="section-h3 text-white mb-2 text-2xl md:text-3xl" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>{card.title}</h3>
+                            <p className="text-base md:text-lg text-gray-400 mb-6" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>{card.desc}</p>
                             <button
                                 onClick={(e) => {
                                     if (!isDragging) {
