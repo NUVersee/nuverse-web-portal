@@ -58,24 +58,24 @@ type TourImage = {
 const TOUR_IMAGES: TourImage[] = [
   {
     id: 1,
-    title: "University Main Plaza",
+    title: "University Campus",
     url: "/Images/360 images/Main Campus.jpeg",
     hotspots: [
       {
         id: "campus-center",
-        position: [0, 6, -12],
+        position: [0, -6, -12],
         title: "Main Academic Building",
-        description: "The university’s main academic hub, hosting lecture halls, labs, and faculty offices."
+        description: "A shaded pedestrian route that connects key facilities and is used heavily by students between classes."
       },
       {
         id: "campus-left",
         position: [-14, 1.5, -14],
-        title: "Campus Walkway & Pergola",
-        description: "A shaded pedestrian route that connects key facilities and is used heavily by students between classes."
+        title: "Tarek khalil Building",
+        description: "The university academic hub, hosting lecture halls, labs, and faculty offices."
       },
       {
         id: "campus-right",
-        position: [14, 1.6, -13],
+        position: [14, -2, -13],
         title: "Student Gathering Area",
         description: "Outdoor seating and shaded spaces where students meet, relax, and socialize across the day."
       }
@@ -90,20 +90,20 @@ const TOUR_IMAGES: TourImage[] = [
       {
         id: "lib-center",
         position: [0, -1.2, -15],
-        title: "Quiet Study Zone",
-        description: "A calm study area designed for deep focus, reading, and exam preparation."
+        title: "Book Collections",
+        description: "Library shelves containing textbooks, references, and academic resources for multiple disciplines."
       },
       {
         id: "lib-left",
-        position: [-14, -2, -11],
-        title: "Study Tables",
-        description: "Comfortable workspaces for individual studying, laptops, and group assignments."
+        position: [-18, -2, -11],
+        title: "Library Assistant Desk",
+        description: "The librarian's station where staff members assist students with finding resources, research guidance, and library services."
       },
       {
         id: "lib-right",
         position: [14, -1.5, -12],
-        title: "Book Collections",
-        description: "Library shelves containing textbooks, references, and academic resources for multiple disciplines."
+        title: "Quiet Study Zone",
+        description: "A calm study area designed for deep focus, reading, and exam preparation."
       }
     ]
   },
@@ -115,16 +115,11 @@ const TOUR_IMAGES: TourImage[] = [
     hotspots: [
       {
         id: "chem-center",
-        position: [0, -2, -15],
+        position: [-18, -6, 4],
         title: "Central Experiment Bench",
         description: "The main lab island where students perform hands-on experiments using professional chemistry tools."
       },
-      {
-        id: "chem-left",
-        position: [-14, -1, -10],
-        title: "Fume Hood & Storage",
-        description: "Ventilated fume hood and storage cabinets used for safe handling of chemicals and vapors."
-      },
+
       {
         id: "chem-right",
         position: [14, 0.8, -9],
@@ -141,19 +136,13 @@ const TOUR_IMAGES: TourImage[] = [
     hotspots: [
       {
         id: "elec-center",
-        position: [-2, 1.6, -15],
+        position: [-18, -2, 35],
         title: "Teaching Whiteboard",
         description: "The explanation zone where circuit concepts, calculations, and lab tasks are taught during sessions."
       },
       {
-        id: "elec-left",
-        position: [-14, -2, -10],
-        title: "Electronics Workbenches",
-        description: "Hands-on benches for circuit building, soldering, prototyping, and embedded systems testing."
-      },
-      {
         id: "elec-right",
-        position: [14, -1.5, -8],
+        position: [14, -4, -8],
         title: "Instructor & Demo Desk",
         description: "Supervisor station used for live demos, debugging guidance, and monitoring lab progress."
       }
@@ -183,7 +172,7 @@ function clampToRadius(pos: [number, number, number], radius = 15): [number, num
  * @param {(h: Hotspot) => void} props.onHotspotClick - Callback when a hotspot is clicked.
  * @returns {JSX.Element} The Three.js mesh and HTML hotspots.
  */
-function Scene({ url, hotspots, onHotspotClick, onDebugClick }: { url: string, hotspots: Hotspot[], onHotspotClick: (h: Hotspot) => void, onDebugClick?: (pos: [number, number, number]) => void }) {
+function Scene({ url, hotspots, onHotspotClick, onDebugClick, hideHotspots }: { url: string, hotspots: Hotspot[], onHotspotClick: (h: Hotspot) => void, onDebugClick?: (pos: [number, number, number]) => void, hideHotspots?: boolean }) {
   const texture = useTexture(url);
 
   const handleClick = (e: any) => {
@@ -206,7 +195,7 @@ function Scene({ url, hotspots, onHotspotClick, onDebugClick }: { url: string, h
         <meshBasicMaterial map={texture} side={THREE.BackSide} />
       </mesh>
 
-      {hotspots.map((hotspot) => (
+      {!hideHotspots && hotspots.map((hotspot) => (
         <Html key={hotspot.id} position={clampToRadius(hotspot.position, 15)} distanceFactor={15}>
           <button
             onClick={() => onHotspotClick(hotspot)}
@@ -425,6 +414,7 @@ export function Tour360Viewer({ onClose, initialIndex = 0 }: { onClose: () => vo
               hotspots={currentTour.hotspots}
               onHotspotClick={setSelectedHotspot}
               onDebugClick={showDebug ? setDebugPoint : undefined}
+              hideHotspots={!!selectedHotspot}
             />
           </Suspense>
           {/* @ts-ignore */}
@@ -591,8 +581,8 @@ export function Tour360Viewer({ onClose, initialIndex = 0 }: { onClose: () => vo
               </button>
             </div>
 
-            <h3 className="text-3xl font-black uppercase tracking-tight text-white mb-4 leading-tight">{selectedHotspot.title}</h3>
-            <p className="text-white/70 text-lg leading-relaxed mb-8">
+            <h3 className="text-2xl font-sans font-bold text-white mb-4 leading-snug">{selectedHotspot.title}</h3>
+            <p className="text-white/80 text-base font-sans font-normal leading-relaxed mb-8">
               {selectedHotspot.description}
             </p>
 

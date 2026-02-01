@@ -89,7 +89,6 @@ export function Tour360({ onStart360Tour }: Tour360Props) {
             </div>
           </div>
         </div>
-
       </div>
     </section>
   );

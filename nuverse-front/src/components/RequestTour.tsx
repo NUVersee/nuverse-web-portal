@@ -156,7 +156,7 @@ export function Contact() {
                   required
                   className={`w-full px-5 py-3.5 border-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-nu-red-500 focus:border-transparent bg-nu-dark/80 text-white transition-all ${errors.name ? 'border-red-500 bg-red-900/10' : 'border-white/10'
                     }`}
-                  placeholder="John Doe"
+                  placeholder="NUVERSE"
                   style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}
                 />
                 {errors.name && (
@@ -176,7 +176,7 @@ export function Contact() {
                   required
                   className={`w-full px-5 py-3.5 border-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-nu-red-500 focus:border-transparent bg-nu-dark/80 text-white transition-all ${errors.email ? 'border-red-500 bg-red-900/10' : 'border-white/10'
                     }`}
-                  placeholder="john@gmail.com"
+                  placeholder="nuverse6@gmail.com"
                   style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}
                 />
                 {errors.email && (

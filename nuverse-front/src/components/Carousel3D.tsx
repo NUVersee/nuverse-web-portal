@@ -15,10 +15,10 @@ type Carousel3DProps = {
 };
 
 const CARDS = [
-    { title: "Main Campus", desc: "Explore the university’s main campus through an immersive 360° view.", img: "/Images/360 images/Main Campus.jpeg", tourIndex: 0 },
-    { title: "Library", desc: "Step inside the library with a 360° virtual view and discover study spaces, resources, and the academic atmosphere up close.", img: "/Images/360 images/Library.jpeg", tourIndex: 1 },
-    { title: "Chemistry Lab", desc: "Enter the chemistry lab in a 360° experience, and explore lab equipment", img: "/Images/360 images/Chemistry Lab.jpeg", tourIndex: 2 },
-    { title: "Circuits Lab", desc: "Navigate the circuits lab in 360°, and examine electronic components,", img: "/Images/360 images/Circuits Lab.jpeg", tourIndex: 3 },
+    { title: "Main Campus", desc: "Explore the university’s main campus through an immersive 360° view.", img: "/Images/360-cards/campus.jpg", tourIndex: 0 },
+    { title: "Library", desc: "Step inside the library with a 360° virtual view and discover study spaces, resources, and the academic atmosphere up close.", img: "/Images/360-cards/library.jpg", tourIndex: 1 },
+    { title: "Chemistry Lab", desc: "Enter the chemistry lab in a 360° experience, and explore lab equipment", img: "/Images/360-cards/Chemistry-lab.jpg", tourIndex: 2 },
+    { title: "Circuits Lab", desc: "Navigate the circuits lab in 360°, and examine electronic components,", img: "/Images/360-cards/circuits_electronics_lab.jpg", tourIndex: 3 },
 ];
 
 export function Carousel3D({ onStartTour }: Carousel3DProps) {
@@ -107,32 +107,44 @@ export function Carousel3D({ onStartTour }: Carousel3DProps) {
                     >
 
 
-                        <div className="relative h-2/3 w-full">
-                            <Image
-                                src={card.img}
-                                alt={card.title}
-                                fill
-                                className="object-cover pointer-events-none"
-                                sizes="(max-width: 768px) 100vw, 450px"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
-                        </div>
+                        <div className="flex flex-col h-full w-full">
+                            <div className="relative h-[55%] w-full">
+                                <Image
+                                    src={card.img}
+                                    alt={card.title}
+                                    fill
+                                    className="object-cover pointer-events-none"
+                                    sizes="(max-width: 768px) 100vw, 450px"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-nu-dark/90" />
+                            </div>
 
-                        <div className="p-8 text-center absolute bottom-0 w-full bg-gradient-to-t from-nu-dark via-nu-dark/95 to-transparent">
-                            <h3 className="section-h3 text-white mb-2">{card.title}</h3>
-                            <p className="text-sm text-gray-400 mb-6">{card.desc}</p>
-                            <button
-                                onClick={(e) => {
-                                    if (!isDragging) {
-                                        e.stopPropagation();
-                                        onStartTour(card.tourIndex);
-                                    }
-                                }}
-                                className="btn-primary group flex items-center gap-2 mx-auto pointer-events-auto z-20 relative px-8 py-3 rounded-full text-base"
-                            >
-                                <Rotate3D size={18} />
-                                Start Tour
-                            </button>
+                            <div className="flex flex-col items-center justify-center h-[45%] w-full bg-nu-dark px-6 pb-6 pt-2 text-center text-white">
+                                <h3
+                                    className="text-3xl font-bold mb-3 uppercase tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400"
+                                    style={{ fontFamily: 'RostexDisplay, sans-serif' }}
+                                >
+                                    {card.title}
+                                </h3>
+                                <p
+                                    className="text-gray-400 mb-6 leading-relaxed text-base max-w-sm mx-auto"
+                                    style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}
+                                >
+                                    {card.desc}
+                                </p>
+                                <button
+                                    onClick={(e) => {
+                                        if (!isDragging) {
+                                            e.stopPropagation();
+                                            onStartTour(card.tourIndex);
+                                        }
+                                    }}
+                                    className="btn-primary group flex items-center gap-2 mx-auto pointer-events-auto relative px-8 py-3 rounded-full text-sm font-bold tracking-wide uppercase hover:scale-105 transition-transform"
+                                >
+                                    <Rotate3D size={18} />
+                                    <span>Start Tour</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 ))}

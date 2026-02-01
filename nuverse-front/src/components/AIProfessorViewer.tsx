@@ -25,9 +25,9 @@ export function AIProfessorViewer({ onClose, onRequestVRTour }: AIProfessorViewe
   const title = "AI Professor";
   const detailDesc = "Inside the VR experience, you can interact with the AI Professor as if you are engaging with a real academic guide on campus. Through immersive conversation, the AI Professor introduces the fundamentals of each major, explains core subjects and practical components, and demonstrates how theoretical knowledge is applied in real-world scenarios. With unlimited interaction, it helps you explore your interests, understand the skills you will develop, and confidently choose the academic path that best suits your goals—all within a fully immersive virtual environment.";
   const gallery = [
-    "/Images/AI Professor.webp",
-    "/Images/AI Professor2.webp",
-    "/Images/AI Professor3.webp",
+    "/Images/AI-prof/1.jpeg",
+    "/Images/AI-prof/2.jpeg",
+    "/Images/AI-prof/3.jpeg",
   ];
 
   return (

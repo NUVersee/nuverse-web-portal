@@ -9,7 +9,7 @@ import { Contact } from "@/components/RequestTour";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
-import { LabsViewer } from "@/components/LabsViewer";
+import { LabsOrchestrator } from "@/components/LabsOrchestrator";
 import { Services } from "@/components/Services";
 import { Tour360 } from "@/components/Tour360";
 import { Tour360Viewer } from "@/components/Tour360Viewer";
@@ -82,7 +82,7 @@ export default function Home() {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
         >
-          <LabsViewer onClose={() => {
+          <LabsOrchestrator onClose={() => {
             setShowLabs(false);
             setTimeout(() => {
               document.getElementById("services")?.scrollIntoView({ behavior: "smooth" });

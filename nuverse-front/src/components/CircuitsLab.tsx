@@ -10,7 +10,7 @@ type LabsViewerProps = {
   onRequestVRTour?: () => void;
 };
 
-export function LabsViewer({ onClose, onRequestVRTour }: LabsViewerProps) {
+export function CircuitsLab({ onClose, onRequestVRTour }: LabsViewerProps) {
   // Close on ESC key
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -22,11 +22,11 @@ export function LabsViewer({ onClose, onRequestVRTour }: LabsViewerProps) {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [onClose]);
 
-  const title = "Virtual Labs";
-  const detailDesc = "Step inside our VIrtual Circuit and Chemistry Labs and experience hands-on learning like never before. Through immersive VR exploration, you can discover lab environments, examine equipment up close, and interact with key components used in real experiments. This interactive experience helps you understand how experiments are conducted, how instruments are used, and how theoretical concepts are applied in practice—giving you a realistic preview of laboratory learning before stepping on campus.";
+  const title = "Circuits & Electronics Lab";
+  const detailDesc = "Enter the high-tech world of our Virtual Circuits & Electronics Lab. This immersive environment allows you to interact with breadboards, oscilloscopes, and function generators just like you would in a physical lab. Experiment with circuit design, analyze signal waveforms, and troubleshoot electronic components in a risk-free, virtual space. Perfect for mastering the fundamentals of electrical engineering before getting hands-on with real hardware.";
   const gallery = [
-    "/Images/virtual lab2.webp",
-    "/Images/virtual lab3.webp",
+    "/Images/Circuits-lab/1.jpeg",
+    "/Images/Circuits-lab/2.jpeg",
   ];
 
   return (

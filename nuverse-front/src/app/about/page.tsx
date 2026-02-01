@@ -6,7 +6,7 @@ import { About } from "@/components/About";
 import { ChatbotButton } from "@/components/ChatbotButton";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
-import { LabsViewer } from "@/components/LabsViewer";
+import { LabsOrchestrator } from "@/components/LabsOrchestrator";
 import { Tour360Viewer } from "@/components/Tour360Viewer";
 
 export default function AboutPage() {
@@ -20,7 +20,7 @@ export default function AboutPage() {
       {showTour360 ? (
         <Tour360Viewer onClose={() => setShowTour360(false)} initialIndex={startTourIndex} />
       ) : showLabs ? (
-        <LabsViewer onClose={() => setShowLabs(false)} />
+        <LabsOrchestrator onClose={() => setShowLabs(false)} />
       ) : showAIProfessor ? (
         <AIProfessorViewer onClose={() => setShowAIProfessor(false)} />
       ) : (

@@ -1,11 +1,11 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { LabsViewer } from "@/components/LabsViewer";
+import { LabsOrchestrator } from "@/components/LabsOrchestrator";
 
 export default function LabsPage() {
   const router = useRouter();
 
-  return <LabsViewer onClose={() => router.push("/")} />;
+  return <LabsOrchestrator onClose={() => router.push("/")} />;
 }
 
