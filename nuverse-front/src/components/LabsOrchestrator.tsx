@@ -61,7 +61,7 @@ export function LabsOrchestrator({ onClose, onRequestVRTour }: LabsOrchestratorP
                     {/* Background Image */}
                     <div className="absolute inset-0 transition-transform duration-1000 md:group-hover:scale-105">
                         <Image
-                            src="/Images/virtual labs/circuits-wallpaper.jpeg"
+                            src="/Images/virtual-labs/circuits-wallpaper.jpeg"
                             alt="Circuits Lab"
                             fill
                             className="object-cover opacity-60 md:group-hover:opacity-80 transition-opacity duration-700"
@@ -110,7 +110,7 @@ export function LabsOrchestrator({ onClose, onRequestVRTour }: LabsOrchestratorP
                     {/* Background Image */}
                     <div className="absolute inset-0 transition-transform duration-1000 md:group-hover:scale-105">
                         <Image
-                            src="/Images/virtual labs/chemistry-wallpaper.jpeg"
+                            src="/Images/virtual-labs/chemistry-wallpaper.jpeg"
                             alt="Chemistry Lab"
                             fill
                             className="object-cover opacity-60 md:group-hover:opacity-80 transition-opacity duration-700"

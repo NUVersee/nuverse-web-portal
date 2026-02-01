@@ -59,7 +59,7 @@ const TOUR_IMAGES: TourImage[] = [
   {
     id: 1,
     title: "University Campus",
-    url: "/Images/360 images/Main Campus.jpeg",
+    url: "/Images/360-images/Main-Campus.jpeg",
     hotspots: [
       {
         id: "campus-center",
@@ -85,7 +85,7 @@ const TOUR_IMAGES: TourImage[] = [
   {
     id: 2,
     title: "Campus Library",
-    url: "/Images/360 images/Library.jpeg",
+    url: "/Images/360-images/Library.jpeg",
     hotspots: [
       {
         id: "lib-center",
@@ -111,7 +111,7 @@ const TOUR_IMAGES: TourImage[] = [
   {
     id: 3,
     title: "Chemistry Research Lab",
-    url: "/Images/360 images/Chemistry Lab.jpeg",
+    url: "/Images/360-images/Chemistry-Lab.jpeg",
     hotspots: [
       {
         id: "chem-center",
@@ -132,7 +132,7 @@ const TOUR_IMAGES: TourImage[] = [
   {
     id: 4,
     title: "Circuits & Electronics Lab",
-    url: "/Images/360 images/Circuits Lab.jpeg",
+    url: "/Images/360-images/Circuits-Lab.jpeg",
     hotspots: [
       {
         id: "elec-center",

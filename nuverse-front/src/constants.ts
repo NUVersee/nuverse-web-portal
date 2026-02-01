@@ -33,8 +33,8 @@ export const SOCIAL_LINKS = {
 
 export const BRAND = {
     name: "NUverse",
-    logoPath: "/Images/NUverse Logo.webp",
-    faviconPath: "/Images/NUverse Logo.webp",
+    logoPath: "/Images/NUverse-Logo.webp",
+    faviconPath: "/Images/NUverse-Logo.webp",
     vrIconPath: "/Images/VR.webp",
     tagline: "Experience the future of education through immersive virtual reality technology.",
 } as const;
