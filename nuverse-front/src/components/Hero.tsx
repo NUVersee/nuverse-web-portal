@@ -135,7 +135,8 @@ export function Hero({ onStart360Tour }: HeroProps) {
               </motion.h1>
               <motion.p
                 variants={itemVariants}
-                className="text-gray-400 text-lg leading-relaxed max-w-xl"
+                className="text-gray-400 text-xl md:text-2xl leading-relaxed max-w-xl"
+                style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}
               >
                 Dive into interactive labs, talk to an AI-powered Admission Officer, and connect seamlessly with a virtual AI-professor — from anywhere in the world.
               </motion.p>
