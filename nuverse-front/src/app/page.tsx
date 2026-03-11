@@ -14,6 +14,7 @@ import { Services } from "@/components/Services";
 import { Tour360 } from "@/components/Tour360";
 import { Tour360Viewer } from "@/components/Tour360Viewer";
 import { About } from "@/components/About";
+import { MajorFitSection } from "@/components/MajorFitSection";
 
 // Dynamically import CinematicLanding to avoid SSR issues
 const CinematicLanding = dynamic(
@@ -126,6 +127,7 @@ export default function Home() {
           <Header />
           <Hero onStart360Tour={() => startTour(0)} />
           <Tour360 onStart360Tour={(indexOrUrl) => startTour(indexOrUrl)} />
+          <MajorFitSection />
           <Services
             onOpenLabs={() => setShowLabs(true)}
             onOpenAIProfessor={() => setShowAIProfessor(true)}
