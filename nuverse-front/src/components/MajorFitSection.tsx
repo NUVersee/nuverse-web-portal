@@ -48,7 +48,7 @@ export function MajorFitSection() {
 
             <motion.div variants={itemVariants}>
               <h2 className="section-h1 text-gray-900 dark:text-white mb-4 uppercase" style={{ fontFamily: 'RostexDisplay, sans-serif' }}>
-                Unsure which major is right for <span className="gradient-text bg-gradient-to-r from-[#121521] via-[#38476b] via-[#2d3a5a] to-[#1a2137] bg-clip-text text-transparent gap-2 inline-flex items-center justify-center lg:justify-start">you?</span>
+                Unsure which major is right for <span className="nu-header-gradient">you?</span>
               </h2>
             </motion.div>
 
@@ -59,7 +59,8 @@ export function MajorFitSection() {
             <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto lg:w-auto">
               <Link 
                 href="/major-fit"
-                className="group relative inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-slate-900 rounded-full font-medium transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+                className="group relative inline-flex items-center justify-center gap-2 px-8 py-4 btn-primary text-white rounded-full font-bold transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+                style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}
               >
                 <span>Take the Assessment</span>
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
