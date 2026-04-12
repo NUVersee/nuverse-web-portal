@@ -103,7 +103,7 @@ export const MAJOR_RESULTS: Record<MajorCategory, MajorResult> = {
     icon: Briefcase,
     quote: '"You spot opportunities, rally people, and turn ideas into momentum."',
     description: "You are energized by leadership, strategy, and the challenge of building something that grows. Business at university sharpens the way you analyze markets, manage teams, communicate clearly, and make decisions under pressure. If you enjoy entrepreneurship, planning, and understanding why some companies thrive while others stall, Business gives you the tools to lead with purpose.",
-    color: 'text-nu-blue-300',
-    bgGradient: 'from-nu-blue-300/20 to-nu-blue-400/20',
+    color: 'text-emerald-400',
+    bgGradient: 'from-emerald-400/20 to-green-500/20',
   }
 };

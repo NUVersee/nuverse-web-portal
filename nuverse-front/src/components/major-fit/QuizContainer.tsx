@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { QUESTIONS, MajorCategory, MAJOR_RESULTS } from '@/constants/major-fit';
 import { QuizIntro } from './QuizIntro';
@@ -13,6 +13,33 @@ export function QuizContainer() {
   const [quizState, setQuizState] = useState<QuizState>('INTRO');
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, number>>({});
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  // Persistence: Load on mount
+  useEffect(() => {
+    const saved = localStorage.getItem('nuverse-quiz-state');
+    if (saved) {
+      try {
+        const { state, index, scores } = JSON.parse(saved);
+        setQuizState(state || 'INTRO');
+        setCurrentQuestionIndex(index || 0);
+        setAnswers(scores || {});
+      } catch (e) {
+        console.error('Failed to load quiz state', e);
+      }
+    }
+    setIsHydrated(true);
+  }, []);
+
+  // Persistence: Save on change
+  useEffect(() => {
+    if (!isHydrated) return;
+    localStorage.setItem('nuverse-quiz-state', JSON.stringify({
+      state: quizState,
+      index: currentQuestionIndex,
+      scores: answers
+    }));
+  }, [quizState, currentQuestionIndex, answers, isHydrated]);
 
   // Shuffle questions randomly once on mount
   const [questions] = useState(() => {

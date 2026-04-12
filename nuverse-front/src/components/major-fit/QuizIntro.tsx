@@ -10,9 +10,9 @@ interface QuizIntroProps {
 }
 
 const steps = [
-  { num: '01', icon: BookOpen,          title: 'Read',     desc: 'Read each statement and think honestly about how it applies to you.' },
-  { num: '02', icon: SlidersHorizontal, title: 'Rate',     desc: 'Score every statement from 1 (Strongly Disagree) to 5 (Strongly Agree).' },
-  { num: '03', icon: Sparkles,          title: 'Discover', desc: 'Receive your personalized major recommendation the moment you finish.' },
+  { num: '01', icon: BookOpen, title: 'Read', desc: 'Read each statement and think honestly about how it applies to you.' },
+  { num: '02', icon: SlidersHorizontal, title: 'Rate', desc: 'Score every statement from 1 (Strongly Disagree) to 5 (Strongly Agree).' },
+  { num: '03', icon: Sparkles, title: 'Discover', desc: 'Receive your personalized major recommendation the moment you finish.' },
 ];
 
 const majorChips = [
@@ -131,10 +131,10 @@ export function QuizIntro({ onStart }: QuizIntroProps) {
           className="flex flex-col gap-6"
         >
           <h1
-            className="section-h1 bg-clip-text text-transparent bg-gradient-to-r from-nu-blue-300 via-nu-peach-300 to-nu-red-300 leading-tight"
+            className="section-h1 text-white leading-tight"
             style={{ fontFamily: 'RostexDisplay, sans-serif' }}
           >
-            Discover Your Perfect Major
+            Discover Your <span className="nu-header-gradient">Perfect Major</span>
           </h1>
 
           <p className="text-xl text-gray-400 leading-relaxed max-w-lg" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
@@ -151,11 +151,11 @@ export function QuizIntro({ onStart }: QuizIntroProps) {
             onClick={onStart}
             whileHover={{ scale: 1.04, y: -2 }}
             whileTap={{ scale: 0.97 }}
-            className="group inline-flex items-center gap-3 px-14 py-5 w-fit text-white text-lg bg-gradient-to-r from-nu-red-600 to-nu-red-500 hover:from-nu-red-500 hover:to-nu-red-400 rounded-full font-bold transition-all shadow-lg hover:shadow-nu-red-500/30"
+            className="group inline-flex items-center gap-3 px-10 py-4 w-fit btn-primary text-white rounded-xl transition-all duration-500 shadow-lg hover:shadow-2xl transform font-bold text-base"
             style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}
           >
             <span>Start Assessment</span>
-            <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
+            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </motion.button>
         </motion.div>
 
@@ -184,8 +184,11 @@ export function QuizIntro({ onStart }: QuizIntroProps) {
             className="absolute w-52 h-52 lg:w-64 lg:h-64 rounded-full"
           >
             <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-nu-peach-400 shadow-[0_0_10px_rgba(245,149,110,0.8)]" />
-            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-9 h-9 rounded-full bg-green-900/90 border border-green-500/70 shadow-[0_0_18px_rgba(74,222,128,0.45)] flex items-center justify-center">
-              <ArrowUp className="w-4 h-4 text-green-300 rotate-180" />
+            <div
+              className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-9 h-9 rounded-full border border-white/30 shadow-[0_0_20px_rgba(185,29,47,0.35)] flex items-center justify-center"
+              style={{ background: 'var(--nu-gradient-signature)' }}
+            >
+              <ArrowUp className="w-4 h-4 text-white rotate-180" />
             </div>
           </motion.div>
 
@@ -199,22 +202,23 @@ export function QuizIntro({ onStart }: QuizIntroProps) {
             const Icon = chip.icon;
             const isActive = activeMajorIndex === i;
             return (
-            <motion.div
-              key={chip.label}
-              initial={{ opacity: 0, scale: 0.7 }}
-              animate={{
-                opacity: 1,
-                scale: isActive ? 1.08 : 1,
-                boxShadow: isActive ? '0 0 24px rgba(74, 222, 128, 0.35)' : '0 10px 24px rgba(0,0,0,0.18)',
-              }}
-              transition={{ delay: 0.5 + i * 0.1 }}
-              className={`absolute ${chip.posClass} flex items-center justify-center gap-2 text-[11px] lg:text-xs font-bold px-4 py-2.5 rounded-full border backdrop-blur-sm shadow-lg whitespace-nowrap ${isActive ? 'bg-green-400/18 text-green-100 border-green-300/80' : chip.baseColor}`}
-              style={{ fontFamily: 'system-ui, sans-serif' }}
-            >
-              <Icon className="w-4 h-4" />
-              {chip.label}
-            </motion.div>
-          );})}
+              <motion.div
+                key={chip.label}
+                initial={{ opacity: 0, scale: 0.7 }}
+                animate={{
+                  opacity: 1,
+                  scale: isActive ? 1.08 : 1,
+                  boxShadow: isActive ? '0 0 24px rgba(185, 29, 47, 0.35)' : '0 10px 24px rgba(0,0,0,0.18)',
+                }}
+                transition={{ delay: 0.5 + i * 0.1 }}
+                className={`absolute ${chip.posClass} flex items-center justify-center gap-2 text-[11px] lg:text-xs font-bold px-4 py-2.5 rounded-full border backdrop-blur-sm shadow-lg whitespace-nowrap ${isActive ? 'text-white border-white/20' : chip.baseColor}`}
+                style={isActive ? { fontFamily: 'system-ui, sans-serif', background: 'var(--nu-gradient-signature)' } : { fontFamily: 'system-ui, sans-serif' }}
+              >
+                <Icon className="w-4 h-4" />
+                {chip.label}
+              </motion.div>
+            );
+          })}
         </motion.div>
       </div>
 

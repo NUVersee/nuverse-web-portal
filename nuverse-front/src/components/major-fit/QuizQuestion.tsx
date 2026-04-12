@@ -99,8 +99,13 @@ export function QuizQuestion({
           className={`px-6 py-3 rounded-full font-ui font-medium transition-colors ${
             currentIndex === 0
               ? 'opacity-0 cursor-default pointer-events-none'
-              : 'text-slate-200 hover:bg-white/10'
+              : 'text-white shadow-md'
           }`}
+          style={
+            currentIndex === 0
+              ? undefined
+              : { background: 'var(--nu-gradient-signature)', backgroundSize: '200% auto' }
+          }
         >
           Previous
         </button>
@@ -111,8 +116,13 @@ export function QuizQuestion({
           className={`px-8 py-3 outline-none rounded-full font-ui font-medium transition-all ${
             currentValue === null
               ? 'bg-white/10 text-slate-500 cursor-not-allowed'
-              : 'bg-nu-red-600 text-white hover:bg-nu-red-500 shadow-md transform hover:-translate-y-0.5'
+              : 'text-white shadow-md transform hover:-translate-y-0.5'
           }`}
+          style={
+            currentValue === null
+              ? undefined
+              : { background: 'var(--nu-gradient-signature)', backgroundSize: '200% auto' }
+          }
         >
           {currentIndex === totalQuestions - 1 ? 'See Results' : 'Next'}
         </button>

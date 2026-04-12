@@ -59,8 +59,12 @@ export function MajorFitSection() {
             <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto lg:w-auto">
               <Link 
                 href="/major-fit"
-                className="group relative inline-flex items-center justify-center gap-2 px-8 py-4 btn-primary text-white rounded-full font-bold transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
-                style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}
+                className="group relative inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-medium text-white transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+                style={{
+                  fontFamily: 'system-ui, -apple-system, sans-serif',
+                  background: 'var(--nu-gradient-signature)',
+                  backgroundSize: '200% auto',
+                }}
               >
                 <span>Take the Assessment</span>
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
