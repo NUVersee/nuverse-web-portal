@@ -70,10 +70,10 @@ export function DragDropSorter({ step, accentColor, onComplete }: ElementProps) 
           </Reorder.Item>
         ))}
       </Reorder.Group>
-      <button 
-        onClick={validate} 
+      <button
+        onClick={validate}
         className="rounded-full px-10 py-3.5 font-bold text-white transition-all hover:-translate-y-0.5"
-        style={{ 
+        style={{
           background: 'var(--nu-gradient-signature)',
           boxShadow: '0 0 20px rgba(185, 29, 47, 0.3)'
         }}
@@ -118,7 +118,7 @@ export function LabPlacer({ step, accentColor, onComplete }: ElementProps) {
       <button
         onClick={() => placed.length === items.length && onComplete(placed)}
         className="rounded-full px-10 py-3.5 font-bold text-white transition-all hover:-translate-y-0.5"
-        style={{ 
+        style={{
           background: 'var(--nu-gradient-signature)',
           boxShadow: '0 0 20px rgba(185, 29, 47, 0.3)'
         }}
@@ -169,7 +169,7 @@ export function ResourceBalancer({ step, accentColor, onComplete }: ElementProps
         <button
           onClick={() => Math.abs(total - 100) <= 5 && onComplete(values)}
           className="rounded-full px-7 py-2.5 font-bold text-white transition-all hover:-translate-y-0.5"
-          style={{ 
+          style={{
             background: 'var(--nu-gradient-signature)',
             boxShadow: '0 0 15px rgba(185, 29, 47, 0.2)'
           }}
@@ -217,10 +217,10 @@ export function LogicBuilder({ step, accentColor, onComplete }: ElementProps) {
           </button>
         ))}
       </div>
-      <button 
-        onClick={submit} 
+      <button
+        onClick={submit}
         className="rounded-full px-10 py-3.5 font-bold text-white transition-all hover:-translate-y-0.5"
-        style={{ 
+        style={{
           background: 'var(--nu-gradient-signature)',
           boxShadow: '0 0 20px rgba(185, 29, 47, 0.3)'
         }}
@@ -328,8 +328,8 @@ export function CubeSorter({ step, accentColor, onComplete }: ElementProps) {
                   borderColor: 'rgba(255,255,255,0.1)',
                   boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
                 }}
-                whileHover={{ 
-                  scale: 1.05, 
+                whileHover={{
+                  scale: 1.05,
                   borderColor: 'rgba(255,255,255,0.3)',
                   background: 'linear-gradient(145deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04))'
                 }}
@@ -337,12 +337,12 @@ export function CubeSorter({ step, accentColor, onComplete }: ElementProps) {
               >
                 {/* 3D-ish highlight */}
                 <div className="absolute top-0 left-0 right-0 h-1/2 bg-gradient-to-b from-white/5 to-transparent rounded-t-xl" />
-                
+
                 {cube}
-                
+
                 {/* Visual feedback if correct in result list order (computed on the fly) */}
                 {cube === cubes.indexOf(cube) + 1 && (
-                  <motion.span 
+                  <motion.span
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     className="absolute -top-1.5 -right-1.5 h-4 w-4 rounded-full bg-white/20 border border-white/20 flex items-center justify-center text-[8px] backdrop-blur-sm shadow-sm"
@@ -458,10 +458,10 @@ export function TowerBuilder({ step, accentColor, onComplete }: ElementProps) {
         ))}
       </div>
       <div className="min-w-72 rounded-2xl border border-white/10 bg-white/5 p-6 text-center text-white">Tower: {stack.join(' → ') || 'Empty'}</div>
-      <button 
-        onClick={test} 
+      <button
+        onClick={test}
         className="rounded-full px-10 py-3.5 font-bold text-white transition-all hover:-translate-y-0.5"
-        style={{ 
+        style={{
           background: 'var(--nu-gradient-signature)',
           boxShadow: '0 0 20px rgba(185, 29, 47, 0.3)'
         }}
@@ -507,16 +507,15 @@ export function StructuralIntegrity({ step, accentColor, onComplete }: ElementPr
         {designs.map((design) => {
           const isActive = selected === design.id;
           const isSuccess = design.id === 'arch' || design.id === 'truss';
-          
+
           return (
             <button
               key={design.id}
               onClick={() => handleSelect(design.id)}
-              className={`group flex flex-col p-6 rounded-2xl border transition-all text-left ${
-                isActive 
-                ? (isSuccess ? 'border-emerald-500/50 bg-emerald-500/10' : 'border-red-500/50 bg-red-500/10')
-                : 'border-white/10 bg-white/5 hover:bg-white/10'
-              }`}
+              className={`group flex flex-col p-6 rounded-2xl border transition-all text-left ${isActive
+                  ? (isSuccess ? 'border-emerald-500/50 bg-emerald-500/10' : 'border-red-500/50 bg-red-500/10')
+                  : 'border-white/10 bg-white/5 hover:bg-white/10'
+                }`}
             >
               <div className="flex items-center justify-between mb-4">
                 <div className={`p-3 rounded-xl ${isActive ? 'bg-white/20' : 'bg-white/5'}`}>
@@ -528,10 +527,10 @@ export function StructuralIntegrity({ step, accentColor, onComplete }: ElementPr
               </div>
 
               <h4 className="text-lg font-bold text-white mb-2">{design.label}</h4>
-              
+
               <div className="h-20">
                 {isActive && (
-                  <motion.p 
+                  <motion.p
                     initial={{ opacity: 0, y: 5 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="text-xs leading-relaxed text-slate-400 font-medium"
@@ -542,7 +541,7 @@ export function StructuralIntegrity({ step, accentColor, onComplete }: ElementPr
               </div>
 
               {isActive && isSuccess && (
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   className="mt-4 flex items-center gap-2 text-[10px] font-black uppercase text-emerald-400 tracking-widest"
@@ -611,12 +610,11 @@ export function BusinessLaunch({ step, accentColor, onComplete }: ElementProps) 
             onClick={() => handlePriceSelect(price)}
             className={`flex flex-col items-center gap-2 group transition-all ${selectedPrice === price ? 'scale-105' : 'hover:scale-102 opacity-80 hover:opacity-100'}`}
           >
-            <div 
-              className={`h-20 w-20 rounded-2xl border-2 flex items-center justify-center text-2xl font-black transition-all ${
-                selectedPrice === price 
-                ? (price === 10 ? 'border-emerald-500/50 bg-emerald-500/10 text-emerald-400' : 'border-red-500/50 bg-red-500/10 text-red-400')
-                : 'border-white/10 bg-white/5 text-white'
-              }`}
+            <div
+              className={`h-20 w-20 rounded-2xl border-2 flex items-center justify-center text-2xl font-black transition-all ${selectedPrice === price
+                  ? (price === 10 ? 'border-emerald-500/50 bg-emerald-500/10 text-emerald-400' : 'border-red-500/50 bg-red-500/10 text-red-400')
+                  : 'border-white/10 bg-white/5 text-white'
+                }`}
             >
               ${price}
             </div>
@@ -685,12 +683,12 @@ export function FlaskDragDrop({ step, accentColor, onComplete }: ElementProps) {
           />
           <motion.path
             initial={{ d: "M20 50 L44 50 L56 86 L8 86 Z" }}
-            animate={{ 
+            animate={{
               d: [
-                "M20 52 L44 52 L56 86 L8 86 Z", 
-                "M20 50 L44 50 L56 88 L8 88 Z", 
+                "M20 52 L44 52 L56 86 L8 86 Z",
+                "M20 50 L44 50 L56 88 L8 88 Z",
                 "M20 52 L44 52 L56 86 L8 86 Z"
-              ] 
+              ]
             }}
             transition={{ repeat: Infinity, duration: 2 }}
             fill={color}
@@ -733,7 +731,7 @@ export function FlaskDragDrop({ step, accentColor, onComplete }: ElementProps) {
                 <div className="relative h-20 w-20 flex items-center justify-center rounded-2xl bg-nu-blue-500/10 border border-blue-500/20 shadow-[0_0_30px_rgba(59,130,246,0.2)]">
                   <Droplets className="h-10 w-10 text-blue-400 animate-pulse" />
                 </div>
-                <motion.div 
+                <motion.div
                   initial={{ y: 10, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.3 }}
@@ -748,10 +746,10 @@ export function FlaskDragDrop({ step, accentColor, onComplete }: ElementProps) {
 
           {/* Reaction glow */}
           {(h2In || o2In) && !reactionComplete && (
-            <motion.div 
+            <motion.div
               animate={{ opacity: [0.1, 0.4, 0.1], scale: [1, 1.2, 1] }}
               transition={{ repeat: Infinity, duration: 1 }}
-              className="absolute inset-0 rounded-full bg-white/10 blur-xl" 
+              className="absolute inset-0 rounded-full bg-white/10 blur-xl"
             />
           )}
         </div>
@@ -840,11 +838,10 @@ export function RoomDesigner({ step, accentColor, onComplete }: ElementProps) {
                     <button
                       key={opt}
                       onClick={() => handleSelect(cat.id, opt)}
-                      className={`flex items-center gap-2 px-3 py-2 rounded-xl border transition-all text-[11px] font-medium ${
-                        isActive 
-                        ? 'bg-white/15 border-white text-white' 
-                        : 'border-white/5 text-white/50 hover:bg-white/10'
-                      }`}
+                      className={`flex items-center gap-2 px-3 py-2 rounded-xl border transition-all text-[11px] font-medium ${isActive
+                          ? 'bg-white/15 border-white text-white'
+                          : 'border-white/5 text-white/50 hover:bg-white/10'
+                        }`}
                     >
                       <span
                         className="w-4 h-4 rounded-md shrink-0 border border-white/20"
@@ -927,11 +924,10 @@ export function RoomDesigner({ step, accentColor, onComplete }: ElementProps) {
       <button
         onClick={() => allDone && onComplete(selections)}
         disabled={!allDone}
-        className={`rounded-full px-12 py-4 font-bold text-white transition-all ${
-          allDone
-          ? 'hover:-translate-y-0.5'
-          : 'opacity-20 grayscale pointer-events-none'
-        }`}
+        className={`rounded-full px-12 py-4 font-bold text-white transition-all ${allDone
+            ? 'hover:-translate-y-0.5'
+            : 'opacity-20 grayscale pointer-events-none'
+          }`}
         style={{
           background: 'var(--nu-gradient-signature)',
           boxShadow: allDone ? '0 0 24px rgba(185, 29, 47, 0.35)' : 'none',
@@ -976,6 +972,15 @@ export function RocketLaunch({ step, accentColor, onComplete }: ElementProps) {
     }, 2500);
   };
 
+  const stars = useMemo(() => {
+    return [...Array(20)].map(() => ({
+      left: `${Math.random() * 100}%`,
+      top: `-${Math.random() * 20}%`,
+      duration: 1 + Math.random(),
+      delay: Math.random()
+    }));
+  }, []);
+
   return (
     <div className="flex w-full max-w-4xl flex-col items-center gap-10">
       <div className="text-xs font-semibold text-slate-400 uppercase tracking-[0.2em] text-center">
@@ -986,7 +991,7 @@ export function RocketLaunch({ step, accentColor, onComplete }: ElementProps) {
         {/* Visual Rocket Area */}
         <div className="relative h-96 w-64 rounded-[3rem] bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/40" />
-          
+
           {/* Stars Background during flight */}
           {status === 'success' && (
              <motion.div 
@@ -994,13 +999,13 @@ export function RocketLaunch({ step, accentColor, onComplete }: ElementProps) {
                animate={{ opacity: 1 }} 
                className="absolute inset-0 bg-[#000408]"
              >
-                {[...Array(20)].map((_, i) => (
+                {stars.map((star, i) => (
                   <motion.div
                     key={i}
                     animate={{ y: [0, 400], opacity: [0, 1, 0] }}
-                    transition={{ repeat: Infinity, duration: 1 + Math.random(), delay: Math.random() }}
+                    transition={{ repeat: Infinity, duration: star.duration, delay: star.delay }}
                     className="absolute w-0.5 h-0.5 bg-white rounded-full"
-                    style={{ left: `${Math.random() * 100}%`, top: `-${Math.random() * 20}%` }}
+                    style={{ left: star.left, top: star.top }}
                   />
                 ))}
              </motion.div>
@@ -1008,23 +1013,23 @@ export function RocketLaunch({ step, accentColor, onComplete }: ElementProps) {
 
           <motion.div
             animate={
-              status === 'launching' 
-                ? { y: [0, -2, 2, -2, 0], x: [0, 1, -1, 1, 0] } 
+              status === 'launching'
+                ? { y: [0, -2, 2, -2, 0], x: [0, 1, -1, 1, 0] }
                 : status === 'success'
-                ? { y: -500, scale: 0.5, opacity: 0 }
-                : status === 'fail'
-                ? { y: [0, -10, 0], rotate: [0, 5, -5, 0], opacity: [1, 1, 0] }
-                : {}
+                  ? { y: -500, scale: 0.5, opacity: 0 }
+                  : status === 'fail'
+                    ? { y: [0, -10, 0], rotate: [0, 5, -5, 0], opacity: [1, 1, 0] }
+                    : {}
             }
             transition={
-              status === 'launching' 
-                ? { repeat: Infinity, duration: 0.1 } 
+              status === 'launching'
+                ? { repeat: Infinity, duration: 0.1 }
                 : { duration: 2.5, ease: "easeInOut" }
             }
             className="relative z-10"
           >
             <Rocket className={`h-32 w-32 text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.3)] ${status === 'fail' ? 'text-red-500' : ''}`} />
-            
+
             {(status === 'launching' || status === 'success') && (
               <motion.div
                 initial={{ scale: 0, opacity: 0 }}
@@ -1048,8 +1053,8 @@ export function RocketLaunch({ step, accentColor, onComplete }: ElementProps) {
             <div className="space-y-3">
               <div className="flex justify-between items-center text-xs font-bold uppercase tracking-widest text-slate-400">
                 <div className="flex items-center gap-2 italic">
-                   <Zap className="w-3 h-3 text-yellow-400" />
-                   Thrust Power
+                  <Zap className="w-3 h-3 text-yellow-400" />
+                  Thrust Power
                 </div>
                 <span className="text-white font-black">{thrust}kN</span>
               </div>
@@ -1067,8 +1072,8 @@ export function RocketLaunch({ step, accentColor, onComplete }: ElementProps) {
             <div className="space-y-3">
               <div className="flex justify-between items-center text-xs font-bold uppercase tracking-widest text-slate-400">
                 <div className="flex items-center gap-2 italic">
-                   <Wind className="w-3 h-3 text-blue-400" />
-                   Rocket Weight
+                  <Wind className="w-3 h-3 text-blue-400" />
+                  Rocket Weight
                 </div>
                 <span className="text-white font-black">{weight}kg</span>
               </div>
@@ -1085,24 +1090,23 @@ export function RocketLaunch({ step, accentColor, onComplete }: ElementProps) {
           </div>
 
           <div className="pt-4">
-             <div className="flex items-center justify-between mb-4 px-2">
-                <div className="flex flex-col">
-                  <span className="text-[10px] font-black uppercase text-slate-600">Ratio</span>
-                  <span className={`text-lg font-black ${Math.abs(thrust - weight - 30) < 15 ? 'text-emerald-400' : 'text-white'}`}>
-                    {(thrust / weight).toFixed(2)}
-                  </span>
-                </div>
-                <Gauge className={`w-8 h-8 ${status === 'launching' ? 'animate-pulse text-nu-red-500' : 'text-white/20'}`} />
-             </div>
+            <div className="flex items-center justify-between mb-4 px-2">
+              <div className="flex flex-col">
+                <span className="text-[10px] font-black uppercase text-slate-600">Ratio</span>
+                <span className={`text-lg font-black ${Math.abs(thrust - weight - 30) < 15 ? 'text-emerald-400' : 'text-white'}`}>
+                  {(thrust / weight).toFixed(2)}
+                </span>
+              </div>
+              <Gauge className={`w-8 h-8 ${status === 'launching' ? 'animate-pulse text-nu-red-500' : 'text-white/20'}`} />
+            </div>
 
-             <button
+            <button
               onClick={handleLaunch}
               disabled={status !== 'idle'}
-              className={`w-full py-4 rounded-xl font-black uppercase tracking-[0.2em] transition-all ${
-                status === 'idle' 
-                ? 'bg-white text-black hover:bg-white/90 hover:-translate-y-1 shadow-lg' 
-                : 'bg-white/5 text-white/20 border border-white/10 cursor-not-allowed'
-              }`}
+              className={`w-full py-4 rounded-xl font-black uppercase tracking-[0.2em] transition-all ${status === 'idle'
+                  ? 'bg-white text-black hover:bg-white/90 hover:-translate-y-1 shadow-lg'
+                  : 'bg-white/5 text-white/20 border border-white/10 cursor-not-allowed'
+                }`}
             >
               {status === 'idle' ? 'Initiate Launch' : 'Launching...'}
             </button>
@@ -1117,15 +1121,14 @@ export function RocketLaunch({ step, accentColor, onComplete }: ElementProps) {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
-            className={`text-center max-w-md p-6 rounded-2xl border ${
-              status === 'success' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' : 'bg-red-500/10 border-red-500/20 text-red-400'
-            }`}
+            className={`text-center max-w-md p-6 rounded-2xl border ${status === 'success' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' : 'bg-red-500/10 border-red-500/20 text-red-400'
+              }`}
           >
             <p className="font-bold mb-2">{status === 'success' ? 'Mission Success' : 'Mission Failure'}</p>
             <p className="text-sm font-medium leading-relaxed opacity-80">{feedback}</p>
-            
+
             {status === 'fail' && (
-              <button 
+              <button
                 onClick={() => setStatus('idle')}
                 className="mt-4 text-[10px] font-black uppercase border-b border-white/20 hover:border-white transition-all text-white/60 hover:text-white"
               >
@@ -1179,7 +1182,7 @@ export function CircuitRepair({ step, accentColor, onComplete }: ElementProps) {
         <div className="flex-1 relative h-full flex items-center justify-center min-w-[300px]">
           {/* Horizontal Wire Path */}
           <div className="absolute left-0 right-0 h-1 bg-white/5 top-1/2 -translate-y-1/2" />
-          
+
           {/* Neon Pulse when complete */}
           {complete && (
             <motion.div
@@ -1197,11 +1200,10 @@ export function CircuitRepair({ step, accentColor, onComplete }: ElementProps) {
                 <div key={target.id} className="flex flex-col items-center gap-6">
                   <motion.div
                     onClick={() => !item && handlePlace(target.id, target.label)}
-                    className={`h-24 w-20 rounded-xl border-2 border-dashed flex items-center justify-center transition-all cursor-pointer ${
-                      item 
-                      ? 'border-solid border-white/40 bg-white/5' 
-                      : 'border-white/10 hover:border-white/20 bg-black/20'
-                    }`}
+                    className={`h-24 w-20 rounded-xl border-2 border-dashed flex items-center justify-center transition-all cursor-pointer ${item
+                        ? 'border-solid border-white/40 bg-white/5'
+                        : 'border-white/10 hover:border-white/20 bg-black/20'
+                      }`}
                     whileHover={!item ? { scale: 1.05 } : {}}
                     whileTap={!item ? { scale: 0.95 } : {}}
                   >
@@ -1216,7 +1218,7 @@ export function CircuitRepair({ step, accentColor, onComplete }: ElementProps) {
                         <Cpu className="h-8 w-8 text-white" style={{ color: target.color }} />
                         <span className="text-[8px] font-black uppercase text-white/50">{target.label}</span>
                         {complete && (
-                          <motion.div 
+                          <motion.div
                             animate={{ opacity: [0, 1, 0] }}
                             transition={{ repeat: Infinity, duration: 1 }}
                             className="absolute inset-0 rounded-xl bg-white/10 blur-xl"
@@ -1234,12 +1236,11 @@ export function CircuitRepair({ step, accentColor, onComplete }: ElementProps) {
 
         {/* Target: The Core */}
         <div className="flex flex-col items-center gap-4">
-          <div className={`h-24 w-24 rounded-3xl border-2 flex items-center justify-center transition-all duration-1000 ${
-            complete 
-            ? 'border-emerald-500/50 bg-emerald-500/10 shadow-[0_0_40px_rgba(16,185,129,0.3)]' 
-            : 'border-white/10 bg-white/5'
-          }`}>
-             <Activity className={`h-12 w-12 ${complete ? 'text-emerald-400 animate-pulse' : 'text-white/20'}`} />
+          <div className={`h-24 w-24 rounded-3xl border-2 flex items-center justify-center transition-all duration-1000 ${complete
+              ? 'border-emerald-500/50 bg-emerald-500/10 shadow-[0_0_40px_rgba(16,185,129,0.3)]'
+              : 'border-white/10 bg-white/5'
+            }`}>
+            <Activity className={`h-12 w-12 ${complete ? 'text-emerald-400 animate-pulse' : 'text-white/20'}`} />
           </div>
           <span className={`text-[10px] font-black uppercase tracking-widest transition-colors ${complete ? 'text-emerald-400' : 'text-slate-500'}`}>
             Nile University Core

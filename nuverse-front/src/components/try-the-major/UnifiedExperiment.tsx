@@ -6,11 +6,11 @@ import { MousePointer2, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { SIMULATION_CONFIGS } from '@/constants/try-the-major';
 import { MajorCategory } from '@/constants/major-fit';
-import { 
-  DragDropSorter, 
-  LabSelector, 
-  LogicBuilder, 
-  LabPlacer, 
+import {
+  DragDropSorter,
+  LabSelector,
+  LogicBuilder,
+  LabPlacer,
   ResourceBalancer,
   CubeSorter,
   FlowchartEvenOdd,
@@ -48,7 +48,7 @@ export function UnifiedExperiment({ majorKey, onRestart }: UnifiedExperimentProp
   const handleCompleteStep = useCallback((answer: unknown) => {
     if (!currentStep) return;
     setAnswers(prev => ({ ...prev, [currentStep.id]: answer }));
-    
+
     if (!isLastStep) {
       setTimeout(() => {
         setCurrentStepIndex(prev => prev + 1);
@@ -58,7 +58,7 @@ export function UnifiedExperiment({ majorKey, onRestart }: UnifiedExperimentProp
         setShowOutcome(true);
       }, 1200);
     }
-  }, [currentStep?.id, isLastStep]);
+  }, [currentStep, isLastStep]);
 
   const renderStep = useMemo(() => {
     if (!currentStep) return null;
@@ -97,7 +97,7 @@ export function UnifiedExperiment({ majorKey, onRestart }: UnifiedExperimentProp
   return (
     <div
       className="relative min-h-screen flex flex-col overflow-hidden text-white"
-      style={{ 
+      style={{
         fontFamily: 'system-ui, -apple-system, sans-serif',
         background: '#020617' // Deep blue background
       }}
@@ -139,7 +139,7 @@ export function UnifiedExperiment({ majorKey, onRestart }: UnifiedExperimentProp
       <div className="flex-1 flex flex-col items-center justify-center w-full max-w-6xl mx-auto px-6 py-8 relative z-10">
         <AnimatePresence mode="wait">
           {showOutcome ? (
-            <OutcomeScreen 
+            <OutcomeScreen
               key="outcome"
               enjoyed={true}
               config={config}
@@ -156,26 +156,26 @@ export function UnifiedExperiment({ majorKey, onRestart }: UnifiedExperimentProp
             >
               {/* Question Text */}
               <div className="w-full mb-12 text-center max-w-4xl">
-                 <motion.h3 
-                   initial={{ opacity: 0, y: 10 }}
-                   animate={{ opacity: 1, y: 0 }}
-                   transition={{ delay: 0.2 }}
-                   className="text-2xl md:text-4xl text-white font-bold leading-tight"
-                   style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}
-                 >
-                   &quot;{currentStep?.question || 'Preparing Experiment...'}&quot;
-                 </motion.h3>
+                <motion.h3
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                  className="text-2xl md:text-4xl text-white font-bold leading-tight"
+                  style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}
+                >
+                  &quot;{currentStep?.question || 'Preparing Experiment...'}&quot;
+                </motion.h3>
               </div>
 
               {/* Interactive Area */}
               <div className="w-full min-h-[450px] flex items-center justify-center px-4">
-                 {renderStep}
+                {renderStep}
               </div>
 
               {/* Mobile Footer */}
               <div className="mt-12 flex items-center gap-4 text-white/20 text-[10px] font-black uppercase tracking-[0.2em] pointer-events-none sm:hidden">
-                 <MousePointer2 className="w-4 h-4" />
-                 <span>Touch to select</span>
+                <MousePointer2 className="w-4 h-4" />
+                <span>Touch to select</span>
               </div>
             </motion.div>
           )}
@@ -183,7 +183,7 @@ export function UnifiedExperiment({ majorKey, onRestart }: UnifiedExperimentProp
       </div>
 
       {/* Persistent Backglow */}
-      <div 
+      <div
         className="absolute bottom-[-10%] left-1/2 -translate-x-1/2 w-[80%] h-[50%] blur-[120px] rounded-full -z-10 opacity-30 pointer-events-none"
         style={{ backgroundColor: config.accentColor }}
       />
