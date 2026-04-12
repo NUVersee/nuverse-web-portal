@@ -1,10 +1,11 @@
 "use client";
 
 import { Facebook, Instagram, Linkedin, Mail, MapPin, Phone, Send, Twitter, Sparkles } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { API_BASE_URL } from "@/constants";
 import { toast } from "sonner";
 import ReCAPTCHA from "react-google-recaptcha";
+import { motion, AnimatePresence } from "framer-motion";
 
 /**
  * Contact Component
@@ -26,6 +27,14 @@ export function Contact() {
 
   const [submitting, setSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isFormEngaged, setIsFormEngaged] = useState(false);
+
+  // Automatically engage the form if any field has content (e.g., from autofill)
+  useEffect(() => {
+    if (formData.name || formData.email || formData.phone || formData.reason) {
+      setIsFormEngaged(true);
+    }
+  }, [formData]);
 
   /**
    * Handles the submission of the contact form.
@@ -154,6 +163,7 @@ export function Contact() {
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   required
+                  onFocus={() => setIsFormEngaged(true)}
                   className={`w-full px-5 py-3.5 border-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-nu-red-500 focus:border-transparent bg-nu-dark/80 text-white transition-all ${errors.name ? 'border-red-500 bg-red-900/10' : 'border-white/10'
                     }`}
                   placeholder="NUVERSE"
@@ -174,6 +184,7 @@ export function Contact() {
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   required
+                  onFocus={() => setIsFormEngaged(true)}
                   className={`w-full px-5 py-3.5 border-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-nu-red-500 focus:border-transparent bg-nu-dark/80 text-white transition-all ${errors.email ? 'border-red-500 bg-red-900/10' : 'border-white/10'
                     }`}
                   placeholder="nuverse6@gmail.com"
@@ -193,6 +204,7 @@ export function Contact() {
                   id="phone"
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                  onFocus={() => setIsFormEngaged(true)}
                   className={`w-full px-5 py-3.5 border-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-nu-red-500 focus:border-transparent bg-nu-dark/80 text-white transition-all ${errors.phone ? 'border-red-500 bg-red-900/10' : 'border-white/10'
                     }`}
                   placeholder="+20 123 456 7890"
@@ -213,6 +225,7 @@ export function Contact() {
                   onChange={(e) => setFormData({ ...formData, reason: e.target.value })}
                   required
                   rows={5}
+                  onFocus={() => setIsFormEngaged(true)}
                   className={`w-full px-5 py-3.5 border-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-nu-red-500 focus:border-transparent bg-nu-dark/80 text-white resize-none transition-all ${errors.reason ? 'border-red-500 bg-red-900/10' : 'border-white/10'
                     }`}
                   placeholder="I would like to request the university VR equipment to take a virtual tour of..."
@@ -223,19 +236,31 @@ export function Contact() {
                 )}
               </div>
 
-              <div className="flex justify-center">
-                {process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ? (
-                  <ReCAPTCHA
-                    sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
-                    onChange={(token) => setCaptchaToken(token)}
-                    theme="dark"
-                  />
-                ) : (
-                  <p className="text-red-400 text-sm bg-red-900/10 p-2 rounded">
-                    Error: NEXT_PUBLIC_RECAPTCHA_SITE_KEY is missing in .env.local
-                  </p>
+              <AnimatePresence>
+                {isFormEngaged && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0, y: 10 }}
+                    animate={{ opacity: 1, height: "auto", y: 0 }}
+                    exit={{ opacity: 0, height: 0, y: 10 }}
+                    transition={{ duration: 0.5, ease: "easeOut" }}
+                    className="flex justify-center flex-col items-center gap-4 overflow-hidden"
+                  >
+                    <div className="p-4 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 shadow-[0_0_20px_rgba(56,71,107,0.2)] transition-all duration-500 hover:shadow-[0_0_30px_rgba(182,25,46,0.2)]">
+                      {process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ? (
+                        <ReCAPTCHA
+                          sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+                          onChange={(token) => setCaptchaToken(token)}
+                          theme="dark"
+                        />
+                      ) : (
+                        <p className="text-red-400 text-sm bg-red-900/10 p-2 rounded">
+                          Error: NEXT_PUBLIC_RECAPTCHA_SITE_KEY is missing in .env.local
+                        </p>
+                      )}
+                    </div>
+                  </motion.div>
                 )}
-              </div>
+              </AnimatePresence>
 
 
               <button
