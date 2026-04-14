@@ -114,7 +114,7 @@ export function Hero({ onStart360Tour }: HeroProps) {
             >
               <div className="flex items-center justify-center relative w-8 h-8">
                 <Image
-                  src="/Images/NUverse Logo.webp"
+                  src="/Images/NUverse-Logo.webp"
                   alt="VR Icon"
                   fill
                   className="object-contain drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]"
