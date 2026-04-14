@@ -20,12 +20,11 @@ export interface MajorResult {
 
 export const QUESTIONS: Question[] = [
   // Computer Science
-  { id: 'cs_1', text: 'I enjoy solving logical or algorithmic problems.', category: 'Computer Science' },
+  { id: 'cs_1', text: 'I prefer structured, rule-based problem solving.', category: 'Computer Science' },
   { id: 'cs_2', text: 'I am interested in programming or building software applications.', category: 'Computer Science' },
   { id: 'cs_3', text: 'I like working with computers for extended periods.', category: 'Computer Science' },
   { id: 'cs_4', text: 'I enjoy debugging and fixing technical issues.', category: 'Computer Science' },
   { id: 'cs_5', text: 'I am curious about artificial intelligence or cybersecurity.', category: 'Computer Science' },
-  { id: 'cs_6', text: 'I prefer structured, rule-based problem solving.', category: 'Computer Science' },
   
   // Engineering
   { id: 'eng_1', text: 'I enjoy understanding how machines and systems work.', category: 'Engineering' },
@@ -33,31 +32,27 @@ export const QUESTIONS: Question[] = [
   { id: 'eng_3', text: 'I like applying math and physics to real-world problems.', category: 'Engineering' },
   { id: 'eng_4', text: 'I enjoy building or assembling technical projects.', category: 'Engineering' },
   { id: 'eng_5', text: 'I am comfortable working with technical tools or equipment.', category: 'Engineering' },
-  { id: 'eng_6', text: 'I prefer solving practical engineering challenges.', category: 'Engineering' },
   
   // Biotechnology
   { id: 'bio_1', text: 'I am curious about biological systems and genetics.', category: 'Biotechnology' },
   { id: 'bio_2', text: 'I enjoy conducting scientific experiments.', category: 'Biotechnology' },
-  { id: 'bio_3', text: 'I like analyzing scientific data and drawing conclusions.', category: 'Biotechnology' },
-  { id: 'bio_4', text: 'I am interested in medical or environmental innovations.', category: 'Biotechnology' },
-  { id: 'bio_5', text: 'I feel comfortable working in laboratory environments.', category: 'Biotechnology' },
-  { id: 'bio_6', text: 'I enjoy research-based academic work.', category: 'Biotechnology' },
+  { id: 'bio_3', text: 'I am interested in medical or environmental innovations.', category: 'Biotechnology' },
+  { id: 'bio_4', text: 'I feel comfortable working in laboratory environments.', category: 'Biotechnology' },
+  { id: 'bio_5', text: 'I enjoy research-based academic work.', category: 'Biotechnology' },
   
   // Architecture
   { id: 'arch_1', text: 'I enjoy designing or sketching ideas visually.', category: 'Architecture' },
   { id: 'arch_2', text: 'I am interested in buildings, structures, and urban spaces.', category: 'Architecture' },
   { id: 'arch_3', text: 'I like combining creativity with technical knowledge.', category: 'Architecture' },
   { id: 'arch_4', text: 'I think about how spaces affect people’s experiences.', category: 'Architecture' },
-  { id: 'arch_5', text: 'I prefer open-ended creative projects over fixed instructions.', category: 'Architecture' },
-  { id: 'arch_6', text: 'I enjoy visualizing 3D concepts in my mind.', category: 'Architecture' },
+  { id: 'arch_5', text: 'I enjoy visualizing 3D concepts in my mind.', category: 'Architecture' },
 
   // Business
-  { id: 'bus_1', text: 'I enjoy leading teams and organizing group projects.', category: 'Business' },
+  { id: 'bus_1', text: 'I am interested in understanding how companies grow and succeed.', category: 'Business' },
   { id: 'bus_2', text: 'I am interested in starting or managing a business.', category: 'Business' },
   { id: 'bus_3', text: 'I like analyzing markets, trends, and business opportunities.', category: 'Business' },
   { id: 'bus_4', text: 'I enjoy solving problems related to management or strategy.', category: 'Business' },
   { id: 'bus_5', text: 'I feel comfortable communicating ideas and negotiating with others.', category: 'Business' },
-  { id: 'bus_6', text: 'I am interested in understanding how companies grow and succeed.', category: 'Business' },
 ];
 
 export const MAJOR_RESULTS: Record<MajorCategory, MajorResult> = {

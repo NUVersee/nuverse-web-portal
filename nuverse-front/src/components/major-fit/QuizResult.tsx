@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { MajorResult, MajorCategory, MAJOR_RESULTS } from '@/constants/major-fit';
+import { MajorResult, MajorCategory, MAJOR_RESULTS, QUESTIONS } from '@/constants/major-fit';
 import { ArrowLeft, ArrowRight, RefreshCcw, Sparkles, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 
@@ -19,13 +19,24 @@ const BRAND_COLORS = {
 };
 
 export function QuizResult({ scores, bestFit, onRetake }: QuizResultProps) {
-  const MAX_SCORE = 30;
+  const MAX_QUESTION_SCORE = 5;
+
+  const maxScoresByCategory = QUESTIONS.reduce((acc, question) => {
+    acc[question.category] += MAX_QUESTION_SCORE;
+    return acc;
+  }, {
+    'Computer Science': 0,
+    'Engineering': 0,
+    'Biotechnology': 0,
+    'Architecture': 0,
+    'Business': 0,
+  } as Record<MajorCategory, number>);
 
   const sortedScores = Object.entries(scores)
     .map(([category, score]) => ({
       category: category as MajorCategory,
       score,
-      percentage: Math.round((score / MAX_SCORE) * 100),
+      percentage: Math.round((score / maxScoresByCategory[category as MajorCategory]) * 100),
     }))
     .sort((a, b) => b.score - a.score);
 
