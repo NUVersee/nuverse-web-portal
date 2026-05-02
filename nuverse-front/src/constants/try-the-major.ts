@@ -122,7 +122,7 @@ export const SIMULATION_CONFIGS: Record<MajorCategory, SimulationConfig> = {
       {
         id: 'arch_q1',
         type: 'ROOM_DESIGN',
-        question: 'Select the foundational elements for this modern interior design.',
+        question: 'Master the spatial requirements for the assigned design challenge.',
       }
     ]
   },
