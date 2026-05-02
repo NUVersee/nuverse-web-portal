@@ -891,6 +891,29 @@ export function RoomDesigner({ step, accentColor, onComplete }: ElementProps) {
     { id: 'light', label: 'Light', options: ['Ambient Cove', 'Warm Spotlight'] },
   ];
 
+  const challenges = [
+    {
+      name: 'Industrial Style',
+      description: 'Create a room that feels like a city warehouse. It should look raw, strong, and urban, with a cool "under construction" feel.',
+      target: { floor: 'Polished Concrete', wall: 'Exposed Brick', light: 'Warm Spotlight' }
+    },
+    {
+      name: 'Cozy Minimal',
+      description: 'Design a room that is super simple and relaxing. It should feel bright, open, and very peaceful, like a quiet morning.',
+      target: { floor: 'Smoked Oak', wall: 'Smooth Plaster', light: 'Ambient Cove' }
+    },
+    {
+      name: 'Nature Forest',
+      description: 'Bring the feeling of the woods indoors. The space should feel calm, earthy, and connected to nature.',
+      target: { floor: 'Herringbone Walnut', wall: 'Sage Green', light: 'Ambient Cove' }
+    },
+    {
+      name: 'Art Gallery',
+      description: 'Make a space that looks like a fancy museum. It should feel very clean, elegant, and ready to show off beautiful art.',
+      target: { floor: 'Italian Marble', wall: 'Concrete Panel', light: 'Warm Spotlight' }
+    }
+  ];
+
   const colorLookup: Record<string, Record<string, string>> = {
     floor: floorColors,
     wall: wallColors,
@@ -904,13 +927,36 @@ export function RoomDesigner({ step, accentColor, onComplete }: ElementProps) {
   };
 
   const [selections, setSelections] = useState<Record<string, string>>({});
+  const [challenge, setChallenge] = useState(challenges[0]);
+  const [status, setStatus] = useState<'idle' | 'success' | 'failure'>('idle');
 
-  useEffect(() => setSelections({}), [step.id]);
+  useEffect(() => {
+    const random = challenges[Math.floor(Math.random() * challenges.length)];
+    setChallenge(random);
+    setSelections({});
+    setStatus('idle');
+  }, [step.id]);
 
   const allDone = Object.keys(selections).length === 3;
 
   const handleSelect = (categoryId: string, option: string) => {
+    if (status === 'success') return;
     setSelections(prev => ({ ...prev, [categoryId]: option }));
+    setStatus('idle');
+  };
+
+  const validate = () => {
+    const isCorrect = 
+      selections.floor === challenge.target.floor &&
+      selections.wall === challenge.target.wall &&
+      selections.light === challenge.target.light;
+
+    if (isCorrect) {
+      setStatus('success');
+      setTimeout(() => onComplete(selections), 2500);
+    } else {
+      setStatus('failure');
+    }
   };
 
   const currentFloor = floorColors[selections['floor']] || '#1a1a2e';
@@ -918,9 +964,30 @@ export function RoomDesigner({ step, accentColor, onComplete }: ElementProps) {
   const currentLight = lightColors[selections['light']] || 'transparent';
 
   return (
-    <div className="flex w-full max-w-6xl flex-col items-center gap-8">
-      <div className="text-xs font-semibold text-slate-400 uppercase tracking-[0.2em] text-center">
-        Design your dream interior space
+    <div className="flex w-full max-w-6xl flex-col items-center gap-10">
+      {/* Goal Card */}
+      <div className="w-full max-w-2xl p-6 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-md flex flex-col md:flex-row items-center gap-6 shadow-2xl relative overflow-hidden group">
+        <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+          <Building className="w-16 h-16" />
+        </div>
+        <div className="flex-1 space-y-2 text-center md:text-left relative z-10">
+          <div className="text-[10px] font-black tracking-[0.2em] text-slate-500">Active Challenge</div>
+          <h4 className="text-2xl font-bold text-white leading-tight">{challenge.name}</h4>
+          <p className="text-xs text-slate-400 font-medium leading-relaxed">{challenge.description}</p>
+        </div>
+        <div className="flex flex-col items-center gap-2 shrink-0 relative z-10 md:border-l md:border-white/10 md:pl-6">
+          <span className="text-[8px] font-black text-slate-500 tracking-widest">Goal Requirements</span>
+          <div className="flex gap-2">
+            {Object.entries(challenge.target).map(([key, val]) => (
+              <div key={key} className="flex flex-col items-center gap-1">
+                <div className={`w-8 h-8 rounded-lg border flex items-center justify-center ${selections[key] === val ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-400' : 'bg-white/5 border-white/10 text-white/20'}`}>
+                  {catIcons[key]}
+                </div>
+                <span className="text-[8px] font-black text-slate-600">{key}</span>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
 
       <div className="flex flex-col-reverse md:flex-row w-full gap-8 items-stretch">
@@ -930,12 +997,14 @@ export function RoomDesigner({ step, accentColor, onComplete }: ElementProps) {
             <div key={cat.id} className="flex flex-col gap-3 p-4 rounded-2xl bg-white/5 border border-white/10">
               <div className="flex items-center gap-2 mb-1">
                 {catIcons[cat.id]}
-                <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">{cat.label}</span>
+                <span className="text-[10px] font-black tracking-widest text-slate-500">{cat.label}</span>
               </div>
               <div className="grid grid-cols-2 gap-2">
                 {cat.options.map(opt => {
                   const isActive = selections[cat.id] === opt;
+                  const isCorrect = selections[cat.id] === opt && opt === challenge.target[cat.id as keyof typeof challenge.target];
                   const swatchColor = colorLookup[cat.id]?.[opt] || '#fff';
+                  
                   return (
                     <button
                       key={opt}
@@ -961,7 +1030,7 @@ export function RoomDesigner({ step, accentColor, onComplete }: ElementProps) {
         {/* Visual Room Preview — Large */}
         <div className="flex-1 flex items-center justify-center min-h-[320px]">
           <div
-            className="relative w-full max-w-md h-80 rounded-3xl overflow-hidden border border-white/10"
+            className="relative w-full max-w-md h-80 rounded-[3rem] overflow-hidden border border-white/10 shadow-2xl"
             style={{ backgroundColor: '#0a0a1a' }}
           >
             {/* Light glow from ceiling */}
@@ -990,52 +1059,69 @@ export function RoomDesigner({ step, accentColor, onComplete }: ElementProps) {
               }}
             />
 
-            {/* Window on wall */}
-            {selections['wall'] && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="absolute top-[12%] right-[15%] w-16 h-20 rounded-lg border-2 border-white/20 bg-white/5 backdrop-blur-sm"
-              >
-                <div className="absolute inset-1 rounded bg-gradient-to-b from-sky-400/20 to-sky-600/10" />
-              </motion.div>
-            )}
-
             {/* Room label */}
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-black/70 rounded-full border border-white/10">
-              <span className="text-[9px] font-black text-white/60 uppercase tracking-widest">
-                {allDone ? '✓ Design Complete' : 'Live Preview'}
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 px-5 py-2 bg-black/70 backdrop-blur-md rounded-full border border-white/10 shadow-xl">
+              <span className={`text-[9px] font-black tracking-widest ${status === 'success' ? 'text-emerald-400' : 'text-white/60'}`}>
+                {status === 'success' ? '✓ Goal Reached' : allDone ? 'Ready for Review' : 'Live Preview'}
               </span>
             </div>
 
-            {/* Light fixture indicator */}
-            {selections['light'] && (
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                className="absolute top-4 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full flex items-center justify-center"
-                style={{ backgroundColor: currentLight, boxShadow: `0 0 30px ${currentLight}` }}
-              >
-                <Sun className="h-4 w-4 text-black/60" />
-              </motion.div>
-            )}
+            {/* Success Overlay */}
+            <AnimatePresence>
+              {status === 'success' && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="absolute inset-0 bg-emerald-500/10 backdrop-blur-[2px] flex items-center justify-center z-50"
+                >
+                  <motion.div
+                    initial={{ scale: 0.8, y: 10 }}
+                    animate={{ scale: 1, y: 0 }}
+                    className="flex flex-col items-center gap-3"
+                  >
+                    <div className="h-16 w-16 rounded-full bg-emerald-500 flex items-center justify-center shadow-[0_0_40px_rgba(16,185,129,0.5)]">
+                      <Check className="w-8 h-8 text-white" />
+                    </div>
+                    <span className="text-white font-black italic tracking-tighter text-xl">Perfect Design!</span>
+                  </motion.div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Failure Overlay */}
+            <AnimatePresence>
+              {status === 'failure' && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="absolute inset-0 bg-red-500/10 backdrop-blur-[2px] flex items-center justify-center z-50"
+                >
+                  <div className="text-center p-6">
+                    <span className="text-red-400 font-black text-sm tracking-widest block mb-2">Almost there!</span>
+                    <p className="text-[10px] text-white/60 font-medium leading-relaxed">Check your floor, wall, or lighting choices. <br />They need to match the style above.</p>
+                    <button onClick={() => setStatus('idle')} className="mt-4 text-[9px] font-black uppercase border-b border-white/20 hover:border-white transition-all text-white/40 hover:text-white">Adjust Elements</button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       </div>
 
       <button
-        onClick={() => allDone && onComplete(selections)}
-        disabled={!allDone}
-        className={`rounded-full px-12 py-4 font-bold text-white transition-all ${allDone
-          ? 'hover:-translate-y-0.5'
+        onClick={validate}
+        disabled={!allDone || status === 'success'}
+        className={`rounded-full px-12 py-4 font-bold text-white transition-all ${allDone && status !== 'success'
+          ? 'hover:-translate-y-0.5 active:scale-95'
           : 'opacity-20 grayscale pointer-events-none'
           }`}
         style={{
           background: 'var(--nu-gradient-signature)',
-          boxShadow: allDone ? '0 0 24px rgba(185, 29, 47, 0.35)' : 'none',
+          boxShadow: allDone && status !== 'success' ? '0 0 30px rgba(185, 29, 47, 0.4)' : 'none',
         }}
       >
-        {allDone ? '✓ Finalize Design' : 'Complete Selection'}
+        {status === 'success' ? '✓ Design Finalized' : 'Verify Design Match'}
       </button>
     </div>
   );
