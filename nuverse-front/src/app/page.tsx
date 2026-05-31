@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import dynamic from "next/dynamic";
 import { AIProfessorViewer } from "@/components/AIProfessorViewer";
+import { BasketballViewer } from "@/components/BasketballViewer";
 import { ChatbotButton } from "@/components/ChatbotButton";
 import { Contact } from "@/components/RequestTour";
 import { Footer } from "@/components/Footer";
@@ -35,6 +36,7 @@ export default function Home() {
   const [tourIndex, setTourIndex] = useState<number | string>(0);
   const [showLabs, setShowLabs] = useState(false);
   const [showAIProfessor, setShowAIProfessor] = useState(false);
+  const [showBasketball, setShowBasketball] = useState(false);
 
   useEffect(() => {
     const hasSeenLanding = sessionStorage.getItem("nuverse-landing-seen");
@@ -115,6 +117,26 @@ export default function Home() {
             }, 500);
           }} />
         </motion.div>
+      ) : showBasketball ? (
+        <motion.div
+          key="Basketball"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          <BasketballViewer onClose={() => {
+            setShowBasketball(false);
+            setTimeout(() => {
+              document.getElementById("services")?.scrollIntoView({ behavior: "smooth" });
+            }, 500);
+          }} onRequestVRTour={() => {
+            setShowBasketball(false);
+            setTimeout(() => {
+              document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+            }, 500);
+          }} />
+        </motion.div>
       ) : (
         <motion.div
           key="main"
@@ -131,6 +153,7 @@ export default function Home() {
           <Services
             onOpenLabs={() => setShowLabs(true)}
             onOpenAIProfessor={() => setShowAIProfessor(true)}
+            onOpenBasketball={() => setShowBasketball(true)}
             onStartTour={() => startTour(0)}
           />
           <Contact />

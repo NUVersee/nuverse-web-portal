@@ -2,13 +2,14 @@
 
 import { useRef } from "react";
 import { useRouter } from "next/navigation";
-import { Brain, FlaskConical, Sparkles } from "lucide-react";
+import { Brain, FlaskConical, Sparkles, Dribbble } from "lucide-react";
 import { motion, useInView } from "framer-motion";
 import { ServiceCard } from "./ServiceCard";
 
 type ServicesProps = {
   onOpenLabs?: () => void;
   onOpenAIProfessor?: () => void;
+  onOpenBasketball?: () => void;
   onStartTour?: () => void;
 };
 
@@ -24,7 +25,7 @@ type ServicesProps = {
  * @param {() => void} props.onStartTour - Callback to start the 360 tour.
  * @returns {JSX.Element} The services section.
  */
-export function Services({ onOpenLabs, onOpenAIProfessor, onStartTour }: ServicesProps) {
+export function Services({ onOpenLabs, onOpenAIProfessor, onOpenBasketball, onStartTour }: ServicesProps) {
   const headerRef = useRef(null);
   const cardsRef = useRef(null);
   const statsRef = useRef(null);
@@ -59,6 +60,19 @@ export function Services({ onOpenLabs, onOpenAIProfessor, onStartTour }: Service
       gallery: ["/Images/AI-Professor.jpeg", "/Images/AI-Professor.jpeg"],
       features: ["Personalized Learning", "Interactive Q&A", "24/7 Availability"],
       onClick: onOpenAIProfessor,
+      hasDetailView: false,
+    },
+    {
+      icon: Dribbble,
+      title: "Virtual Basketball",
+      description:
+        "Experience university life in VR. Try out our university courts, play matches, and immerse yourself in an interactive campus experience.",
+      detailDesc: "Our VR basketball court allows you to experience university life from anywhere. Try the university courts, play matches, and immerse yourself in an interactive campus experience.",
+      rightText: "Play basketball and experience campus life in VR.",
+      image: "/Images/Basketball/basketball-wallpaper.jpeg",
+      gallery: ["/Images/Basketball/Basketball1.png", "/Images/Basketball/Basketball2.png", "/Images/Basketball/Basketball3.png"],
+      features: ["Realistic Courts", "Interactive Gameplay", "Campus Experience"],
+      onClick: onOpenBasketball,
       hasDetailView: false,
     },
   ];
@@ -166,7 +180,7 @@ export function Services({ onOpenLabs, onOpenAIProfessor, onStartTour }: Service
             <motion.div
               key={index}
               variants={itemVariants}
-              className="min-w-[300px] md:min-w-[400px] snap-center"
+              className="min-w-[300px] md:min-w-[400px] snap-center self-stretch"
             >
               <ServiceCard {...service} />
             </motion.div>
