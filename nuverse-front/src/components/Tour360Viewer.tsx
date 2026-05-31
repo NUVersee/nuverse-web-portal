@@ -581,14 +581,17 @@ export function Tour360Viewer({ onClose, initialIndex = 0 }: { onClose: () => vo
               </button>
             </div>
 
-            <h3 className="text-2xl font-sans font-bold text-white mb-4 leading-snug">{selectedHotspot.title}</h3>
-            <p className="text-white/80 text-base font-sans font-normal leading-relaxed mb-8">
+            <h3 className="text-2xl font-bold text-white mb-4 leading-snug" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+              {selectedHotspot.title}
+            </h3>
+            <p className="text-white/80 text-base font-normal leading-relaxed mb-8" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
               {selectedHotspot.description}
             </p>
 
             <button
               onClick={() => setSelectedHotspot(null)}
               className="w-full bg-gradient-to-r from-[#b6192e] to-[#ff4b2b] text-white py-5 rounded-2xl font-black uppercase tracking-widest text-sm hover:opacity-90 transition-all shadow-lg hover:shadow-nu-red-500/25 transform hover:-translate-y-1 active:scale-95"
+              style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}
             >
               Back to Tour
             </button>
