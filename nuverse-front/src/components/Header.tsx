@@ -113,12 +113,13 @@ export function Header() {
                   <Link
                     key={item.name}
                     href={getNavHref(item)}
-                    className={`relative font-bold transition-colors px-4 py-2 rounded-full uppercase tracking-widest text-sm
+                    className={`relative font-bold transition-colors px-4 py-2 rounded-full uppercase tracking-widest text-base
                       ${isActive
                         ? "text-nu-peach-300 bg-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.25)]"
                         : "text-white hover:text-nu-blue-300 hover:bg-white/10"
                       }
                     `}
+                    style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}
                   >
                     {item.name}
                   </Link>
@@ -158,6 +159,7 @@ export function Header() {
                         : "text-white hover:text-nu-blue-300 hover:bg-white/5"
                       }
                     `}
+                    style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}
                   >
                     {item.name}
                   </Link>

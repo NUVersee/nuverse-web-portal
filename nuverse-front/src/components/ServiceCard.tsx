@@ -23,12 +23,12 @@ export function ServiceCard({ icon: Icon, title, description, image, features, o
 
   return (
     <div
-      className="group bg-nu-dark/85 backdrop-blur-xl rounded-2xl shadow-2xl overflow-hidden hover:shadow-[0_0_50px_rgba(0,0,0,0.5)] transition-all duration-500 transform hover:-translate-y-2 cursor-pointer border border-white/10 hover:border-nu-peach-300/40"
+      className="group bg-nu-dark/85 backdrop-blur-xl rounded-2xl shadow-2xl overflow-hidden hover:shadow-[0_0_50px_rgba(0,0,0,0.5)] transition-all duration-500 transform hover:-translate-y-2 cursor-pointer border border-white/10 hover:border-nu-peach-300/40 h-full flex flex-col"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={handleClick}
     >
-      <div className="relative h-64 overflow-hidden">
+      <div className="relative h-48 shrink-0 overflow-hidden">
         <ImageWithFallback
           src={image}
           alt={title}
@@ -40,8 +40,8 @@ export function ServiceCard({ icon: Icon, title, description, image, features, o
         <div className="absolute inset-0 bg-gradient-to-tr from-nu-blue-900/40 to-nu-blue-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
       </div>
 
-      <div className="p-8">
-        <div className="flex items-center justify-between mb-6">
+      <div className="p-6 flex flex-col flex-grow">
+        <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-4">
             <div 
               className="p-3 rounded-xl shadow-lg transform group-hover:rotate-12 transition-transform duration-300"
@@ -49,14 +49,14 @@ export function ServiceCard({ icon: Icon, title, description, image, features, o
             >
               <Icon className="text-white" size={24} />
             </div>
-            <h3 className="text-2xl md:text-3xl font-black text-white tracking-tight" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>{title}</h3>
+            <h3 className="text-xl md:text-2xl font-black text-white tracking-tight" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>{title}</h3>
           </div>
           <ArrowUpRight className="text-white/40 group-hover:text-nu-peach-300 transition-colors" size={24} />
         </div>
         
-        <p className="text-slate-100 text-lg mb-6 leading-relaxed font-medium transition-colors" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>{description}</p>
+        <p className="text-slate-100 text-base mb-4 leading-relaxed font-medium transition-colors flex-grow" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>{description}</p>
 
-        <div className="space-y-2 mb-8">
+        <div className="space-y-2 mb-6">
           {features.map((feature, index) => (
             <div
               key={index}
@@ -74,7 +74,7 @@ export function ServiceCard({ icon: Icon, title, description, image, features, o
             e.stopPropagation();
             if (onClick) onClick();
           }}
-          className="px-8 py-3 rounded-full text-white transition-all flex items-center gap-2 group font-bold uppercase tracking-widest text-[11px] shadow-lg hover:shadow-nu-blue-500/20 hover:scale-105 active:scale-95"
+          className="px-8 py-3 mt-auto rounded-full text-white transition-all flex items-center gap-2 group font-bold uppercase tracking-widest text-[11px] shadow-lg hover:shadow-nu-blue-500/20 hover:scale-105 active:scale-95 w-fit"
           style={{ 
             background: 'var(--nu-gradient-signature)', 
             fontFamily: 'system-ui, -apple-system, sans-serif' 
