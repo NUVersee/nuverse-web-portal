@@ -1549,27 +1549,31 @@ export function BlockCoding({ step, accentColor, onComplete }: ElementProps) {
     <div className="flex w-full max-w-6xl flex-col lg:flex-row gap-8 items-start justify-center">
       {/* Sidebar: Toolbox & Stack */}
       <div className="w-full lg:w-80 flex flex-col gap-6 shrink-0">
-        <div className="p-5 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-md shadow-xl">
+          <div className="p-5 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-md shadow-xl">
           <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 mb-4">Logic Units</h4>
           <div className="grid grid-cols-1 gap-2">
-            {[
-              { type: 'loop', label: 'FOR each pass', color: '#a855f7' },
-              { type: 'scan', label: '  FOR each element', color: '#3b82f6' },
-              { type: 'if', label: '    IF current > next', color: '#f59e0b' },
-              { type: 'swap', label: '      SWAP elements', color: '#ef4444' },
-            ].map((btn) => (
-              <button
-                key={btn.type}
-                onClick={() => addBlock(btn.type as any)}
-                disabled={status !== 'idle'}
-                className="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 hover:border-white/20 transition-all text-xs font-bold text-white/80 group disabled:opacity-50"
-              >
-                <div className="p-1.5 rounded-md bg-black/40" style={{ color: btn.color }}>
-                  <Cpu className="h-3.5 w-3.5" />
-                </div>
-                <span className="whitespace-pre">{btn.label}</span>
-              </button>
-            ))}
+            {(() => {
+              const items = [
+                { type: 'loop', label: 'FOR each pass', color: '#a855f7' },
+                { type: 'scan', label: '  FOR each element', color: '#3b82f6' },
+                { type: 'if', label: '    IF current > next', color: '#f59e0b' },
+                { type: 'swap', label: '      SWAP elements', color: '#ef4444' },
+              ];
+              const shuffled = items.sort(() => Math.random() - 0.5);
+              return shuffled.map((btn) => (
+                <button
+                  key={btn.type}
+                  onClick={() => addBlock(btn.type as any)}
+                  disabled={status !== 'idle'}
+                  className="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 hover:border-white/20 transition-all text-xs font-bold text-white/80 group disabled:opacity-50"
+                >
+                  <div className="p-1.5 rounded-md bg-black/40" style={{ color: btn.color }}>
+                    <Cpu className="h-3.5 w-3.5" />
+                  </div>
+                  <span className="whitespace-pre">{btn.label}</span>
+                </button>
+              ));
+            })()}
           </div>
         </div>
 
@@ -1640,8 +1644,15 @@ export function BlockCoding({ step, accentColor, onComplete }: ElementProps) {
         </div>
         <div className="max-w-md text-center px-4">
           <p className="text-[10px] font-medium text-slate-500 leading-relaxed uppercase tracking-tighter">
-            <span className="text-white/40">Instructions:</span> Data must be processed in nested iterative units. Reorder the stack to follow standard Bubble Sort protocol: Loop pass → List scan → Comparison logic → Memory swap.
+            <span className="text-white/40">Instructions:</span> Data must be processed in nested iterative units. Reorder the stack to follow the sequence below (order randomized each run):
           </p>
+          <div className="mt-3 text-sm text-white/80 font-black tracking-tight">
+            {(() => {
+              const units = ['Loop pass', 'List scan', 'Comparison logic', 'Memory swap'];
+              const shuffled = units.sort(() => Math.random() - 0.5);
+              return <div className="uppercase text-[10px]">{shuffled.join(' → ')}</div>;
+            })()}
+          </div>
         </div>
       </div>
     </div>
